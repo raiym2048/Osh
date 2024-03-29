@@ -1,4 +1,4 @@
-package kg.it_lab.backend.Osh.exceptions;
+package kg.it_lab.backend.Osh.exception;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -10,4 +10,7 @@ public class OshApplication {
 		SpringApplication.run(OshApplication.class, args);
 	}
 
+
 }
+
+
