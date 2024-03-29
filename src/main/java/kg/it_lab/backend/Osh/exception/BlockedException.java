@@ -1,4 +1,4 @@
-package kg.it_lab.backend.Osh.exceptions;
+package kg.it_lab.backend.Osh.exception;
 
 public class BlockedException extends RuntimeException {
     public BlockedException() {

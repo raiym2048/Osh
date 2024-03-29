@@ -1,4 +1,4 @@
-package kg.it_lab.backend.Osh.repositories;
+package kg.it_lab.backend.Osh.repository;
 
 import kg.it_lab.backend.Osh.entities.News;
 import org.springframework.data.jpa.repository.JpaRepository;

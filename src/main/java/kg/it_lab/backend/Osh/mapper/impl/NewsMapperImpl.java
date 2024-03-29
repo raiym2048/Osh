@@ -1,6 +1,6 @@
-package kg.it_lab.backend.Osh.mappers.impl;
+package kg.it_lab.backend.Osh.mapper.impl;
 
-import kg.it_lab.backend.Osh.mappers.NewsMapper;
+import kg.it_lab.backend.Osh.mapper.NewsMapper;
 import org.springframework.stereotype.Component;
 
 @Component

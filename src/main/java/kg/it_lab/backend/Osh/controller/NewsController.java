@@ -1,4 +1,4 @@
-package kg.it_lab.backend.Osh.controllers;
+package kg.it_lab.backend.Osh.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

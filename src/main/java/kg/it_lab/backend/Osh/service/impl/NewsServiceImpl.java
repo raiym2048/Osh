@@ -1,6 +1,5 @@
-package kg.it_lab.backend.Osh.services.impl;
+package kg.it_lab.backend.Osh.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
