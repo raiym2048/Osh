@@ -15,7 +15,8 @@ public class News {
     private String name;
     @Column(columnDefinition = "text")
     private String description;
-    private LocalDateTime dateTime;
+    private LocalDateTime createdAt;
+
 
     @OneToOne
     @JoinColumn
