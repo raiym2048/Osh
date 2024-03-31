@@ -6,6 +6,7 @@ import kg.it_lab.backend.Osh.entities.News;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class NewsMapperImpl implements NewsMapper {
     public News toDtoNews(News news, NewsRequest newsRequest) {
         news.setName(newsRequest.getName());
         news.setDescription(newsRequest.getDescription());
-        news.setCreatedAt(newsRequest.getCreatedAt());
+        news.setCreatedAt(LocalDateTime.now());
         return news;
     }
 }

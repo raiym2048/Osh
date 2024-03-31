@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 public class NewsRequest {
     private String name;
-    private LocalDateTime createdAt;
     private String description ;
 
 }

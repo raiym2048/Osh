@@ -5,7 +5,7 @@ import kg.it_lab.backend.Osh.entities.News;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
 import kg.it_lab.backend.Osh.repository.NewsRepository;
-import kg.it_lab.backend.Osh.service.RedactorService;
+import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class RedactorServiceImpl implements RedactorService {
+public class EditorServiceImpl implements EditorService {
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
     @Override
