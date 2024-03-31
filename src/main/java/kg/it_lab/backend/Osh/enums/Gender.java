@@ -1,5 +1,5 @@
 package kg.it_lab.backend.Osh.enums;
 
-public enum gender {
+public enum Gender {
     male, female
 }
