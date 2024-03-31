@@ -10,6 +10,5 @@ public interface AdminService {
     void updateByName(String name, NewsRequest newsRequest);
 
     void deleteByName(String name);
-    void registerAdmin(AdminRegisterRequest adminRegisterRequest);
-    void loginAdmin(AdminLoginRequest adminLoginRequest);
+
 }

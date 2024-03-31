@@ -16,9 +16,7 @@ import kg.it_lab.backend.Osh.service.AdminService;
 import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,9 +25,6 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
-    private final UserRepository userRepository;
-    private final EmailSenderService emailSenderService;
-    private final AuthenticationManager authenticationManager;
     @Override
     public void add(NewsRequest newsRequest) {
         if(newsRequest.getName().isEmpty()){
@@ -71,43 +66,7 @@ public class AdminServiceImpl implements AdminService {
         newsRepository.deleteByName(name);
     }
 
-    @Override
-    public void registerAdmin(AdminRegisterRequest adminRegisterRequest) {
-        if(userRepository.findByEmail(adminRegisterRequest.getEmail()).isPresent()){
-            throw new BadRequestException("Admin with this email already exist" );
-        }
-        if(adminRegisterRequest.getEmail().isEmpty()){
-            throw new BadRequestException("Your email can't be empty");
-        }
-        if (!adminRegisterRequest.getEmail().contains("@")) {
-            throw new BadRequestException("Invalid email!");
-        }
 
-        User admin = new User();
-        admin.setEmail(adminRegisterRequest.getEmail());
-        admin.setRole(Role.ADMIN);
-        userRepository.save(admin);
-        emailSenderService.sendPassword(adminRegisterRequest.getEmail());
-    }
-
-    @Override
-    public void loginAdmin(AdminLoginRequest adminLoginRequest) {
-        Optional<User>user =userRepository.findByUsername(adminLoginRequest.getUsername());
-        if(user.isEmpty()){
-            throw new NotFoundException("User with this username was not found" , HttpStatus.NOT_FOUND);
-        }
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            adminLoginRequest.getUsername(),
-                            adminLoginRequest.getPassword()
-                    )
-            );
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid email or password");
-        }
-
-    }
 
 
     private void checker(Optional<News> news, String name) {
