@@ -29,16 +29,6 @@ public class AdminController {
     public void deleteByName(@PathVariable String name) {
         adminService.deleteByName(name);
     }
-    @PostMapping("/register")
-    public MyData registerAdmin(@RequestBody AdminRegisterRequest adminRegisterRequest){
-        adminService.registerAdmin(adminRegisterRequest);
-        MyData data = new MyData();
-        data.setMessage("Your new login and password was sent to "+ adminRegisterRequest.getEmail()+" !");
-        return data;
-    }
-    @PostMapping("/login")
-    public void loginAdmin(@RequestBody AdminLoginRequest adminLoginRequest){
-        adminService.loginAdmin(adminLoginRequest);
-    }
+
 
 }
