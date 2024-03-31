@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class NewsResponse {
+    private Long id;
     private String name;
     private LocalDateTime createdAt;
-    private String description ;
+    private String slogan;
+    private String category;
 }
