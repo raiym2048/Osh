@@ -16,6 +16,8 @@ public class News {
     @Column(columnDefinition = "text")
     private String description;
     private LocalDateTime createdAt;
+    private String category;
+    private String slogan;
 
 
     @OneToOne
