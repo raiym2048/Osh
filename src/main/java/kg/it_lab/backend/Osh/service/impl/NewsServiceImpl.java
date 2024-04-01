@@ -1,9 +1,12 @@
 package kg.it_lab.backend.Osh.service.impl;
 import kg.it_lab.backend.Osh.dto.news.NewsDetailResponse;
 import kg.it_lab.backend.Osh.dto.news.NewsResponse;
+import kg.it_lab.backend.Osh.entities.Event;
+import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.News;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
+import kg.it_lab.backend.Osh.repository.ImageRepository;
 import kg.it_lab.backend.Osh.repository.NewsRepository;
 import kg.it_lab.backend.Osh.service.NewsService;
 import lombok.AllArgsConstructor;
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class NewsServiceImpl implements NewsService {
     private final NewsMapper newsMapper;
     private final NewsRepository newsRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     public List<NewsResponse> all() {
@@ -32,5 +36,19 @@ public class NewsServiceImpl implements NewsService {
         if(news.isEmpty())
             throw new NotFoundException("News with id: " + id + " - not found!", HttpStatus.NOT_FOUND);
         return newsMapper.toDetailDto(news.get());
+    }
+
+    @Override
+    public void attachImageToNews(String newsName, String imageName) {
+        Optional<News> news = newsRepository.findByName(newsName);
+        if(news.isEmpty()) {
+            throw new NotFoundException("Event with name \"" + newsName + "\" not found", HttpStatus.NOT_FOUND);
+        }
+        Optional<Image> image = imageRepository.findByName(imageName);
+        if(image.isEmpty()) {
+            throw new NotFoundException("Image with name=\"" + imageName + "\" not found", HttpStatus.NOT_FOUND);
+        }
+        news.get().setImage(image.get());
+        newsRepository.save(news.get());
     }
 }
