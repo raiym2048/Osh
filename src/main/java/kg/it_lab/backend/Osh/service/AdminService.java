@@ -1,5 +1,6 @@
 package kg.it_lab.backend.Osh.service;
 
+import kg.it_lab.backend.Osh.dto.category.CategoryRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.news.admin.AdminLoginRequest;
@@ -14,5 +15,7 @@ public interface AdminService {
     void addEvent(EventRequest eventRequest);
     void updateEvent(String name , EventRequest eventRequest);
     void deleteEvent(String name);
+    void addCategory(CategoryRequest categoryRequest);
+    void deleteCategory(String name);
 
 }

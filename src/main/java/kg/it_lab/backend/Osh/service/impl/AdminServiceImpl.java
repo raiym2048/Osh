@@ -1,13 +1,14 @@
 package kg.it_lab.backend.Osh.service.impl;
 
+import kg.it_lab.backend.Osh.dto.category.CategoryRequest;
+
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
-import kg.it_lab.backend.Osh.dto.news.admin.AdminLoginRequest;
-import kg.it_lab.backend.Osh.dto.news.admin.AdminRegisterRequest;
+
+import kg.it_lab.backend.Osh.entities.Category;
 import kg.it_lab.backend.Osh.entities.Event;
 import kg.it_lab.backend.Osh.entities.News;
-import kg.it_lab.backend.Osh.entities.User;
-import kg.it_lab.backend.Osh.enums.Role;
+
 import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
@@ -16,9 +17,9 @@ import kg.it_lab.backend.Osh.mapper.NewsMapper;
 import kg.it_lab.backend.Osh.repository.CategoryRepository;
 import kg.it_lab.backend.Osh.repository.EventRepository;
 import kg.it_lab.backend.Osh.repository.NewsRepository;
-import kg.it_lab.backend.Osh.repository.UserRepository;
+
 import kg.it_lab.backend.Osh.service.AdminService;
-import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 
@@ -75,7 +76,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void addEvent(EventRequest eventRequest) {
+    public void addEvent( EventRequest eventRequest) {
         if(eventRequest.getName().isEmpty()){
             throw new BadRequestException("Title of the event can't be empty");
         }
@@ -83,13 +84,31 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Content of the event can't be empty");
         }
         if(categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()){
-            throw new BadRequestException("Category of event can't be empty ");
+            throw new BadRequestException("Category of event with this id wasn't found");
         }
         if(eventRequest.getSlogan().isEmpty()){
             throw new BadRequestException("Slogan of event can't be empty ");
         }
         if(eventRepository.findByName(eventRequest.getName()).isPresent()){
             throw new BadCredentialsException("Event with name "+ eventRequest.getName() +" already exist!");
+        }
+        if(eventRequest.getYear() <0 ) {
+            throw new BadRequestException("Date of year can't be negative ");
+        }
+        if(eventRequest.getMonth()<0 || eventRequest.getMonth()>12){
+            throw new BadRequestException("Incorrect input of months");
+        }
+        if(eventRequest.getDay()>31 || eventRequest.getDay()<0|| eventRequest.getMonth() == 2 && eventRequest.getDay()>29){
+            throw new BadRequestException("Incorrect date of the day");
+        }
+        if(eventRequest.getHour()>24 || eventRequest.getHour()<0){
+            throw new BadRequestException("Incorrect date of hour");
+        }
+        if(eventRequest.getMinute()<0 || eventRequest.getMinute()>60){
+            throw new BadRequestException("Incorrect date of minutes");
+        }
+        if(eventRequest.getSeconds()<0 || eventRequest.getSeconds()>60){
+            throw new BadRequestException("Incorrect date of seconds");
         }
         Event event = new Event();
         eventRepository.save(eventMapper.toDtoEvent(event,eventRequest));
@@ -116,6 +135,24 @@ public class AdminServiceImpl implements AdminService {
         if(eventRequest.getSlogan().isEmpty()){
             throw new BadRequestException("Slogan of event can't be empty ");
         }
+        if(eventRequest.getYear() <0 ) {
+            throw new BadRequestException("Date of year can't be negative ");
+        }
+        if(eventRequest.getMonth()<0 || eventRequest.getMonth()>12){
+            throw new BadRequestException("Incorrect input of months");
+        }
+        if(eventRequest.getDay()>31 || eventRequest.getDay()<0|| eventRequest.getMonth() == 2 && eventRequest.getDay()>29){
+            throw new BadRequestException("Incorrect date of the day");
+        }
+        if(eventRequest.getHour()>24 || eventRequest.getHour()<0){
+            throw new BadRequestException("Incorrect date of hour");
+        }
+        if(eventRequest.getMinute()<0 || eventRequest.getMinute()>60){
+            throw new BadRequestException("Incorrect date of minutes");
+        }
+        if(eventRequest.getSeconds()<0 || eventRequest.getSeconds()>60){
+            throw new BadRequestException("Incorrect date of seconds");
+        }
         eventRepository.save(eventMapper.toDtoEvent(event.get() , eventRequest));
 
 
@@ -125,15 +162,39 @@ public class AdminServiceImpl implements AdminService {
     public void deleteEvent(String name) {
         Optional<Event> event = eventRepository.findByName(name);
         if(event.isEmpty()){
-            throw new NotFoundException("Event with name \"" + name + "\" not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Event with name " + name +  "not found", HttpStatus.NOT_FOUND);
         }
         eventRepository.deleteByName(name);
+    }
+
+    @Override
+    public void addCategory(CategoryRequest categoryRequest) {
+        if(categoryRequest.getName().isEmpty()){
+            throw new BadRequestException("Title of the category can't be empty");
+        }
+        if(categoryRepository.findByName(categoryRequest.getName()).isPresent()){
+            throw new BadRequestException("Category with this title already exist!");
+        }
+
+        Category category = new Category();
+        category.setName(categoryRequest.getName());
+        categoryRepository.save(category);
+
+    }
+
+    @Override
+    public void deleteCategory(String name) {
+        Optional<Category> category = categoryRepository.findByName(name);
+        if(category.isEmpty()){
+            throw new BadRequestException("Category wasn't found");
+        }
+        categoryRepository.deleteByName(name);
     }
 
 
     private void checker(Optional<News> news, String name) {
         if(news.isEmpty()) {
-            throw new NotFoundException("News with name \"" + name + "\" not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("News with name " + name + " not found", HttpStatus.NOT_FOUND);
         }
     }
 }

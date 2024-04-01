@@ -54,7 +54,6 @@ public class NewsMapperImpl implements NewsMapper {
 
     @Override
     public News toDtoNews(News news, NewsRequest newsRequest) {
-
         news.setName(newsRequest.getName());
         news.setDescription(newsRequest.getDescription());
         news.setCreatedAt(LocalDateTime.now());
