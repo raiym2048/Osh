@@ -1,6 +1,7 @@
 package kg.it_lab.backend.Osh.controller;
 
 import kg.it_lab.backend.Osh.dto.auth.MyData;
+import kg.it_lab.backend.Osh.dto.category.CategoryRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
@@ -20,29 +21,62 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/news/add")
-    public void add(@RequestBody NewsRequest newsRequest ){
+    public MyData add(@RequestBody NewsRequest newsRequest ){
         adminService.add(newsRequest);
+        MyData data = new MyData();
+        data.setMessage("News added successfully");
+        return data;
     }
     @PutMapping("/news/updateByName/{name}")
-    public void updateByName(@PathVariable String name, @RequestBody NewsRequest newsRequest) {
+    public MyData updateByName(@PathVariable String name, @RequestBody NewsRequest newsRequest) {
         adminService.updateByName(name, newsRequest);
+        MyData data = new MyData();
+        data.setMessage("News updated successfully");
+        return data;
     }
     @DeleteMapping("/news/deleteByName/{name}")
-    public void deleteByName(@PathVariable String name) {
+    public MyData deleteByName(@PathVariable String name) {
         adminService.deleteByName(name);
+        MyData data = new MyData();
+        data.setMessage("News deleted successfully");
+        return data;
     }
     @PostMapping("/event/add")
-    public void add(@RequestBody EventRequest eventRequest){
+    public MyData add( @RequestBody EventRequest eventRequest){
         adminService.addEvent(eventRequest);
+        MyData data = new MyData();
+        data.setMessage("Event added successfully");
+        return data;
     }
     @PutMapping("/event/updateByName/{name}")
-    public void update(@PathVariable String name, @RequestBody EventRequest eventRequest) {
+    public MyData update(@PathVariable String name, @RequestBody EventRequest eventRequest) {
         adminService.updateEvent(name, eventRequest);
+        MyData data = new MyData();
+        data.setMessage("Event updated successfully");
+        return data;
     }
     @DeleteMapping("/event/deleteByName/{name}")
-    public void delete(@PathVariable String name){
+    public MyData delete(@PathVariable String name){
         adminService.deleteEvent(name);
+        MyData data = new MyData();
+        data.setMessage("Event deleted successfully");
+        return data;
     }
+    @PostMapping("/category/add")
+    public MyData addCategory(@RequestBody CategoryRequest categoryRequest){
+        adminService.addCategory(categoryRequest);
+        MyData data = new MyData();
+        data.setMessage("Category added successfully");
+        return data;
+    }
+    @DeleteMapping("/category/deleteByName/{name}")
+    public MyData deleteCategory(@PathVariable String name){
+        adminService.deleteCategory(name);
+        MyData data = new MyData();
+        data.setMessage("Category was successfully deleted");
+        return data;
+    }
+
 
 
 }

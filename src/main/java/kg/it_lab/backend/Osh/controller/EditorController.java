@@ -15,18 +15,21 @@ import org.springframework.web.bind.annotation.*;
 public class EditorController {
     private final EditorService editorService;
     @PutMapping("/news/updateByName/{name}")
-    public void updateByName(@PathVariable String name, @RequestBody NewsRequest newsRequest) {
+    public MyData updateByName(@PathVariable String name, @RequestBody NewsRequest newsRequest) {
         editorService.updateByName(name, newsRequest);
+        MyData data = new MyData();
+        data.setMessage("News updated successfully");
+        return data;
     }
     @PostMapping("/register")
-    public MyData registerAdmin(@RequestBody AdminRegisterRequest adminRegisterRequest){
+    public MyData registerEditor(@RequestBody AdminRegisterRequest adminRegisterRequest){
         editorService.registerEditor(adminRegisterRequest);
         MyData data = new MyData();
         data.setMessage("Your new login and password was sent to "+ adminRegisterRequest.getEmail()+" !");
         return data;
     }
     @PostMapping("/login")
-    public void loginAdmin(@RequestBody AdminLoginRequest adminLoginRequest){
+    public void loginEditor(@RequestBody AdminLoginRequest adminLoginRequest){
         editorService.loginEditor(adminLoginRequest);
     }
     @PutMapping("/changePassword")
