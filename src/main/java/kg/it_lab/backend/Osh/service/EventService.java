@@ -12,4 +12,6 @@ public interface EventService {
     List<EventResponse> all();
 
     EventDetailResponse detail(Long id);
+
+    void attachImageToEvent(String eventName, String imageName);
 }
