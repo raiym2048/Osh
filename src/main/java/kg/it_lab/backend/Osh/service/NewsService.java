@@ -11,4 +11,6 @@ public interface NewsService {
     List<NewsResponse> all();
 
     NewsDetailResponse detail(Long id);
+
+    void attachImageToNews(String newsName, String imageName);
 }
