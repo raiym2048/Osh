@@ -1,5 +1,7 @@
 package kg.it_lab.backend.Osh.service.impl;
 
+import kg.it_lab.backend.Osh.config.JwtService;
+import kg.it_lab.backend.Osh.dto.auth.AuthLoginResponse;
 import kg.it_lab.backend.Osh.dto.auth.EditorPasswordRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
@@ -33,6 +35,7 @@ public class EditorServiceImpl implements EditorService {
     private final UserRepository userRepository;
     private final EmailSenderService emailSenderService;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
     @Override
     public void updateByName(String name, NewsRequest newsRequest) {
         Optional<News> news =newsRepository.findByName(name);
@@ -54,7 +57,7 @@ public class EditorServiceImpl implements EditorService {
     @Override
     public void registerEditor(AdminRegisterRequest adminRegisterRequest) {
         if(userRepository.findByEmail(adminRegisterRequest.getEmail()).isPresent()){
-            throw new BadRequestException("Admin with this email already exist" );
+            throw new BadRequestException("Editor with this email already exist" );
         }
         if(adminRegisterRequest.getEmail().isEmpty()){
             throw new BadRequestException("Your email can't be empty");
@@ -71,7 +74,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public void loginEditor(AdminLoginRequest adminLoginRequest) {
+    public AuthLoginResponse loginEditor(AdminLoginRequest adminLoginRequest) {
         Optional<User>user =userRepository.findByUsername(adminLoginRequest.getUsername());
         if(adminLoginRequest.getPassword().isEmpty() || adminLoginRequest.getUsername().isEmpty()){
             throw new BadRequestException("Your password or username can't be empty");
@@ -89,6 +92,10 @@ public class EditorServiceImpl implements EditorService {
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid email or password");
         }
+        String token = jwtService.generateToken(user.get());
+        AuthLoginResponse authLoginResponse = new AuthLoginResponse();
+        authLoginResponse.setToken(token);
+        return  authLoginResponse;
 
     }
 

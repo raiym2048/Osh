@@ -17,7 +17,6 @@ public class Event {
     @Column(columnDefinition = "text")
     private String description;
     private LocalDateTime dateTime;
-
     @OneToOne
     @JoinColumn
     private Image image;
