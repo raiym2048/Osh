@@ -1,5 +1,6 @@
 package kg.it_lab.backend.Osh.mapper.impl;
 
+import kg.it_lab.backend.Osh.dto.event.EventDetailResponse;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.event.EventResponse;
 import kg.it_lab.backend.Osh.entities.Event;
@@ -19,9 +20,9 @@ public class EventMapperImpl implements EventMapper {
     @Override
     public EventResponse toDto(Event event) {
         EventResponse eventResponse = new EventResponse();
+        eventResponse.setId(event.getId());
         eventResponse.setName(event.getName());
         eventResponse.setCategory(event.getCategory().getName());
-        eventResponse.setDescription(event.getDescription());
         eventResponse.setSlogan(event.getSlogan());
         eventResponse.setDateTime(event.getDateTime());
         return eventResponse;
@@ -44,6 +45,19 @@ public class EventMapperImpl implements EventMapper {
         event.setCategory(categoryRepository.findById(eventRequest.getCategoryId()).get());
         event.setSlogan(eventRequest.getSlogan());
         event.setDateTime(LocalDateTime.of(eventRequest.getYear() , eventRequest.getMonth() , eventRequest.getDay() , eventRequest.getHour(),   eventRequest.getMinute() , eventRequest.getSeconds()));
+
         return event;
+    }
+
+    @Override
+    public EventDetailResponse toDetailDto(Event event) {
+        EventDetailResponse response = new EventDetailResponse();
+        response.setId(event.getId());
+        response.setName(event.getName());
+        response.setCategory(event.getCategory().getName());
+        response.setSlogan(event.getSlogan());
+        response.setDateTime(event.getDateTime());
+        response.setDescription(event.getDescription());
+        return response;
     }
 }
