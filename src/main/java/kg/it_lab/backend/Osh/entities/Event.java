@@ -7,16 +7,15 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class News {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
+    private String slogan;
     @Column(columnDefinition = "text")
     private String description;
-    private LocalDateTime createdAt;
-    private String slogan;
+    private LocalDateTime dateTime;
 
     @ManyToOne
     private Category category;
@@ -24,5 +23,4 @@ public class News {
     @OneToOne
     @JoinColumn
     private Image image;
-
 }
