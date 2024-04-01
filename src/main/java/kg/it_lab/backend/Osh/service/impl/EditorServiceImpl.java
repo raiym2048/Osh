@@ -3,13 +3,11 @@ package kg.it_lab.backend.Osh.service.impl;
 import kg.it_lab.backend.Osh.config.JwtService;
 import kg.it_lab.backend.Osh.dto.auth.AuthLoginResponse;
 import kg.it_lab.backend.Osh.dto.auth.EditorPasswordRequest;
-import kg.it_lab.backend.Osh.dto.auth.MyData;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.news.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.news.admin.AdminRegisterRequest;
 import kg.it_lab.backend.Osh.entities.News;
 import kg.it_lab.backend.Osh.entities.User;
-import kg.it_lab.backend.Osh.enums.Role;
 import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
@@ -23,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -36,6 +35,7 @@ public class EditorServiceImpl implements EditorService {
     private final EmailSenderService emailSenderService;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+
     @Override
     public void updateByName(String name, NewsRequest newsRequest) {
         Optional<News> news =newsRepository.findByName(name);
@@ -66,10 +66,9 @@ public class EditorServiceImpl implements EditorService {
             throw new BadRequestException("Invalid email!");
         }
 
-        User admin = new User();
-        admin.setEmail(adminRegisterRequest.getEmail());
-        admin.setRole(Role.EDITOR);
-        userRepository.save(admin);
+        User editor = new User();
+        editor.setEmail(adminRegisterRequest.getEmail());
+        userRepository.save(editor);
         emailSenderService.sendPassword(adminRegisterRequest.getEmail());
     }
 
@@ -101,12 +100,20 @@ public class EditorServiceImpl implements EditorService {
 
     @Override
     public void changePassword(EditorPasswordRequest editorPasswordRequest) {
+//        Optional<Editor > editor =editorRepository.findByPassword(editorPasswordRequest.getOldPassword());
+//        String pass1 = editorPasswordRequest.getPassword1();
+//        String pass2 = editorPasswordRequest.getPassword2();
+//        if(!Objects.equals(pass1, pass2)){
+//            throw new BadRequestException("Passwords don't match!");
+//        }
+//        editor.get().setPassword(encoder.encode(pass1));
+//        editorRepository.save(editor.get());
 
     }
 
     private void checker(Optional<News> news, String name) {
         if(news.isEmpty()) {
-            throw new NotFoundException("Product with name \"" + name + "\" not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Product with name  " + name + " not found", HttpStatus.NOT_FOUND);
         }
     }
 
