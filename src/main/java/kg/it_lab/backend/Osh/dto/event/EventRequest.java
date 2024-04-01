@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class EventRequest {
     LocalDateTime dateTime = LocalDateTime.of(2024, 4, 1, 12, 30, 0);
     private String name;
-    private String category;
+    private Long categoryId ;
     private String slogan;
     private String description;
     private Integer year;

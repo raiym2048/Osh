@@ -5,6 +5,8 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsResponse;
 import kg.it_lab.backend.Osh.entities.News;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
+import kg.it_lab.backend.Osh.repository.CategoryRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -12,7 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class NewsMapperImpl implements NewsMapper {
+    private final CategoryRepository categoryRepository;
 
     @Override
     public NewsResponse toDto(News news) {
@@ -21,7 +25,7 @@ public class NewsMapperImpl implements NewsMapper {
         newsResponse.setName(news.getName());
         newsResponse.setSlogan(news.getSlogan());
         newsResponse.setCreatedAt(news.getCreatedAt());
-        newsResponse.setCategory(news.getCategory());
+        newsResponse.setCategory(news.getCategory().getName());
         return  newsResponse;
 
     }
@@ -42,7 +46,7 @@ public class NewsMapperImpl implements NewsMapper {
         response.setName(news.getName());
         response.setSlogan(news.getSlogan());
         response.setCreatedAt(news.getCreatedAt());
-        response.setCategory(news.getCategory());
+        response.setCategory(news.getCategory().getName());
         response.setDescription(news.getDescription());
         return  response;
     }
@@ -50,10 +54,11 @@ public class NewsMapperImpl implements NewsMapper {
 
     @Override
     public News toDtoNews(News news, NewsRequest newsRequest) {
+
         news.setName(newsRequest.getName());
         news.setDescription(newsRequest.getDescription());
         news.setCreatedAt(LocalDateTime.now());
-        news.setCategory(newsRequest.getCategory());
+        news.setCategory(categoryRepository.findById(newsRequest.getCategoryId()).get());
         news.setSlogan(newsRequest.getSlogan());
         return news;
     }

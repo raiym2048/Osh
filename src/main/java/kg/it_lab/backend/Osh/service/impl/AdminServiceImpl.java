@@ -13,6 +13,7 @@ import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.EventMapper;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
+import kg.it_lab.backend.Osh.repository.CategoryRepository;
 import kg.it_lab.backend.Osh.repository.EventRepository;
 import kg.it_lab.backend.Osh.repository.NewsRepository;
 import kg.it_lab.backend.Osh.repository.UserRepository;
@@ -31,6 +32,7 @@ public class AdminServiceImpl implements AdminService {
     private final NewsMapper newsMapper;
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+    private final CategoryRepository categoryRepository;
     @Override
     public void add(NewsRequest newsRequest) {
         if(newsRequest.getName().isEmpty()){
@@ -80,7 +82,7 @@ public class AdminServiceImpl implements AdminService {
         if(eventRequest.getDescription().isEmpty()){
             throw new BadRequestException("Content of the event can't be empty");
         }
-        if(eventRequest.getCategory().isEmpty()){
+        if(categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()){
             throw new BadRequestException("Category of event can't be empty ");
         }
         if(eventRequest.getSlogan().isEmpty()){
@@ -108,7 +110,7 @@ public class AdminServiceImpl implements AdminService {
         if(eventRepository.findByName(eventRequest.getName()).isPresent()){
             throw new BadRequestException("Title of event with this name already exist");
         }
-        if(eventRequest.getCategory().isEmpty()){
+        if(categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()){
             throw new BadRequestException("Category of event can't be empty ");
         }
         if(eventRequest.getSlogan().isEmpty()){
