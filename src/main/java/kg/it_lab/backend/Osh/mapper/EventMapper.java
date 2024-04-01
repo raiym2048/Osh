@@ -1,5 +1,6 @@
 package kg.it_lab.backend.Osh.mapper;
 
+import kg.it_lab.backend.Osh.dto.event.EventDetailResponse;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.event.EventResponse;
 
@@ -12,4 +13,6 @@ public interface EventMapper {
     EventResponse toDto(Event event);
     List<EventResponse> toDtos(List<Event> event);
     Event toDtoEvent(Event event , EventRequest eventRequest);
+
+    EventDetailResponse toDetailDto(Event event);
 }
