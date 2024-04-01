@@ -34,3 +34,6 @@ build/
 
 ### secret ###
 application-secret.properties
+
+### secret ###
+application-secret.properties
