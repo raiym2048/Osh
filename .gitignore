@@ -36,4 +36,4 @@ build/
 application-secret.properties
 
 ### secret ###
-application-secret.properties
+src/main/resources/application-secret.properties
