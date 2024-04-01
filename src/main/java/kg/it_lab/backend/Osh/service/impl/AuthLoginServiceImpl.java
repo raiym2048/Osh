@@ -44,6 +44,7 @@ public class AuthLoginServiceImpl implements AuthLoginService {
         return authLoginResponse;
     }
 
+
     @Override
     public AuthLoginResponse login(AuthLoginRequest authLoginRequest) {
         authenticationManager.authenticate(
