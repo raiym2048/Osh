@@ -23,10 +23,6 @@ public class EmailSenderService {
     private final PasswordEncoder encoder;
     @Autowired
     private JavaMailSender mailSender;
-
-
-
-
     public void sendPassword(String to ){
         try{
 

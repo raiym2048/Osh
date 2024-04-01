@@ -13,10 +13,6 @@ public class GeneratorService {
 
         SecureRandom random  = new SecureRandom();
         StringBuilder password = new StringBuilder();
-
-
-
-
             for(int i = 0 ; i<9 ;  i++){
                 int randomIndex = random.nextInt(CHARACTERS.length());
                 password.append(CHARACTERS.charAt(randomIndex));
