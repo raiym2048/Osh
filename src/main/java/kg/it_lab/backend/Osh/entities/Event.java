@@ -12,11 +12,14 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String category;
     private String slogan;
     @Column(columnDefinition = "text")
     private String description;
     private LocalDateTime dateTime;
+
+    @ManyToOne
+    private Category category;
+
     @OneToOne
     @JoinColumn
     private Image image;
