@@ -5,12 +5,14 @@ import kg.it_lab.backend.Osh.dto.auth.AuthLoginResponse;
 import kg.it_lab.backend.Osh.dto.auth.EditorPasswordRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
+import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.News;
 import kg.it_lab.backend.Osh.entities.User;
 import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
+import kg.it_lab.backend.Osh.repository.ImageRepository;
 import kg.it_lab.backend.Osh.repository.NewsRepository;
 import kg.it_lab.backend.Osh.repository.RoleRepository;
 import kg.it_lab.backend.Osh.repository.UserRepository;
@@ -38,10 +40,14 @@ public class EditorServiceImpl implements EditorService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final RoleRepository roleRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     public void updateByName(String name, NewsRequest newsRequest , String  imageName) {
+        Optional<Image> image = imageRepository.findByName(imageName);
+        if(image.isEmpty()){
+            throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
+        }
         Optional<News> news =newsRepository.findByName(name);
         if(newsRequest.getName().isEmpty()){
             throw new BadRequestException("Title of the news can't be empty");
@@ -56,7 +62,7 @@ public class EditorServiceImpl implements EditorService {
             throw new BadRequestException("Title of news with this name already exist");
         }
         checker(news , name);
-        newsRepository.save(newsMapper.toDtoNews(news.get() , newsRequest));
+        newsRepository.save(newsMapper.toDtoNews(news.get() , newsRequest, image.get()));
     }
 
     @Override
