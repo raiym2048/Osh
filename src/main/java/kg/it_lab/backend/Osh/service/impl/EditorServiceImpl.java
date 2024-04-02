@@ -5,17 +5,19 @@ import kg.it_lab.backend.Osh.dto.auth.AuthLoginResponse;
 import kg.it_lab.backend.Osh.dto.auth.EditorPasswordRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
+import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
+import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
 import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.News;
+import kg.it_lab.backend.Osh.entities.Project;
 import kg.it_lab.backend.Osh.entities.User;
 import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
-import kg.it_lab.backend.Osh.repository.ImageRepository;
-import kg.it_lab.backend.Osh.repository.NewsRepository;
-import kg.it_lab.backend.Osh.repository.RoleRepository;
-import kg.it_lab.backend.Osh.repository.UserRepository;
+import kg.it_lab.backend.Osh.mapper.ProjectMapper;
+import kg.it_lab.backend.Osh.mapper.ServiceMapper;
+import kg.it_lab.backend.Osh.repository.*;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
 import net.minidev.json.JSONObject;
@@ -37,10 +39,13 @@ public class EditorServiceImpl implements EditorService {
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
     private final UserRepository userRepository;
-
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final ImageRepository imageRepository;
+    private final ServiceRepository serviceRepository;
+    private final ServiceMapper serviceMapper;
+    private final ProjectRepository projectRepository;
+    private final ProjectMapper projectMapper;
 
     @Override
     public void updateByName(String name, NewsRequest newsRequest , String  imageName) {
@@ -89,6 +94,44 @@ public class EditorServiceImpl implements EditorService {
         authLoginResponse.setToken(token);
         return  authLoginResponse;
 
+    }
+
+    @Override
+    public void updateProjectEditor(String name, ProjectRequest projectRequest) {
+        Optional<Project> project = projectRepository.findByName(name);
+        if (projectRequest.getName().isEmpty()) {
+            throw new BadRequestException("Title of the project can't be empty");
+        }
+        if (projectRequest.getDescription().isEmpty()) {
+            throw new BadRequestException("Content of the project can't be empty");
+        }
+        if (project.isEmpty()) {
+            throw new NotFoundException("Title of project with this name wasn't found", HttpStatus.NOT_FOUND);
+        }
+        if (projectRepository.findByName(projectRequest.getName()).isPresent()) {
+            throw new BadCredentialsException("Project with name " + projectRequest.getName() + " already exist!");
+        }
+        projectRepository.save(projectMapper.toDtoProject(project.get(), projectRequest));
+
+
+    }
+
+    @Override
+    public void updateServiceEditor(String name, ServiceRequest serviceRequest) {
+        Optional<kg.it_lab.backend.Osh.entities.Service> service = serviceRepository.findByName(name);
+        if (serviceRequest.getName().isEmpty()) {
+            throw new BadRequestException("Title of the service can't be empty");
+        }
+        if (serviceRequest.getDescription().isEmpty()) {
+            throw new BadRequestException("Content of the service can't be empty");
+        }
+        if (service.isEmpty()) {
+            throw new NotFoundException("Title of service with this name wasn't found", HttpStatus.NOT_FOUND);
+        }
+        if (serviceRepository.findByName(serviceRequest.getName()).isPresent()) {
+            throw new BadCredentialsException("Service with name " + serviceRequest.getName() + " already exist!");
+        }
+        serviceRepository.save(serviceMapper.toDtoService(service.get(), serviceRequest));
     }
 
     @Override
