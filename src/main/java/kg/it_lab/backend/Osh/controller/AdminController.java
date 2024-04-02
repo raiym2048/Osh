@@ -5,10 +5,10 @@ import kg.it_lab.backend.Osh.dto.category.CategoryRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
-import kg.it_lab.backend.Osh.dto.news.admin.AdminLoginRequest;
-import kg.it_lab.backend.Osh.dto.news.admin.AdminRegisterRequest;
 import kg.it_lab.backend.Osh.service.AdminService;
 
+import kg.it_lab.backend.Osh.service.EventService;
+import kg.it_lab.backend.Osh.service.NewsService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin")
 public class AdminController {
     private final AdminService adminService;
+    private final EventService eventService;
+    private final NewsService newsService;
 
     @PostMapping("/news/add")
     public MyData add(@RequestBody NewsRequest newsRequest ){
@@ -77,6 +79,14 @@ public class AdminController {
         return data;
     }
 
+    @PostMapping("/event/{eventName}/image/{imageName}")
+    public void attachImageToEvent(@PathVariable String imageName, @PathVariable String eventName) {
+        eventService.attachImageToEvent(eventName, imageName);
+    }
 
+    @PostMapping("/news/{newsName}/image/{imageName}")
+    public void attachImageToNews(@PathVariable String imageName, @PathVariable String newsName) {
+        newsService.attachImageToNews(newsName, imageName);
+    }
 
 }
