@@ -15,4 +15,5 @@ public class EventDetailResponse {
     private String slogan;
     private String description;
     private LocalDateTime dateTime;
+    private TimerResponse timer;
 }

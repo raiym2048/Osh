@@ -16,4 +16,5 @@ public class EventResponse {
     private String category;
     private String slogan;
     private LocalDateTime dateTime;
+    private TimerResponse timer;
 }

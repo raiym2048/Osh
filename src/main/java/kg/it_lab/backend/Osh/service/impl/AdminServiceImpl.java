@@ -135,13 +135,13 @@ public class AdminServiceImpl implements AdminService {
         }
             
 
-        if(eventRequest.getHour()> 24 || eventRequest.getHour() < 1){
+        if(eventRequest.getHour()> 23 || eventRequest.getHour() < 0){
             throw new BadRequestException("Incorrect date of hour");
         }
-        if(eventRequest.getMinute() < 1 || eventRequest.getMinute() > 60){
+        if(eventRequest.getMinute() < 0 || eventRequest.getMinute() > 59){
             throw new BadRequestException("Incorrect date of minutes");
         }
-        if(eventRequest.getSeconds() <  1 || eventRequest.getSeconds() > 60){
+        if(eventRequest.getSeconds() <  0 || eventRequest.getSeconds() > 59){
             throw new BadRequestException("Incorrect date of seconds");
         }
         Event event = new Event();
