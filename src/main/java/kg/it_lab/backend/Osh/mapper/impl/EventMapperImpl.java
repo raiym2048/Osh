@@ -23,6 +23,8 @@ public class EventMapperImpl implements EventMapper {
     public EventResponse toDto(Event event) {
         EventResponse eventResponse = new EventResponse();
         eventResponse.setId(event.getId());
+        if(event.getImage() != null)
+            eventResponse.setImagePath(event.getImage().getPath());
         eventResponse.setName(event.getName());
         eventResponse.setCategory(event.getCategory().getName());
         eventResponse.setSlogan(event.getSlogan());
@@ -55,6 +57,8 @@ public class EventMapperImpl implements EventMapper {
     public EventDetailResponse toDetailDto(Event event) {
         EventDetailResponse response = new EventDetailResponse();
         response.setId(event.getId());
+        if(event.getImage() != null)
+            response.setImagePath(event.getImage().getPath());
         response.setName(event.getName());
         response.setCategory(event.getCategory().getName());
         response.setSlogan(event.getSlogan());

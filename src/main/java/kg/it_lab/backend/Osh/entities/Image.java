@@ -20,4 +20,6 @@ public class Image {
     private News news;
     @OneToOne(mappedBy = "image")
     private Event event;
+    @OneToOne(mappedBy = "image")
+    private Activity activity;
 }
