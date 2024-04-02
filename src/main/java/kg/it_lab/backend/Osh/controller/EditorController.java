@@ -4,6 +4,8 @@ import kg.it_lab.backend.Osh.dto.auth.EditorPasswordRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
+import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
+import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,20 @@ public class EditorController {
         data.setMessage("News updated successfully");
         return data;
     }
+    @PutMapping("/project/updateByName/{projectName}")
+    public MyData updateProjectEditor(@PathVariable String projectName, @RequestBody ProjectRequest projectRequest ){
+        editorService.updateProjectEditor(projectName, projectRequest );
+        MyData data = new MyData();
+        data.setMessage("Project updated successfully");
+        return data;
+    }
+    @PutMapping("/service/updateByName/{name}")
+    public MyData updateServiceEditor(@PathVariable String serviceName, @RequestBody ServiceRequest serviceRequest ){
+        editorService.updateServiceEditor(serviceName, serviceRequest );
+        MyData data = new MyData();
+        data.setMessage("Service updated successfully");
+        return data;
+    }
 
 
     @PostMapping("/login")
@@ -33,5 +49,6 @@ public class EditorController {
         data.setMessage("Your password changed successfully");
         return data;
     }
+
 
 }
