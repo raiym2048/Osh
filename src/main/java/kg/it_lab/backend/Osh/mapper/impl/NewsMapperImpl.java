@@ -23,6 +23,8 @@ public class NewsMapperImpl implements NewsMapper {
     public NewsResponse toDto(News news) {
         NewsResponse newsResponse = new NewsResponse();
         newsResponse.setId(news.getId());
+        if(news.getImage() != null)
+            newsResponse.setImagePath(news.getImage().getPath());
         newsResponse.setName(news.getName());
         newsResponse.setSlogan(news.getSlogan());
         newsResponse.setCreatedAt(news.getCreatedAt());
@@ -44,6 +46,8 @@ public class NewsMapperImpl implements NewsMapper {
     public NewsDetailResponse toDetailDto(News news) {
         NewsDetailResponse response = new NewsDetailResponse();
         response.setId(news.getId());
+        if(news.getImage() != null)
+            response.setImagePath(news.getImage().getPath());
         response.setName(news.getName());
         response.setSlogan(news.getSlogan());
         response.setCreatedAt(news.getCreatedAt());

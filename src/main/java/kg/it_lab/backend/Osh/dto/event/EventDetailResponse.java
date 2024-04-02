@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 public class EventDetailResponse {
     private Long id;
+    private String imagePath;
     private String name;
     private String category;
     private String slogan;
