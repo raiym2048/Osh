@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Setter
 public class NewsDetailResponse {
     private Long id;
+    private String imagePath;
     private String name;
     private LocalDateTime createdAt;
     private String slogan;
