@@ -22,16 +22,7 @@ public class GeneratorService {
         return password.toString();
 
     }
-    public String generateLogin(){
-        String code = "";
-        Random random = new Random();
-        for (int k = 0; k < 7; k++) {
 
-            code += (char) (random.nextInt(26) + 65);
-
-        }
-        return code;
-    }
     public static boolean isStrongPassword(String password){
 
         if (password.length() < 8) {

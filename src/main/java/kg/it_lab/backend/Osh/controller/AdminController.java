@@ -1,14 +1,14 @@
 package kg.it_lab.backend.Osh.controller;
 
+import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
-import kg.it_lab.backend.Osh.dto.category.CategoryRequest;
+import kg.it_lab.backend.Osh.dto.admin.category.CategoryRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
+import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.service.AdminService;
 
-import kg.it_lab.backend.Osh.service.EventService;
-import kg.it_lab.backend.Osh.service.NewsService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +19,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin")
 public class AdminController {
     private final AdminService adminService;
-    private final EventService eventService;
-    private final NewsService newsService;
 
-    @PostMapping("/news/add")
-    public MyData add(@RequestBody NewsRequest newsRequest ){
-        adminService.add(newsRequest);
+    @PostMapping("/news/add/{imageName}")
+    public MyData add(@RequestBody NewsRequest newsRequest ,@PathVariable String imageName ){
+        adminService.add(newsRequest , imageName);
         MyData data = new MyData();
         data.setMessage("News added successfully");
         return data;
     }
-    @PutMapping("/news/updateByName/{name}")
-    public MyData updateByName(@PathVariable String name, @RequestBody NewsRequest newsRequest) {
-        adminService.updateByName(name, newsRequest);
+    @PutMapping("/news/updateByName/{newsName}/{imageName}")
+    public MyData updateByName(@PathVariable String newsName, @RequestBody NewsRequest newsRequest , @PathVariable String imageName) {
+        adminService.updateByName(newsName, newsRequest , imageName);
         MyData data = new MyData();
         data.setMessage("News updated successfully");
         return data;
@@ -43,16 +41,16 @@ public class AdminController {
         data.setMessage("News deleted successfully");
         return data;
     }
-    @PostMapping("/event/add")
-    public MyData add( @RequestBody EventRequest eventRequest){
-        adminService.addEvent(eventRequest);
+    @PostMapping("/event/add/{imageName}")
+    public MyData add( @RequestBody EventRequest eventRequest ,@PathVariable String imageName){
+        adminService.addEvent(eventRequest , imageName);
         MyData data = new MyData();
         data.setMessage("Event added successfully");
         return data;
     }
-    @PutMapping("/event/updateByName/{name}")
-    public MyData update(@PathVariable String name, @RequestBody EventRequest eventRequest) {
-        adminService.updateEvent(name, eventRequest);
+    @PutMapping("/event/updateByName/{eventName}/{imageName}")
+    public MyData update(@PathVariable String eventName, @RequestBody EventRequest eventRequest ,@PathVariable String imageName) {
+        adminService.updateEvent(eventName, eventRequest , imageName);
         MyData data = new MyData();
         data.setMessage("Event updated successfully");
         return data;
@@ -78,15 +76,19 @@ public class AdminController {
         data.setMessage("Category was successfully deleted");
         return data;
     }
-
-    @PostMapping("/event/{eventName}/image/{imageName}")
-    public void attachImageToEvent(@PathVariable String imageName, @PathVariable String eventName) {
-        eventService.attachImageToEvent(eventName, imageName);
+    @PostMapping("/register")
+    public MyData registerEditor(@RequestBody EditorRegisterRequest editorRegisterRequest){
+        adminService.registerEditor(editorRegisterRequest);
+        MyData data = new MyData();
+        data.setMessage("Your new login and password was sent to "+ editorRegisterRequest.getEmail()+" !");
+        return data;
     }
+    @PostMapping("/role/add")
+    public MyData addRole(@RequestBody RoleRequest roleRequest){
 
-    @PostMapping("/news/{newsName}/image/{imageName}")
-    public void attachImageToNews(@PathVariable String imageName, @PathVariable String newsName) {
-        newsService.attachImageToNews(newsName, imageName);
+        adminService.addRole(roleRequest);
+        MyData data = new MyData();
+        data.setMessage("Role added successfully");
+        return data;
     }
-
 }

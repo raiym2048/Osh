@@ -13,13 +13,13 @@ public class Event {
     private Long id;
     private String name;
     private String slogan;
+
     @Column(columnDefinition = "text")
     private String description;
     private LocalDateTime dateTime;
-
     @ManyToOne
+    @JoinColumn(referencedColumnName = "name")
     private Category category;
-
     @OneToOne
     @JoinColumn
     private Image image;
