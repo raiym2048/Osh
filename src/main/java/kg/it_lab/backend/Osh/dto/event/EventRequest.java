@@ -11,10 +11,10 @@ public class EventRequest {
     private Long categoryId ;
     private String slogan;
     private String description;
-    private Integer year;
-    private Integer month;
-    private Integer day;
-    private Integer hour;
-    private Integer minute;
-    private Integer seconds;
+        private Integer year;
+        private Integer month;
+        private Integer day;
+        private Integer hour;
+        private Integer minute;
+        private Integer seconds;
 }

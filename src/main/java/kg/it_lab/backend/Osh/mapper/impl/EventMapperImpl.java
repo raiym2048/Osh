@@ -4,6 +4,7 @@ import kg.it_lab.backend.Osh.dto.event.EventDetailResponse;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.event.EventResponse;
 import kg.it_lab.backend.Osh.entities.Event;
+import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.mapper.EventMapper;
 import kg.it_lab.backend.Osh.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class EventMapperImpl implements EventMapper {
     private final CategoryRepository categoryRepository;
+
     @Override
     public EventResponse toDto(Event event) {
         EventResponse eventResponse = new EventResponse();
@@ -38,14 +40,14 @@ public class EventMapperImpl implements EventMapper {
     }
 
     @Override
-    public Event toDtoEvent(Event event, EventRequest eventRequest) {
+    public Event toDtoEvent(Event event, EventRequest eventRequest , Image image) {
 
         event.setName(eventRequest.getName());
         event.setDescription(eventRequest.getDescription());
         event.setCategory(categoryRepository.findById(eventRequest.getCategoryId()).get());
         event.setSlogan(eventRequest.getSlogan());
         event.setDateTime(LocalDateTime.of(eventRequest.getYear() , eventRequest.getMonth() , eventRequest.getDay() , eventRequest.getHour(),   eventRequest.getMinute() , eventRequest.getSeconds()));
-
+        event.setImage(image);
         return event;
     }
 

@@ -1,4 +1,4 @@
-package kg.it_lab.backend.Osh.dto.category;
+package kg.it_lab.backend.Osh.dto.admin.category;
 
 import lombok.Getter;
 import lombok.Setter;
