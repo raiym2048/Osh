@@ -3,6 +3,7 @@ package kg.it_lab.backend.Osh.mapper.impl;
 import kg.it_lab.backend.Osh.dto.news.NewsDetailResponse;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsResponse;
+import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.News;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
 import kg.it_lab.backend.Osh.repository.CategoryRepository;
@@ -53,12 +54,13 @@ public class NewsMapperImpl implements NewsMapper {
 
 
     @Override
-    public News toDtoNews(News news, NewsRequest newsRequest) {
+    public News toDtoNews(News news, NewsRequest newsRequest , Image image) {
         news.setName(newsRequest.getName());
         news.setDescription(newsRequest.getDescription());
         news.setCreatedAt(LocalDateTime.now());
         news.setCategory(categoryRepository.findById(newsRequest.getCategoryId()).get());
         news.setSlogan(newsRequest.getSlogan());
+        news.setImage(image);
         return news;
     }
 }

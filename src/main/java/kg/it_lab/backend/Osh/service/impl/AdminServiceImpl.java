@@ -1,7 +1,4 @@
 package kg.it_lab.backend.Osh.service.impl;
-
-
-
 import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.admin.category.CategoryRequest;
 
@@ -41,6 +38,10 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     @Override
     public void add(NewsRequest newsRequest , String imageName) {
+        Optional<Image> image = imageRepository.findByName(imageName);
+        if(image.isEmpty()){
+            throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
+        }
         if(newsRequest.getName().isEmpty()){
             throw new BadRequestException("Title of the news can't be empty");
         }
@@ -51,11 +52,15 @@ public class AdminServiceImpl implements AdminService {
             throw new BadCredentialsException("News with name "+ newsRequest.getName() +" already exist!");
         }
         News news = new News();
-        newsRepository.save(newsMapper.toDtoNews(news,newsRequest));
+        newsRepository.save(newsMapper.toDtoNews(news,newsRequest , image.get()));
     }
 
     @Override
     public void updateByName(String name, NewsRequest newsRequest ,String imageName) {
+        Optional<Image> image = imageRepository.findByName(imageName);
+        if(image.isEmpty()){
+            throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
+        }
         Optional<News> news = newsRepository.findByName(name);
         if(newsRequest.getName().isEmpty()){
             throw new BadRequestException("Title of the news can't be empty");
@@ -70,7 +75,7 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Title of news with this name already exist");
         }
         checker(news , name);
-        newsRepository.save(newsMapper.toDtoNews(news.get() , newsRequest));
+        newsRepository.save(newsMapper.toDtoNews(news.get() , newsRequest ,image.get()));
     }
 
     @Override
