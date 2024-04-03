@@ -16,7 +16,6 @@ import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.*;
 import kg.it_lab.backend.Osh.repository.*;
-
 import kg.it_lab.backend.Osh.service.AdminService;
 
 import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
@@ -25,6 +24,8 @@ import org.springframework.http.HttpStatus;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,10 +48,10 @@ public class AdminServiceImpl implements AdminService {
     private final ActivityMapper activityMapper;
 
     @Override
-    public void add(NewsRequest newsRequest, String imageName) {
-        Optional<Image> image = imageRepository.findByName(imageName);
+    public void add(NewsRequest newsRequest, Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
         if (newsRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the news can't be empty");
@@ -58,20 +59,17 @@ public class AdminServiceImpl implements AdminService {
         if (newsRequest.getDescription().isEmpty()) {
             throw new BadRequestException("Content of the news can't be empty");
         }
-        if (newsRepository.findByName(newsRequest.getName()).isPresent()) {
-            throw new BadCredentialsException("News with name " + newsRequest.getName() + " already exist!");
-        }
         News news = new News();
         newsRepository.save(newsMapper.toDtoNews(news, newsRequest, image.get()));
     }
 
     @Override
-    public void updateByName(String name, NewsRequest newsRequest, String imageName) {
-        Optional<Image> image = imageRepository.findByName(imageName);
+    public void updateById(Long id, NewsRequest newsRequest, Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
-        Optional<News> news = newsRepository.findByName(name);
+        Optional<News> news = newsRepository.findById(id);
         if (newsRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the news can't be empty");
         }
@@ -81,27 +79,25 @@ public class AdminServiceImpl implements AdminService {
         if (news.isEmpty()) {
             throw new NotFoundException("Title of news with this name wasn't found", HttpStatus.NOT_FOUND);
         }
-        if (newsRepository.findByName(newsRequest.getName()).isPresent()) {
-            throw new BadRequestException("Title of news with this name already exist");
-        }
-        checker(news, name);
+
+        checker(news, id);
         newsRepository.save(newsMapper.toDtoNews(news.get(), newsRequest, image.get()));
     }
 
     @Override
-    public void deleteByName(String name) {
-        Optional<News> news = newsRepository.findByName(name);
-        checker(news, name);
-        newsRepository.deleteByName(name);
+    public void deleteById(Long id) {
+        Optional<News> news = newsRepository.findById(id);
+        checker(news, id);
+        newsRepository.deleteById(id);
         imageRepository.deleteByName(news.get().getImage().getName());
 
     }
 
     @Override
-    public void addEvent(EventRequest eventRequest, String imageName) {
-        Optional<Image> image = imageRepository.findByName(imageName);
+    public void addEvent(EventRequest eventRequest, Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
         if (eventRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the event can't be empty");
@@ -114,9 +110,6 @@ public class AdminServiceImpl implements AdminService {
         }
         if (eventRequest.getSlogan().isEmpty()) {
             throw new BadRequestException("Slogan of event can't be empty ");
-        }
-        if (eventRepository.findByName(eventRequest.getName()).isPresent()) {
-            throw new BadCredentialsException("Event with name " + eventRequest.getName() + " already exist!");
         }
         if (eventRequest.getYear() < 0) {
             throw new BadRequestException("Date of year can't be negative ");
@@ -164,12 +157,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateEvent(String name, EventRequest eventRequest, String imageName) {
-        Optional<Image> image = imageRepository.findByName(imageName);
+    public void updateEvent(Long id, EventRequest eventRequest, Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
-        Optional<Event> event = eventRepository.findByName(name);
+        Optional<Event> event = eventRepository.findById(id);
         if (eventRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the event can't be empty");
         }
@@ -178,9 +171,6 @@ public class AdminServiceImpl implements AdminService {
         }
         if (event.isEmpty()) {
             throw new NotFoundException("Title of event with this name wasn't found", HttpStatus.NOT_FOUND);
-        }
-        if (eventRepository.findByName(eventRequest.getName()).isPresent()) {
-            throw new BadRequestException("Title of event with this name already exist");
         }
         if (categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()) {
             throw new BadRequestException("Category of event can't be empty ");
@@ -218,12 +208,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteEvent(String name) {
-        Optional<Event> event = eventRepository.findByName(name);
+    public void deleteEvent(Long id) {
+        Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
-            throw new NotFoundException("Event with name " + name + " not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Event with id " + id + " not found", HttpStatus.NOT_FOUND);
         }
-        eventRepository.deleteByName(name);
+        eventRepository.deleteById(id);
         imageRepository.deleteByName(event.get().getImage().getName());
 
     }
@@ -244,12 +234,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteCategory(String name) {
-        Optional<Category> category = categoryRepository.findByName(name);
+    public void deleteCategory(Long id) {
+        Optional<Category> category = categoryRepository.findById(id);
         if (category.isEmpty()) {
             throw new BadRequestException("Category wasn't found");
         }
-        categoryRepository.deleteByName(name);
+        categoryRepository.deleteById(id);
     }
 
     @Override
@@ -264,6 +254,15 @@ public class AdminServiceImpl implements AdminService {
         Role role1 = new Role();
         role1.setName(roleRequest.getRoleName());
         roleRepository.save(role1);
+    }
+
+    @Override
+    public void deleteRole(Long id) {
+        Optional<Role>role = roleRepository.findById(id);
+        if(role.isEmpty()){
+            throw new NotFoundException("Role with this id " +id+" not found", HttpStatus.NOT_FOUND );
+        }
+        roleRepository.deleteById(id);
     }
 
     @Override
@@ -282,8 +281,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateProject(String name, ProjectRequest projectRequest) {
-        Optional<Project> project = projectRepository.findByName(name);
+    public void updateProject(Long id, ProjectRequest projectRequest) {
+        Optional<Project> project = projectRepository.findById(id);
         if (projectRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the project can't be empty");
         }
@@ -300,12 +299,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteProject(String name) {
-        Optional<Project> project = projectRepository.findByName(name);
+    public void deleteProject(Long id) {
+        Optional<Project> project = projectRepository.findById(id);
         if (project.isEmpty()) {
             throw new NotFoundException("Title of project with this name wasn't found", HttpStatus.NOT_FOUND);
         }
-        projectRepository.deleteByName(name);
+        projectRepository.deleteById(id);
     }
 
     @Override
@@ -319,14 +318,15 @@ public class AdminServiceImpl implements AdminService {
         if (serviceRepository.findByName(serviceRequest.getName()).isPresent()) {
             throw new BadCredentialsException("Service with name " + serviceRequest.getName() + " already exist!");
         }
-        var service = new kg.it_lab.backend.Osh.entities.Service();
+
+        var service = new Services();
         serviceRepository.save(serviceMapper.toDtoService(service, serviceRequest));
 
     }
 
     @Override
-    public void updateService(String name, ServiceRequest serviceRequest) {
-        Optional<kg.it_lab.backend.Osh.entities.Service> service = serviceRepository.findByName(name);
+    public void updateService(Long id, ServiceRequest serviceRequest) {
+        Optional<Services> service = serviceRepository.findById(id);
         if (serviceRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the service can't be empty");
         }
@@ -343,19 +343,55 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteService(String name) {
-        Optional<kg.it_lab.backend.Osh.entities.Service> service = serviceRepository.findByName(name);
-        if (service.isEmpty()) {
-            throw new NotFoundException("Title of service with this name wasn't found", HttpStatus.NOT_FOUND);
+    public void attachImageToService(Long serviceId, Long imageId) {
+        Optional<Services> service = serviceRepository.findById(serviceId);
+        if(service.isEmpty()){
+            throw new NotFoundException("Services with this id" + serviceId + "not found" ,HttpStatus.NOT_FOUND );
         }
-        serviceRepository.deleteByName(name);
+        Optional<Image>image = imageRepository.findById(imageId);
+        if(image.isEmpty()){
+            throw new NotFoundException("Image with id " + imageId + " not found" , HttpStatus.NOT_FOUND);
+        }
+        List<Image> images = new ArrayList<>();
+        if(service.get().getImages() != null)
+            images=service.get().getImages();
+            images.add(image.get());
+            service.get().setImages(images);
+            serviceRepository.save(service.get());
+
     }
 
     @Override
-    public void addActivity(ActivityRequest activityRequest, String imageName) {
-        Optional<Image> image = imageRepository.findByName(imageName);
+    public void attachImageToProject(Long projectId, Long imageId) {
+        Optional<Project>project =projectRepository.findById(projectId);
+        if(project.isEmpty()){
+            throw new NotFoundException("project with this name not found ", HttpStatus.NOT_FOUND);
+        }
+        Optional<Image>image =imageRepository.findById(imageId);
+        if(image.isEmpty()){
+            throw new NotFoundException("Image with id " + imageId + " not found" , HttpStatus.NOT_FOUND);
+        }
+        List<Image> images = new ArrayList<>();
+        if(project.get().getImages() != null) images = project.get().getImages();
+        images.add(image.get());
+        project.get().setImages(images);
+        projectRepository.save(project.get());
+    }
+
+    @Override
+    public void deleteService(Long id) {
+        Optional<Services> service = serviceRepository.findById(id);
+        if (service.isEmpty()) {
+            throw new NotFoundException("Title of service with this name wasn't found", HttpStatus.NOT_FOUND);
+        }
+        serviceRepository.deleteById(id);
+    }
+
+    @Override
+    public void addActivity(ActivityRequest activityRequest, Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
         if (activityRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the activity can't be empty");
@@ -371,12 +407,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void updateActivity(String name, ActivityRequest activityRequest, String imageName) {
-        Optional<Image> image = imageRepository.findByName(imageName);
+    public void updateActivity(Long id, ActivityRequest activityRequest, Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
         }
-        Optional<Activity> activity = activityRepository.findByName(name);
+        Optional<Activity> activity = activityRepository.findById(id);
         if (activityRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the activity can't be empty");
         }
@@ -393,14 +429,15 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteActivity(String name) {
-        Optional<Activity> activity = activityRepository.findByName(name);
+    public void deleteActivity(Long id) {
+        Optional<Activity> activity = activityRepository.findById(id);
         if (activity.isEmpty()) {
-            throw new NotFoundException("Activity with name " + name + " not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Activity with id " + id + " not found", HttpStatus.NOT_FOUND);
         }
 
-        activityRepository.deleteByName(name);
+        activityRepository.deleteById(id);
         imageRepository.deleteByName(activity.get().getImage().getName());
+
 
     }
 
@@ -428,9 +465,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    private void checker(Optional<News> news, String name) {
+    private void checker(Optional<News> news, Long id ) {
         if (news.isEmpty()) {
-            throw new NotFoundException("News with name " + name + " not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("News with id " + id + " not found", HttpStatus.NOT_FOUND);
         }
     }
 }

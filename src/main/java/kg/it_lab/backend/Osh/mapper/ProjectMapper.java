@@ -12,5 +12,4 @@ public interface ProjectMapper {
     List<ProjectResponse> toDtoS(List<Project> projects);
     Project toDtoProject(Project project , ProjectRequest projectRequest);
 
-    ProjectDetailResponse toDetailDto(Project project);
 }
