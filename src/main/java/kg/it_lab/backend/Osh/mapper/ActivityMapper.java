@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface ActivityMapper {
     ActivityResponse toDto(Activity activity);
-    List<ActivityResponse> toDtos(List<Activity> activities);
+    List<ActivityResponse> toDtoS(List<Activity> activities);
     Activity toDtoActivity(Activity activity , ActivityRequest activityRequest, Image image);
 
 }

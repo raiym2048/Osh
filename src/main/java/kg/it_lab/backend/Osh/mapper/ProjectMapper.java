@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ProjectMapper {
     ProjectResponse toDto(Project project);
-    List<ProjectResponse> toDtos(List<Project> projects);
+    List<ProjectResponse> toDtoS(List<Project> projects);
     Project toDtoProject(Project project , ProjectRequest projectRequest);
 
     ProjectDetailResponse toDetailDto(Project project);
