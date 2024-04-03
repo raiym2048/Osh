@@ -1,9 +1,9 @@
 package kg.it_lab.backend.Osh.mapper.impl;
 
-import com.amazonaws.services.polly.model.Gender;
 import kg.it_lab.backend.Osh.dto.volunteer.VolunteerRequest;
 import kg.it_lab.backend.Osh.dto.volunteer.VolunteerResponse;
 import kg.it_lab.backend.Osh.entities.Volunteer;
+import kg.it_lab.backend.Osh.enums.Gender;
 import kg.it_lab.backend.Osh.mapper.VolunteerMapper;
 import org.springframework.stereotype.Component;
 
