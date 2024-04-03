@@ -30,7 +30,6 @@ public class ImageMapperImpl implements ImageMapper {
     @Override
     public Image toDtoImage(Image image, String name) {
         image.setName(name);
-        image.setPath("localhost:5151/image/view/" + image.getId());
         return image;
     }
 }
