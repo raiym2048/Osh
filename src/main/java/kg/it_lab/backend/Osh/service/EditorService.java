@@ -7,16 +7,14 @@ import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
-import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
-import kg.it_lab.backend.Osh.entities.User;
+import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 
 public interface EditorService {
     void updateById(Long id, NewsRequest newsRequest , Long imageId);
     void updateProject(Long id, ProjectRequest projectRequest );
-    void updateService(Long id, ServiceRequest serviceRequest );
+    void updateService(Long id, ServicesRequest servicesRequest);
     AuthLoginResponse loginEditor(AdminLoginRequest adminLoginRequest);
-    void changePassword(String token  ,EditorPasswordRequest editorPasswordRequest);
+    void changePassword(String token ,EditorPasswordRequest editorPasswordRequest);
     void updateActivity(Long id , ActivityRequest activityRequest , Long imageId );
     void updateEvent(Long eventId , EventRequest eventRequest , Long imageId );
-    public User getUserFromToken(String token);
 }

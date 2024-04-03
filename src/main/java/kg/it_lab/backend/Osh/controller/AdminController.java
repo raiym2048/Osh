@@ -9,7 +9,7 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
-import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
+import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.service.AdminService;
 
 import lombok.AllArgsConstructor;
@@ -78,11 +78,11 @@ public class AdminController {
         data.setMessage("Category was successfully deleted");
         return data;
     }
-    @PostMapping("/register")
+    @PostMapping("/registerEditor")
     public MyData registerEditor(@RequestBody EditorRegisterRequest editorRegisterRequest){
         adminService.registerEditor(editorRegisterRequest);
         MyData data = new MyData();
-        data.setMessage("Your new login and password was sent to "+ editorRegisterRequest.getEmail()+" !");
+        data.setMessage("Your password was sent to "+ editorRegisterRequest.getEmail()+" !");
         return data;
     }
     @PostMapping("/role/add")
@@ -124,20 +124,23 @@ public class AdminController {
         return data;
     }
     @PostMapping("/project/attachImageToProject/{projectId}/image/{imageId}")
-    public void attachImageToProject(@PathVariable Long projectId, @PathVariable Long imageId) {
+    public MyData attachImageToProject(@PathVariable Long projectId, @PathVariable Long imageId) {
         adminService.attachImageToProject(projectId, imageId);
+        MyData data = new MyData();
+        data.setMessage("Image attached to project successfully");
+        return data;
     }
 
     @PostMapping("/service/add")
-    public MyData addService(@RequestBody ServiceRequest serviceRequest ){
-        adminService.addService(serviceRequest);
+    public MyData addService(@RequestBody ServicesRequest servicesRequest){
+        adminService.addService(servicesRequest);
         MyData data = new MyData();
         data.setMessage("Service added successfully");
         return data;
     }
     @PutMapping("/service/updateById/{id}")
-    public MyData updateService(@PathVariable Long id, @RequestBody ServiceRequest serviceRequest ){
-        adminService.updateService(id, serviceRequest );
+    public MyData updateService(@PathVariable Long id, @RequestBody ServicesRequest servicesRequest){
+        adminService.updateService(id, servicesRequest);
         MyData data = new MyData();
         data.setMessage("Service updated successfully");
         return data;
@@ -150,8 +153,11 @@ public class AdminController {
         return data;
     }
     @PostMapping("/service/attachImageToService/{serviceId}/image/{imageId}")
-    public void attachImageToService(@PathVariable Long serviceId, @PathVariable Long imageId) {
+    public MyData attachImageToService(@PathVariable Long serviceId, @PathVariable Long imageId) {
         adminService.attachImageToService(serviceId, imageId);
+        MyData data = new MyData();
+        data.setMessage("Image attached to services successfully");
+        return data;
     }
     @PostMapping("/activity/add/{imageId}")
     public MyData addActivity(@RequestBody ActivityRequest activityRequest , @PathVariable Long imageId ){

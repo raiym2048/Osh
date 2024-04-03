@@ -8,25 +8,23 @@ import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
-import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
+import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.entities.*;
 import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.*;
 import kg.it_lab.backend.Osh.repository.*;
+import kg.it_lab.backend.Osh.service.AuthLoginService;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -39,8 +37,8 @@ public class EditorServiceImpl implements EditorService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final ImageRepository imageRepository;
-    private final ServiceRepository serviceRepository;
-    private final ServiceMapper serviceMapper;
+    private final ServicesRepository servicesRepository;
+    private final ServicesMapper servicesMapper;
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
     private final ActivityRepository activityRepository;
@@ -48,6 +46,8 @@ public class EditorServiceImpl implements EditorService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
     private final CategoryRepository categoryRepository;
+    private final PasswordEncoder encoder;
+    private final AuthLoginService authLoginService;
 
     @Override
     public void updateById(Long id, NewsRequest newsRequest, Long imageId) {
@@ -63,7 +63,7 @@ public class EditorServiceImpl implements EditorService {
             throw new BadRequestException("Content of the news can't be empty");
         }
         if (news.isEmpty()) {
-            throw new NotFoundException("Title of news with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("News with ID  wasn't found", HttpStatus.NOT_FOUND);
         }
 
         checker(news, id);
@@ -80,7 +80,7 @@ public class EditorServiceImpl implements EditorService {
             throw new BadRequestException("Content of the project can't be empty");
         }
         if (project.isEmpty()) {
-            throw new NotFoundException("Title of project with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Project with this ID wasn't found", HttpStatus.NOT_FOUND);
         }
         if (projectRepository.findByName(projectRequest.getName()).isPresent()) {
             throw new BadCredentialsException("Project with name " + projectRequest.getName() + " already exist!");
@@ -89,21 +89,21 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public void updateService(Long id, ServiceRequest serviceRequest) {
-        Optional<Services> service = serviceRepository.findById(id);
-        if (serviceRequest.getName().isEmpty()) {
+    public void updateService(Long id, ServicesRequest servicesRequest) {
+        Optional<Services> service = servicesRepository.findById(id);
+        if (servicesRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the service can't be empty");
         }
-        if (serviceRequest.getDescription().isEmpty()) {
+        if (servicesRequest.getDescription().isEmpty()) {
             throw new BadRequestException("Content of the service can't be empty");
         }
         if (service.isEmpty()) {
-            throw new NotFoundException("Title of service with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Service with this ID wasn't found", HttpStatus.NOT_FOUND);
         }
-        if (serviceRepository.findByName(serviceRequest.getName()).isPresent()) {
-            throw new BadCredentialsException("Service with name " + serviceRequest.getName() + " already exist!");
+        if (servicesRepository.findByName(servicesRequest.getName()).isPresent()) {
+            throw new BadCredentialsException("Service with name " + servicesRequest.getName() + " already exist!");
         }
-        serviceRepository.save(serviceMapper.toDtoService(service.get(), serviceRequest));
+        servicesRepository.save(servicesMapper.toDtoService(service.get(), servicesRequest));
     }
 
     @Override
@@ -133,13 +133,16 @@ public class EditorServiceImpl implements EditorService {
     }
     @Override
     public void changePassword(String token  ,EditorPasswordRequest editorPasswordRequest) {
-        User editor  = getUserFromToken(token); //todo change here
+        User editor  = authLoginService.getUserFromToken(token);
+
         String pass1 = editorPasswordRequest.getPassword1();
         String pass2 = editorPasswordRequest.getPassword2();
         if(!Objects.equals(pass1, pass2)){
             throw new BadRequestException("Passwords don't match!");
         }
-        editor.setPassword(pass1);
+
+        editor.setPassword(encoder.encode(pass1));
+
         userRepository.save(editor);
 
     }
@@ -180,7 +183,7 @@ public class EditorServiceImpl implements EditorService {
             throw new BadRequestException("Content of the event can't be empty");
         }
         if (event.isEmpty()) {
-            throw new NotFoundException("Title of event with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Event with this ID wasn't found", HttpStatus.NOT_FOUND);
         }
         if (categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()) {
             throw new BadRequestException("Category of event can't be empty ");
@@ -220,22 +223,7 @@ public class EditorServiceImpl implements EditorService {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
 
-    @Override
-    public User getUserFromToken(String token) {
-        String[] chunks = token.substring(7).split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        if (chunks.length != 3)
-            throw new org.springframework.security.authentication.BadCredentialsException("Wrong token!");
-        JSONParser jsonParser = new JSONParser();
-        JSONObject object = null;
-        try {
-            byte[] decodedBytes = decoder.decode(chunks[1]);
-            object = (JSONObject) jsonParser.parse(decodedBytes);
-        } catch (ParseException e) {
-            throw new org.springframework.security.authentication.BadCredentialsException("Wrong token!!");
-        }
-        return userRepository.findByUsername(String.valueOf(object.get("sub"))).orElseThrow(() -> new org.springframework.security.authentication.BadCredentialsException("Wrong token!!!"));
-    }
+
 
     private void checker(Optional<News> news, Long id) {
         if(news.isEmpty()) {
