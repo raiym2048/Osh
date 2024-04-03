@@ -11,29 +11,30 @@ import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
 
 public interface AdminService {
-    void add(NewsRequest newsRequest , String  imageName);
+    void add(NewsRequest newsRequest , Long  imageId);
 
-    void updateByName(String name, NewsRequest newsRequest , String imageName);
+    void updateById(Long id, NewsRequest newsRequest , Long imageId);
 
-    void deleteByName(String name);
-    void addEvent(EventRequest eventRequest , String imageName );
-    void updateEvent(String eventName , EventRequest eventRequest ,   String imageName );
-    void deleteEvent(String name);
+    void deleteById(Long id);
+    void addEvent(EventRequest eventRequest , Long imageId );
+    void updateEvent(Long eventId , EventRequest eventRequest ,   Long imageId );
+    void deleteEvent(Long id);
     void addCategory(CategoryRequest categoryRequest);
-    void deleteCategory(String name);
+    void deleteCategory(Long id);
     void registerEditor(EditorRegisterRequest editorRegisterRequest);
     void addRole(RoleRequest roleRequest);
+    void deleteRole(Long id );
     void addProject(ProjectRequest projectRequest );
-    void updateProject(String name, ProjectRequest projectRequest );
-
-    void deleteProject(String name);
+    void updateProject(Long id, ProjectRequest projectRequest );
+    void attachImageToProject(Long projectId, Long imageId);
+    void deleteProject(Long id);
     void addService(ServiceRequest serviceRequest );
-    void updateService(String name, ServiceRequest serviceRequest );
-
-    void deleteService(String name);
-    void addActivity(ActivityRequest activityRequest , String imageName );
-    void updateActivity(String name , ActivityRequest activityRequest ,   String imageName );
-    void deleteActivity(String name);
+    void updateService(Long id, ServiceRequest serviceRequest );
+    void attachImageToService(Long serviceId, Long imageId);
+    void deleteService(Long id);
+    void addActivity(ActivityRequest activityRequest , Long imageId );
+    void updateActivity(Long id , ActivityRequest activityRequest ,   Long imageId );
+    void deleteActivity(Long id);
 
 
 }

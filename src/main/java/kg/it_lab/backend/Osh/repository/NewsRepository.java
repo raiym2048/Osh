@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long> {
     Optional<News> findByName(String name);
-    @Transactional
-    void deleteByName(String name);
+
+
 }
