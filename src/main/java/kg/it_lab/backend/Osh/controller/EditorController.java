@@ -8,7 +8,7 @@ import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
-import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
+import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 public class EditorController {
     private final EditorService editorService;
     @PutMapping("/service/updateById/{id}")
-    public MyData updateService(@PathVariable Long id, @RequestBody ServiceRequest serviceRequest ){
-        editorService.updateService(id, serviceRequest );
+    public MyData updateService(@PathVariable Long id, @RequestBody ServicesRequest servicesRequest){
+        editorService.updateService(id, servicesRequest);
         MyData data = new MyData();
         data.setMessage("Service updated successfully");
         return data;

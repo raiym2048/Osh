@@ -8,7 +8,7 @@ import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
-import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
+import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 
 public interface AdminService {
     void add(NewsRequest newsRequest , Long  imageId);
@@ -28,8 +28,8 @@ public interface AdminService {
     void updateProject(Long id, ProjectRequest projectRequest );
     void attachImageToProject(Long projectId, Long imageId);
     void deleteProject(Long id);
-    void addService(ServiceRequest serviceRequest );
-    void updateService(Long id, ServiceRequest serviceRequest );
+    void addService(ServicesRequest servicesRequest);
+    void updateService(Long id, ServicesRequest servicesRequest);
     void attachImageToService(Long serviceId, Long imageId);
     void deleteService(Long id);
     void addActivity(ActivityRequest activityRequest , Long imageId );

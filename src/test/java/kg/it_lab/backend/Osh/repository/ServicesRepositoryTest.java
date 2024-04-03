@@ -10,10 +10,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class ServiceRepositoryTest {
+class ServicesRepositoryTest {
 
     @Autowired
-    private ServiceRepository serviceRepository;
+    private ServicesRepository servicesRepository;
     private final Services services = new Services();
     @BeforeEach
     void setUp() {
@@ -21,17 +21,17 @@ class ServiceRepositoryTest {
         services.setSubtopic("example");
         services.setDescription("It's description");
         services.setImages(null);
-        serviceRepository.save(services);
+        servicesRepository.save(services);
     }
 
     @AfterEach
     void tearDown() {
-        serviceRepository.deleteAll();
+        servicesRepository.deleteAll();
     }
 
     @Test
     void itShouldFindServiceByName() {
-        Services findServiceByName = serviceRepository.findByName(services.getName()).orElse(null);
+        Services findServiceByName = servicesRepository.findByName(services.getName()).orElse(null);
 
         assertNotNull(findServiceByName);
         assertEquals(services.getName(), findServiceByName.getName());
