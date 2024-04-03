@@ -9,7 +9,7 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
-import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
+import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.service.AdminService;
 
 import lombok.AllArgsConstructor;
@@ -132,15 +132,15 @@ public class AdminController {
     }
 
     @PostMapping("/service/add")
-    public MyData addService(@RequestBody ServiceRequest serviceRequest ){
-        adminService.addService(serviceRequest);
+    public MyData addService(@RequestBody ServicesRequest servicesRequest){
+        adminService.addService(servicesRequest);
         MyData data = new MyData();
         data.setMessage("Service added successfully");
         return data;
     }
     @PutMapping("/service/updateById/{id}")
-    public MyData updateService(@PathVariable Long id, @RequestBody ServiceRequest serviceRequest ){
-        adminService.updateService(id, serviceRequest );
+    public MyData updateService(@PathVariable Long id, @RequestBody ServicesRequest servicesRequest){
+        adminService.updateService(id, servicesRequest);
         MyData data = new MyData();
         data.setMessage("Service updated successfully");
         return data;
