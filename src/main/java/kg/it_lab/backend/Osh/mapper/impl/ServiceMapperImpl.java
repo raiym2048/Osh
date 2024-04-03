@@ -2,7 +2,7 @@ package kg.it_lab.backend.Osh.mapper.impl;
 
 import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
 import kg.it_lab.backend.Osh.dto.service.ServiceResponse;
-import kg.it_lab.backend.Osh.entities.Service;
+import kg.it_lab.backend.Osh.entities.Services;
 import kg.it_lab.backend.Osh.mapper.ServiceMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,27 +15,27 @@ import java.util.List;
 public class ServiceMapperImpl implements ServiceMapper {
 
     @Override
-    public ServiceResponse toDto(Service service) {
+    public ServiceResponse toDto(Services services) {
         ServiceResponse serviceResponse = new ServiceResponse();
-        serviceResponse.setName(service.getName());
-        serviceResponse.setDescription(service.getDescription());
-        serviceResponse.setSubtopic(service.getSubtopic());
+        serviceResponse.setName(services.getName());
+        serviceResponse.setDescription(services.getDescription());
+        serviceResponse.setSubtopic(services.getSubtopic());
         return serviceResponse;
     }
     @Override
-    public List<ServiceResponse> toDtos(List<Service> services) {
+    public List<ServiceResponse> toDtos(List<Services> services) {
         List<ServiceResponse> serviceResponses = new ArrayList<>();
-        for(Service service : services){
+        for(Services service : services){
             serviceResponses.add(toDto(service));
         }
         return serviceResponses;
     }
 
     @Override
-    public Service toDtoService(Service service, ServiceRequest serviceRequest) {
-        service.setName(serviceRequest.getName());
-        service.setDescription(serviceRequest.getDescription());
-        service.setSubtopic(serviceRequest.getSubtopic());
-        return service;
+    public Services toDtoService(Services services, ServiceRequest serviceRequest) {
+        services.setName(serviceRequest.getName());
+        services.setDescription(serviceRequest.getDescription());
+        services.setSubtopic(serviceRequest.getSubtopic());
+        return services;
     }
 }
