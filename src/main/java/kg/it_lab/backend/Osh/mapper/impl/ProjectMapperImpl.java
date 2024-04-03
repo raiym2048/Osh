@@ -2,6 +2,7 @@ package kg.it_lab.backend.Osh.mapper.impl;
 import kg.it_lab.backend.Osh.dto.project.ProjectDetailResponse;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectResponse;
+import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.Project;
 import kg.it_lab.backend.Osh.mapper.ProjectMapper;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,15 @@ public class ProjectMapperImpl implements ProjectMapper {
     @Override
     public ProjectResponse toDto(Project project) {
         ProjectResponse projectResponse = new ProjectResponse();
-        projectResponse.setName(projectResponse.getName());
-        projectResponse.setDescription(projectResponse.getDescription());
-        projectResponse.setSubtopic(projectResponse.getSubtopic());
+        projectResponse.setId(project.getId());
+        projectResponse.setName(project.getName());
+        projectResponse.setDescription(project.getDescription());
+        projectResponse.setSubtopic(project.getSubtopic());
+        ArrayList<String> paths = new ArrayList<>();
+        for(Image image: project.getImages()){
+            paths.add(image.getPath());
+        }
+        projectResponse.setImagePaths(paths);
         return projectResponse;
     }
 
