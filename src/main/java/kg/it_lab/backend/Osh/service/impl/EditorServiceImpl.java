@@ -8,7 +8,7 @@ import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
-import kg.it_lab.backend.Osh.dto.service.ServiceRequest;
+import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.entities.*;
 import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
@@ -18,9 +18,6 @@ import kg.it_lab.backend.Osh.repository.*;
 import kg.it_lab.backend.Osh.service.AuthLoginService;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
-import net.minidev.json.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,8 +25,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.beans.Encoder;
-import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -42,8 +37,8 @@ public class EditorServiceImpl implements EditorService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final ImageRepository imageRepository;
-    private final ServiceRepository serviceRepository;
-    private final ServiceMapper serviceMapper;
+    private final ServicesRepository servicesRepository;
+    private final ServicesMapper servicesMapper;
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
     private final ActivityRepository activityRepository;
@@ -94,21 +89,21 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public void updateService(Long id, ServiceRequest serviceRequest) {
-        Optional<Services> service = serviceRepository.findById(id);
-        if (serviceRequest.getName().isEmpty()) {
+    public void updateService(Long id, ServicesRequest servicesRequest) {
+        Optional<Services> service = servicesRepository.findById(id);
+        if (servicesRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the service can't be empty");
         }
-        if (serviceRequest.getDescription().isEmpty()) {
+        if (servicesRequest.getDescription().isEmpty()) {
             throw new BadRequestException("Content of the service can't be empty");
         }
         if (service.isEmpty()) {
             throw new NotFoundException("Service with this ID wasn't found", HttpStatus.NOT_FOUND);
         }
-        if (serviceRepository.findByName(serviceRequest.getName()).isPresent()) {
-            throw new BadCredentialsException("Service with name " + serviceRequest.getName() + " already exist!");
+        if (servicesRepository.findByName(servicesRequest.getName()).isPresent()) {
+            throw new BadCredentialsException("Service with name " + servicesRequest.getName() + " already exist!");
         }
-        serviceRepository.save(serviceMapper.toDtoService(service.get(), serviceRequest));
+        servicesRepository.save(servicesMapper.toDtoService(service.get(), servicesRequest));
     }
 
     @Override

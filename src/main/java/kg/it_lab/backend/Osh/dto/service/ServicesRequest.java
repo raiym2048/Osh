@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ServiceRequest {
+public class ServicesRequest {
     private String name;
     private String subtopic;
     private String description; //todo text there
