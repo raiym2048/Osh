@@ -56,7 +56,9 @@ public class ImageServiceImpl implements ImageService {
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
         fileObj.delete();
         Image image = new Image();
-        imageRepository.save(imageMapper.toDtoImage(image, fileName));
+        Image image1 = imageRepository.saveAndFlush(imageMapper.toDtoImage(image, fileName));
+        image1.setPath("localhost:5151/image/view/" + image1.getId());
+        imageRepository.save(image1);
         return fileName;
     }
 
