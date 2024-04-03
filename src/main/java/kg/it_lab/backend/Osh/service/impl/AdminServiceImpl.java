@@ -170,7 +170,7 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Content of the event can't be empty");
         }
         if (event.isEmpty()) {
-            throw new NotFoundException("Title of event with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Title of event with this id wasn't found", HttpStatus.NOT_FOUND);
         }
         if (categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()) {
             throw new BadRequestException("Category of event can't be empty ");
@@ -290,7 +290,7 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Content of the project can't be empty");
         }
         if (project.isEmpty()) {
-            throw new NotFoundException("Title of project with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Title of project with this id wasn't found", HttpStatus.NOT_FOUND);
         }
         if (projectRepository.findByName(projectRequest.getName()).isPresent()) {
             throw new BadCredentialsException("Project with name " + projectRequest.getName() + " already exist!");
@@ -302,7 +302,7 @@ public class AdminServiceImpl implements AdminService {
     public void deleteProject(Long id) {
         Optional<Project> project = projectRepository.findById(id);
         if (project.isEmpty()) {
-            throw new NotFoundException("Title of project with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Project with this id wasn't found", HttpStatus.NOT_FOUND);
         }
         projectRepository.deleteById(id);
     }
@@ -334,7 +334,7 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Content of the service can't be empty");
         }
         if (service.isEmpty()) {
-            throw new NotFoundException("Title of service with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException( "Service with this id wasn't found", HttpStatus.NOT_FOUND);
         }
         if (serviceRepository.findByName(serviceRequest.getName()).isPresent()) {
             throw new BadCredentialsException("Service with name " + serviceRequest.getName() + " already exist!");
@@ -365,7 +365,7 @@ public class AdminServiceImpl implements AdminService {
     public void attachImageToProject(Long projectId, Long imageId) {
         Optional<Project>project =projectRepository.findById(projectId);
         if(project.isEmpty()){
-            throw new NotFoundException("project with this name not found ", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("project with this id not found ", HttpStatus.NOT_FOUND);
         }
         Optional<Image>image =imageRepository.findById(imageId);
         if(image.isEmpty()){
@@ -382,7 +382,7 @@ public class AdminServiceImpl implements AdminService {
     public void deleteService(Long id) {
         Optional<Services> service = serviceRepository.findById(id);
         if (service.isEmpty()) {
-            throw new NotFoundException("Title of service with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Service with this id wasn't found", HttpStatus.NOT_FOUND);
         }
         serviceRepository.deleteById(id);
     }
@@ -420,7 +420,7 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Content of the activity can't be empty");
         }
         if (activity.isEmpty()) {
-            throw new NotFoundException("Title of activity with this name wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Activity with this ID wasn't found", HttpStatus.NOT_FOUND);
         }
         if (activityRepository.findByName(activityRequest.getName()).isPresent()) {
             throw new BadRequestException("Title of activity with this name already exist");
