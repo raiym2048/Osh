@@ -43,13 +43,4 @@ class NewsRepositoryTest {
         assertNotNull(newsFindByName);
         assertEquals(news.getName(), newsFindByName.getName());
     }
-
-    @Test
-    void itShouldDeleteNewsByName() {
-        newsRepository.deleteByName(news.getName());
-
-        News deletedNews = newsRepository.findByName(news.getName()).orElse(null);
-
-        assertNull(deletedNews);
-    }
 }

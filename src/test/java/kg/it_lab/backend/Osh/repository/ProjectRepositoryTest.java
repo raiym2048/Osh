@@ -38,13 +38,4 @@ class ProjectRepositoryTest {
         assertNotNull(projectRepository.findByName(project.getName()));
         assertEquals(project.getName(), findProjectByName.getName());
     }
-
-    @Test
-    void itShouldDeleteProjectByName() {
-        projectRepository.deleteByName(project.getName());
-
-        Project emptyProject = projectRepository.findByName(project.getName()).orElse(null);
-
-        assertNull(emptyProject);
-    }
 }

@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -18,17 +20,29 @@ class EventRepositoryTest {
     private final Event event = new Event();
     @BeforeEach
     void setUp() {
-//        event.setName();
+        event.setName("example");
+        event.setSlogan("example");
+        event.setDescription("It's description for event");
+        event.setDateTime(LocalDateTime.now());
+        event.setCategory(null);
+        event.setImage(null);
+        eventRepository.save(event);
     }
 
     @AfterEach
     void tearDown() {
+        eventRepository.deleteAll();
     }
 
     @Test
-    void findByName() {
+    void itShouldFindEventByName() {
+        Event findEventByName = eventRepository.findByName(event.getName()).orElse(null);
+
+        assertNotNull(findEventByName);
+        assertEquals(event.getName(), findEventByName.getName());
     }
 
+    // todo will the method remove?
     @Test
     void deleteByName() {
     }
