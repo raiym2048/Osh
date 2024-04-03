@@ -1,7 +1,7 @@
 package kg.it_lab.backend.Osh.entities;
 
-import com.amazonaws.services.polly.model.Gender;
 import jakarta.persistence.*;
+import kg.it_lab.backend.Osh.enums.Gender;
 import lombok.Data;
 
 import java.time.LocalDate;

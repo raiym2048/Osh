@@ -22,8 +22,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-                                "/auth/**", "/user/**" , "/editor/**" , "/admin/**", "/event/**", "/news/**", "/image/**", "/activity/**").permitAll()
-//                        .requestMatchers("/editor/hello").hasRole("EDITOR")
+                                "/auth/**", "/user/**" , "/editor/**" , "/admin/**", "/event/**", "/news/**", "/image/**", "/activity/**", "/project/**").permitAll()
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
