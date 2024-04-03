@@ -27,9 +27,7 @@ public class EmailSenderService {
         try{
 
             Optional<User> user = userRepository.findByEmail(to);
-            String username = generatorService.generateLogin();
             String password = generatorService.generatePassword();
-            user.get().setUsername(username);
             user.get().setPassword(encoder.encode(password));
             userRepository.save(user.get());
             String email = to;
@@ -38,8 +36,8 @@ public class EmailSenderService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("ecomarket1111@gmail.com");
             message.setTo(to);
-            message.setText("This is your new login: " + username+ " \n\nThis is your new password  " + password);
-            message.setSubject("Youth of Osh. Date for auth.");
+            message.setText("This is your new password  " + password);
+            message.setSubject("Youth of Osh. Password for auth.");
             mailSender.send(message);
         }catch (MailException e ){
             throw new BadRequestException("Email is invalid , please enter correct email");

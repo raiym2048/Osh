@@ -36,18 +36,4 @@ public class EventServiceImpl implements EventService {
         return eventMapper.toDetailDto(event.get());
     }
 
-    @Override
-    public void attachImageToEvent(String eventName, String imageName) {
-        Optional<Event> event = eventRepository.findByName(eventName);
-        if(event.isEmpty()) {
-            throw new NotFoundException("Event with name \"" + eventName + "\" not found", HttpStatus.NOT_FOUND);
-        }
-        Optional<Image> image = imageRepository.findByName(imageName);
-        if(image.isEmpty()) {
-            throw new NotFoundException("Image with name=\"" + imageName + "\" not found", HttpStatus.NOT_FOUND);
-        }
-        event.get().setImage(image.get());
-        eventRepository.save(event.get());
-    }
-
 }

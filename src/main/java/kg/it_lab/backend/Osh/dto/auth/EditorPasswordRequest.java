@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EditorPasswordRequest {
-    private String oldPassword;
     private String password1;
     private String password2;
 }

@@ -4,7 +4,6 @@ import kg.it_lab.backend.Osh.config.JwtService;
 import kg.it_lab.backend.Osh.dto.auth.AuthLoginRequest;
 import kg.it_lab.backend.Osh.dto.auth.AuthLoginResponse;
 import kg.it_lab.backend.Osh.entities.User;
-import kg.it_lab.backend.Osh.enums.Role;
 import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.UserMapper;
@@ -35,7 +34,7 @@ public class AuthLoginServiceImpl implements AuthLoginService {
         User user = new User();
         user.setEmail(authLoginRequest.getEmail());
         user.setPassword(passwordEncoder.encode(authLoginRequest.getPassword()));
-        user.setRole(Role.VISITOR); // todo change here
+         // todo change here and role
         userRepository.save(user);
 
         String token = jwtService.generateToken(user);

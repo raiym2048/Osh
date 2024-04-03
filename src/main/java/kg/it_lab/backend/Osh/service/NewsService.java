@@ -12,5 +12,5 @@ public interface NewsService {
 
     NewsDetailResponse detail(Long id);
 
-    void attachImageToNews(String newsName, String imageName);
+
 }

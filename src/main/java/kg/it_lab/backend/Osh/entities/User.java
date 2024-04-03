@@ -1,7 +1,6 @@
 package kg.it_lab.backend.Osh.entities;
 
 import jakarta.persistence.*;
-import kg.it_lab.backend.Osh.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,12 +21,15 @@ public class User implements UserDetails {
     private String email;
     private String username;
     private String password;
-    @Enumerated(EnumType.STRING)
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "name")
     private Role role;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
     }
 
     @Override
