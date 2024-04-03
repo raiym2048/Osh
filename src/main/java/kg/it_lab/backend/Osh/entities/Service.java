@@ -15,6 +15,6 @@ public class Service {
     private String subtopic;
     @Column(columnDefinition = "text")
     private String description;
-    @OneToMany(mappedBy = "service")
+    @OneToMany
     List<Image> images;
 }

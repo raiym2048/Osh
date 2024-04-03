@@ -15,6 +15,6 @@ public class Project {
     private String subtopic;
     @Column(columnDefinition = "text")
     private String description;
-    @OneToMany(mappedBy = "project")
+    @OneToMany
     List<Image> images;
 }

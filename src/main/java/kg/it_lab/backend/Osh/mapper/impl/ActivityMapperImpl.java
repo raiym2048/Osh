@@ -14,6 +14,7 @@ public class ActivityMapperImpl implements ActivityMapper {
     @Override
     public ActivityResponse toDto(Activity activity) {
         ActivityResponse activityResponse = new ActivityResponse();
+        activityResponse.setId(activity.getId());
         if(activity.getImage() != null)
             activityResponse.setImagePath(activity.getImage().getPath());
         activityResponse.setName(activity.getName());
@@ -25,7 +26,7 @@ public class ActivityMapperImpl implements ActivityMapper {
     }
 
     @Override
-    public List<ActivityResponse> toDtos(List<Activity> activities) {
+    public List<ActivityResponse> toDtoS(List<Activity> activities) {
         List<ActivityResponse> activityResponses = new ArrayList<>();
         for(Activity activity:activities){
             activityResponses.add(toDto(activity));
