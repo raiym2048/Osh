@@ -39,8 +39,5 @@ public class ProjectMapperImpl implements ProjectMapper {
 
     }
 
-    @Override
-    public ProjectDetailResponse toDetailDto(Project project) {
-        return null;
-    }
+
 }
