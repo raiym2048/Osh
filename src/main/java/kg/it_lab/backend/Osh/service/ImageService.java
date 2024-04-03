@@ -9,11 +9,13 @@ import java.util.List;
 public interface ImageService {
     List<ImageResponse> all();
 
-    S3Object getFile(String fileName);
+    S3Object getFile(Long id);
 
     String uploadFile(MultipartFile file);
 
-    byte[] downloadFile(String fileName);
+    byte[] downloadFile(Long id);
 
-    String deleteFile(String fileName);
+    void deleteFile(Long id);
+
+    String getName(Long id);
 }

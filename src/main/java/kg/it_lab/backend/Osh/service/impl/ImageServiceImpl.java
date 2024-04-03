@@ -19,11 +19,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +44,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public S3Object getFile(String fileName) {
+    public S3Object getFile(Long id) {
+        String fileName = getName(id);
         return s3Client.getObject(bucketName, fileName);
     }
 
@@ -54,11 +57,12 @@ public class ImageServiceImpl implements ImageService {
         fileObj.delete();
         Image image = new Image();
         imageRepository.save(imageMapper.toDtoImage(image, fileName));
-        return "File uploaded " + fileName;
+        return fileName;
     }
 
     @Override
-    public byte[] downloadFile(String fileName) {
+    public byte[] downloadFile(Long id) {
+        String fileName = getName(id);
         S3Object s3Object = s3Client.getObject(bucketName, fileName);
         S3ObjectInputStream inputStream = s3Object.getObjectContent();
         try {
@@ -70,13 +74,13 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public String deleteFile(String fileName) {
+    public void deleteFile(Long id) {
+        String fileName = getName(id);
         if(imageRepository.findByName(fileName).isEmpty()) {
             throw new NotFoundException("File with name=\"" + fileName + "\" not found", HttpStatus.NOT_FOUND);
         }
         s3Client.deleteObject(bucketName, fileName);
         imageRepository.deleteByName(fileName);
-        return fileName + " removed";
     }
 
     private File convertMultiPartFileToFile(MultipartFile file) {
@@ -87,5 +91,13 @@ public class ImageServiceImpl implements ImageService {
             throw new BadCredentialsException("Error converting multiPartFile to file");
         }
         return convertedFile;
+    }
+
+    @Override
+    public String getName(Long id){
+        Optional<Image> image = imageRepository.findById(id);
+        if(image.isEmpty())
+            throw new NotFoundException("Image with id: " + id + " - not found", HttpStatus.NOT_FOUND);
+        return image.get().getName();
     }
 }
