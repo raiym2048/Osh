@@ -92,14 +92,8 @@ public class AdminServiceImpl implements AdminService {
     public void deleteByName(String name) {
         Optional<News> news = newsRepository.findByName(name);
         checker(news, name);
-        if (news.get().getImage() != null) {
-            Optional<Image> image = imageRepository.findByName(news.get().getImage().getName());
-            if (image.get().getService() == null && image.get().getActivity() == null && image.get().getEvent() == null) {
-
-            }
-            imageRepository.deleteByName(news.get().getImage().getName());
-        }
         newsRepository.deleteByName(name);
+        imageRepository.deleteByName(news.get().getImage().getName());
 
     }
 
@@ -221,8 +215,6 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         eventRepository.save(eventMapper.toDtoEvent(event.get(), eventRequest, image.get()));
-
-
     }
 
     @Override
@@ -231,8 +223,8 @@ public class AdminServiceImpl implements AdminService {
         if (event.isEmpty()) {
             throw new NotFoundException("Event with name " + name + " not found", HttpStatus.NOT_FOUND);
         }
-        imageRepository.deleteByName(event.get().getImage().getName());
         eventRepository.deleteByName(name);
+        imageRepository.deleteByName(event.get().getImage().getName());
 
     }
 
@@ -406,8 +398,9 @@ public class AdminServiceImpl implements AdminService {
         if (activity.isEmpty()) {
             throw new NotFoundException("Activity with name " + name + " not found", HttpStatus.NOT_FOUND);
         }
-        imageRepository.deleteByName(activity.get().getImage().getName());
+
         activityRepository.deleteByName(name);
+        imageRepository.deleteByName(activity.get().getImage().getName());
 
     }
 

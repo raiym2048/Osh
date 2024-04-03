@@ -22,7 +22,7 @@ public class ProjectMapperImpl implements ProjectMapper {
     }
 
     @Override
-    public List<ProjectResponse> toDtos(List<Project> projects) {
+    public List<ProjectResponse> toDtoS(List<Project> projects) {
         List<ProjectResponse>projectResponses = new ArrayList<>();
         for(Project project : projects){
             projectResponses.add(toDto(project));
