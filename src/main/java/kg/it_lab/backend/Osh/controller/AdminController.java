@@ -10,6 +10,7 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
+import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.service.AdminService;
 
 import lombok.AllArgsConstructor;
@@ -131,28 +132,28 @@ public class AdminController {
         return data;
     }
 
-    @PostMapping("/service/add")
+    @PostMapping("/services/add")
     public MyData addService(@RequestBody ServicesRequest servicesRequest){
         adminService.addService(servicesRequest);
         MyData data = new MyData();
         data.setMessage("Service added successfully");
         return data;
     }
-    @PutMapping("/service/updateById/{id}")
+    @PutMapping("/services/updateById/{id}")
     public MyData updateService(@PathVariable Long id, @RequestBody ServicesRequest servicesRequest){
         adminService.updateService(id, servicesRequest);
         MyData data = new MyData();
         data.setMessage("Service updated successfully");
         return data;
     }
-    @DeleteMapping("/service/deleteById/{id}")
+    @DeleteMapping("/services/deleteById/{id}")
     public MyData deleteService(@PathVariable Long id) {
         adminService.deleteService(id);
         MyData data = new MyData();
         data.setMessage("Service deleted successfully");
         return data;
     }
-    @PostMapping("/service/attachImageToService/{serviceId}/image/{imageId}")
+    @PostMapping("/services/attachImageToService/{serviceId}/image/{imageId}")
     public MyData attachImageToService(@PathVariable Long serviceId, @PathVariable Long imageId) {
         adminService.attachImageToService(serviceId, imageId);
         MyData data = new MyData();
@@ -180,5 +181,28 @@ public class AdminController {
         data.setMessage("Activity deleted successfully");
         return data;
     }
+    @PostMapping("/sponsorship/add")
+        public MyData addSponsorship(@RequestBody SponsorshipRequest sponsorshipRequest){
+        adminService.addSponsorship(sponsorshipRequest);
+        MyData data = new MyData();
+        data.setMessage("Sponsorship added successfully");
+        return data;
+    }
+    @PutMapping("/sponsorship/updateById/{id}")
+    public MyData updateSponsorship(@PathVariable Long id , @RequestBody SponsorshipRequest sponsorshipRequest){
+        adminService.updateSponsorship( id , sponsorshipRequest);
+        MyData data = new MyData();
+        data.setMessage("Sponsorship updated successfully");
+        return data;
+    }
+    @DeleteMapping("/sponsorship/deleteById/{id}")
+    public MyData deleteSponsorship(@PathVariable Long id ){
+        adminService.deleteSponsorship(id);
+        MyData data = new MyData();
+        data.setMessage("Sponsorship deleted successfully");
+        return data;
+
+    }
+
 
 }
