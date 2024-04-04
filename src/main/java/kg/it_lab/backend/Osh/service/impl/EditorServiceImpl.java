@@ -9,6 +9,7 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
+import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.entities.*;
 import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
@@ -48,6 +49,8 @@ public class EditorServiceImpl implements EditorService {
     private final CategoryRepository categoryRepository;
     private final PasswordEncoder encoder;
     private final AuthLoginService authLoginService;
+    private final SponsorshipRepository sponsorshipRepository;
+    private final SponsorshipMapper sponsorshipMapper;
 
     @Override
     public void updateById(Long id, NewsRequest newsRequest, Long imageId) {
@@ -167,6 +170,33 @@ public class EditorServiceImpl implements EditorService {
             throw new BadRequestException("Title of activity with this name already exist");
         }
         activityRepository.save(activityMapper.toDtoActivity(activity.get(),activityRequest, image.get()));
+    }
+
+    @Override
+    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest) {
+        Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
+        if(sponsorship.isEmpty()){
+            throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
+        }
+        if(sponsorshipRequest.getInn().isEmpty()){
+            throw new BadRequestException("INN can't be empty ");
+        }
+        if(sponsorshipRequest.getBank().isEmpty()){
+            throw new BadRequestException("Bank can't be empty");
+        }
+        if(sponsorshipRequest.getAddress().isEmpty()){
+            throw new BadRequestException("Address can't be empty ");
+        }
+        if(sponsorshipRequest.getPaymentAccount().isEmpty()){
+            throw new BadRequestException("Payment account can't be empty");
+        }
+        if(sponsorshipRequest.getCompany().isEmpty()) {
+            throw new BadRequestException("Company name can't be empty");
+        }
+        if(sponsorshipRequest.getDirector().isEmpty()){
+            throw new BadRequestException("Director can't be empty");
+        }
+        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest));
     }
 
     @Override

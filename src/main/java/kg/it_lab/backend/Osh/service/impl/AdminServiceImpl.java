@@ -10,6 +10,7 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
+import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.entities.*;
 import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
@@ -46,6 +47,8 @@ public class AdminServiceImpl implements AdminService {
     private final ServicesRepository servicesRepository;
     private final ActivityRepository activityRepository;
     private final ActivityMapper activityMapper;
+    private final SponsorshipRepository sponsorshipRepository;
+    private final SponsorshipMapper sponsorshipMapper;
 
     @Override
     public void add(NewsRequest newsRequest, Long imageId) {
@@ -57,6 +60,9 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         if (newsRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the news can't be empty");
+        }
+        if(categoryRepository.findById(newsRequest.getCategoryId()).isEmpty()){
+            throw new NotFoundException("Category with this id "+ newsRequest.getCategoryId()+" not found" , HttpStatus.NOT_FOUND);
         }
         if (newsRequest.getDescription().isEmpty()) {
             throw new BadRequestException("Content of the news can't be empty");
@@ -451,6 +457,66 @@ public class AdminServiceImpl implements AdminService {
         imageRepository.deleteByName(activity.get().getImage().getName());
 
 
+    }
+
+    @Override
+    public void addSponsorship(SponsorshipRequest sponsorshipRequest) {
+        if(sponsorshipRequest.getInn().isEmpty()){
+            throw new BadRequestException("INN can't be empty ");
+        }
+        if(sponsorshipRequest.getBank().isEmpty()){
+            throw new BadRequestException("Bank can't be empty");
+        }
+        if(sponsorshipRequest.getAddress().isEmpty()){
+            throw new BadRequestException("Address can't be empty ");
+        }
+        if(sponsorshipRequest.getPaymentAccount().isEmpty()){
+            throw new BadRequestException("Payment account can't be empty");
+        }
+        if(sponsorshipRequest.getCompany().isEmpty()) {
+            throw new BadRequestException("Company name can't be empty");
+        }
+        if(sponsorshipRequest.getDirector().isEmpty()){
+            throw new BadRequestException("Director can't be empty");
+        }
+        Sponsorship sponsorship = new Sponsorship();
+        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship ,sponsorshipRequest ));
+    }
+
+    @Override
+    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest) {
+        Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
+        if(sponsorship.isEmpty()){
+            throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
+        }
+        if(sponsorshipRequest.getInn().isEmpty()){
+            throw new BadRequestException("INN can't be empty ");
+        }
+        if(sponsorshipRequest.getBank().isEmpty()){
+            throw new BadRequestException("Bank can't be empty");
+        }
+        if(sponsorshipRequest.getAddress().isEmpty()){
+            throw new BadRequestException("Address can't be empty ");
+        }
+        if(sponsorshipRequest.getPaymentAccount().isEmpty()){
+            throw new BadRequestException("Payment account can't be empty");
+        }
+        if(sponsorshipRequest.getCompany().isEmpty()) {
+            throw new BadRequestException("Company name can't be empty");
+        }
+        if(sponsorshipRequest.getDirector().isEmpty()){
+            throw new BadRequestException("Director can't be empty");
+        }
+        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest));
+    }
+
+    @Override
+    public void deleteSponsorship(Long id) {
+        Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
+        if(sponsorship.isEmpty()){
+            throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
+        }
+        sponsorshipRepository.deleteById(id);
     }
 
     @Override

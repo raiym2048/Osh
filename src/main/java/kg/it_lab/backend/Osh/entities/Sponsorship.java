@@ -19,4 +19,5 @@ public class Sponsorship {
     private String bank;
     private String bic;
     private String director;
+
 }

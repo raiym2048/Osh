@@ -9,6 +9,7 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
+import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,13 @@ public class EditorController {
         editorService.updateActivity(activityId, activityRequest , imageId);
         MyData data = new MyData();
         data.setMessage("Activity updated successfully");
+        return data;
+    }
+    @PutMapping("/sponsorship/updateById/{id}")
+    public MyData updateSponsorship(@PathVariable Long id , @RequestBody SponsorshipRequest sponsorshipRequest){
+        editorService.updateSponsorship( id , sponsorshipRequest);
+        MyData data = new MyData();
+        data.setMessage("Sponsorship updated successfully");
         return data;
     }
     @PostMapping("/login")
