@@ -1,5 +1,6 @@
 package kg.it_lab.backend.Osh.controller;
 
+import com.amazonaws.services.dynamodbv2.xspec.M;
 import kg.it_lab.backend.Osh.dto.activity.ActivityRequest;
 import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
@@ -7,6 +8,7 @@ import kg.it_lab.backend.Osh.dto.admin.category.CategoryRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
+import kg.it_lab.backend.Osh.dto.numbers.NumbersRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
@@ -136,21 +138,21 @@ public class AdminController {
     public MyData addService(@RequestBody ServicesRequest servicesRequest){
         adminService.addService(servicesRequest);
         MyData data = new MyData();
-        data.setMessage("Service added successfully");
+        data.setMessage("Services added successfully");
         return data;
     }
     @PutMapping("/services/updateById/{id}")
     public MyData updateService(@PathVariable Long id, @RequestBody ServicesRequest servicesRequest){
         adminService.updateService(id, servicesRequest);
         MyData data = new MyData();
-        data.setMessage("Service updated successfully");
+        data.setMessage("Services updated successfully");
         return data;
     }
     @DeleteMapping("/services/deleteById/{id}")
     public MyData deleteService(@PathVariable Long id) {
         adminService.deleteService(id);
         MyData data = new MyData();
-        data.setMessage("Service deleted successfully");
+        data.setMessage("Services deleted successfully");
         return data;
     }
     @PostMapping("/services/attachImageToService/{serviceId}/image/{imageId}")
@@ -202,6 +204,27 @@ public class AdminController {
         data.setMessage("Sponsorship deleted successfully");
         return data;
 
+    }
+    @PostMapping("/numbers/add")
+    public MyData addNumbers(@RequestBody NumbersRequest numbersRequest){
+        adminService.addNumbers(numbersRequest);
+        MyData data = new MyData();
+        data.setMessage("Numbers added successfully");
+        return data;
+    }
+    @PutMapping("/numbers/updateById/{id}")
+    public MyData updateNumbers(@PathVariable Long id ,@RequestBody NumbersRequest numbersRequest){
+        adminService.updateNumbers(id , numbersRequest);
+        MyData data = new MyData();
+        data.setMessage("Numbers updated successfully");
+        return data;
+    }
+    @DeleteMapping("/numbers/deleteById/{id}")
+    public MyData deleteNumbersById(@PathVariable Long id ){
+        adminService.deleteNumbersById(id);
+        MyData data = new MyData();
+        data.setMessage("Numbers deleted successfully");
+        return data;
     }
 
 

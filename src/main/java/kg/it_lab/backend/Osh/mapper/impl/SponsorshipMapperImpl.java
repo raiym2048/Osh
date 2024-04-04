@@ -41,6 +41,7 @@ public class SponsorshipMapperImpl implements SponsorshipMapper {
         sponsorship.setDirector(sponsorshipRequest.getDirector());
         sponsorship.setCompany(sponsorshipRequest.getCompany());
         sponsorship.setPaymentAccount(sponsorshipRequest.getPaymentAccount());
+        sponsorship.setBic(sponsorshipRequest.getBic());
         return sponsorship;
     }
 }

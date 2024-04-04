@@ -7,6 +7,7 @@ import kg.it_lab.backend.Osh.dto.admin.category.CategoryRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
+import kg.it_lab.backend.Osh.dto.numbers.NumbersRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
@@ -51,6 +52,8 @@ public class AdminServiceImpl implements AdminService {
     private final ActivityMapper activityMapper;
     private final SponsorshipRepository sponsorshipRepository;
     private final SponsorshipMapper sponsorshipMapper;
+    private final NumbersRepository numbersRepository;
+    private final NumbersMapper numbersMapper;
     private final ImageService imageService;
 
     @Override
@@ -105,6 +108,7 @@ public class AdminServiceImpl implements AdminService {
         int cnt = 0;
         if(news.get().getImage() != null){
             cnt = imageChecker(news.get().getImage());
+            System.out.println(cnt);
         }
 
         newsRepository.deleteById(id);
@@ -498,26 +502,26 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void addSponsorship(SponsorshipRequest sponsorshipRequest) {
-        if(sponsorshipRequest.getInn().isEmpty()){
-            throw new BadRequestException("INN can't be empty ");
-        }
-        if(sponsorshipRequest.getBank().isEmpty()){
-            throw new BadRequestException("Bank can't be empty");
-        }
-        if(sponsorshipRequest.getAddress().isEmpty()){
-            throw new BadRequestException("Address can't be empty ");
-        }
-        if(sponsorshipRequest.getPaymentAccount().isEmpty()){
-            throw new BadRequestException("Payment account can't be empty");
-        }
-        if(sponsorshipRequest.getCompany().isEmpty()) {
-            throw new BadRequestException("Company name can't be empty");
-        }
-        if(sponsorshipRequest.getDirector().isEmpty()){
-            throw new BadRequestException("Director can't be empty");
-        }
-        Sponsorship sponsorship = new Sponsorship();
-        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship ,sponsorshipRequest ));
+            if(sponsorshipRequest.getInn().isEmpty()){
+                throw new BadRequestException("INN can't be empty ");
+            }
+            if(sponsorshipRequest.getBank().isEmpty()){
+                throw new BadRequestException("Bank can't be empty");
+            }
+            if(sponsorshipRequest.getAddress().isEmpty()){
+                throw new BadRequestException("Address can't be empty ");
+            }
+            if(sponsorshipRequest.getPaymentAccount().isEmpty()){
+                throw new BadRequestException("Payment account can't be empty");
+            }
+            if(sponsorshipRequest.getCompany().isEmpty()) {
+                throw new BadRequestException("Company name can't be empty");
+            }
+            if(sponsorshipRequest.getDirector().isEmpty()){
+                throw new BadRequestException("Director can't be empty");
+            }
+            Sponsorship sponsorship = new Sponsorship();
+            sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship ,sponsorshipRequest ));
     }
 
     @Override
@@ -547,6 +551,7 @@ public class AdminServiceImpl implements AdminService {
         sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest));
     }
 
+
     @Override
     public void deleteSponsorship(Long id) {
         Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
@@ -554,6 +559,32 @@ public class AdminServiceImpl implements AdminService {
             throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
         }
         sponsorshipRepository.deleteById(id);
+    }
+
+    @Override
+    public void addNumbers(NumbersRequest numbersRequest) {
+        Numbers numbers = new Numbers();
+        numbersRepository.save(numbersMapper.toDtoNumbers(numbers , numbersRequest ));
+    }
+
+    @Override
+    public void updateNumbers(Long id , NumbersRequest numbersRequest) {
+        Optional<Numbers> numbers = numbersRepository.findById(id);
+        if(numbersRepository.findById(id).isEmpty()){
+            throw new NotFoundException("Numbers with id "+ id+ " not found!" , HttpStatus.NOT_FOUND);
+        }
+        numbersRepository.save(numbersMapper.toDtoNumbers(numbers.get() , numbersRequest ));
+    }
+
+    @Override
+    public void deleteNumbersById(Long id) {
+        Optional<Numbers> numbers = numbersRepository.findById(id);
+        if(numbersRepository.findById(id).isEmpty()){
+            throw new NotFoundException("Numbers with id "+ id+ " not found!" , HttpStatus.NOT_FOUND);
+        }
+        numbersRepository.deleteById(id);
+
+
     }
 
     @Override
