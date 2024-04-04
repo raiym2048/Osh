@@ -1,5 +1,4 @@
 package kg.it_lab.backend.Osh.mapper.impl;
-import kg.it_lab.backend.Osh.dto.project.ProjectDetailResponse;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectResponse;
 import kg.it_lab.backend.Osh.entities.Image;
