@@ -68,11 +68,6 @@ public class NewsMapperImpl implements NewsMapper {
         news.setCreatedAt(LocalDateTime.now());
         news.setCategory(categoryRepository.findById(newsRequest.getCategoryId()).get());
         news.setSlogan(newsRequest.getSlogan());
-        for(News newsItem: newsRepository.findAll())
-            if(newsItem.getImage() != null && Objects.equals(newsItem.getImage().getId(), image.getId()))
-                throw new BadRequestException("Image with id: " + image.getId() + " - is already in use!");
-
-
         news.setImage(image);
         return news;
     }
