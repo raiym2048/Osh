@@ -53,6 +53,8 @@ public class AdminServiceImpl implements AdminService {
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
+        if(imageChecker(image.get()) > 0)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         if (newsRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the news can't be empty");
         }
@@ -76,11 +78,14 @@ public class AdminServiceImpl implements AdminService {
         if (newsRequest.getDescription().isEmpty()) {
             throw new BadRequestException("Content of the news can't be empty");
         }
-        if (news.isEmpty()) {
-            throw new NotFoundException("Title of news with this name wasn't found", HttpStatus.NOT_FOUND);
-        }
+        if (newsRequest.getCategoryId() == null)
+            throw new BadRequestException("Category of the news can't be empty");
+
+        if (categoryRepository.findById(newsRequest.getCategoryId()).isEmpty())
+            throw new NotFoundException("Category with id: " + newsRequest.getCategoryId() + " - wasn't found!!", HttpStatus.NOT_FOUND);
 
         checker(news, id);
+        news.get().setImage(null);
         newsRepository.save(newsMapper.toDtoNews(news.get(), newsRequest, image.get()));
     }
 
@@ -88,8 +93,15 @@ public class AdminServiceImpl implements AdminService {
     public void deleteById(Long id) {
         Optional<News> news = newsRepository.findById(id);
         checker(news, id);
+        int cnt = 0;
+        if(news.get().getImage() != null){
+            cnt = imageChecker(news.get().getImage());
+            System.out.println(cnt);
+        }
+
         newsRepository.deleteById(id);
-        imageRepository.deleteByName(news.get().getImage().getName());
+        if(cnt == 1)imageRepository.deleteByName(news.get().getImage().getName());
+//        eventRepository.update
 
     }
 
@@ -469,5 +481,31 @@ public class AdminServiceImpl implements AdminService {
         if (news.isEmpty()) {
             throw new NotFoundException("News with id " + id + " not found", HttpStatus.NOT_FOUND);
         }
+    }
+
+    private int imageChecker(Image image){
+        int cnt = 0;
+        if (eventRepository.existsByImage(image)) {
+            cnt++;
+            System.out.println("EVENT");
+        }
+        if (activityRepository.existsByImage(image)) {
+            cnt++;
+            System.out.println("ACTIVITY");
+        }
+        if (newsRepository.existsByImage(image)) {
+            cnt++;
+            System.out.println("NEWS");
+        }
+        if (projectRepository.existsByImagesContaining(image)) {
+            cnt++;
+            System.out.println("PROJECT");
+        }
+        if (servicesRepository.existsByImagesContaining(image)) {
+            cnt++;
+            System.out.println("SERVICES");
+        }
+        return cnt;
+
     }
 }
