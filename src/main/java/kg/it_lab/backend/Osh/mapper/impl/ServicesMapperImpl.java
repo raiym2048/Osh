@@ -18,6 +18,7 @@ public class ServicesMapperImpl implements ServicesMapper {
     @Override
     public ServicesResponse toDto(Services services) {
         ServicesResponse servicesResponse = new ServicesResponse();
+        servicesResponse.setId(services.getId());
         servicesResponse.setName(services.getName());
         servicesResponse.setDescription(services.getDescription());
         servicesResponse.setSubtopic(services.getSubtopic());

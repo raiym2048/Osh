@@ -50,7 +50,7 @@ public class EventMapperImpl implements EventMapper {
 
         event.setName(eventRequest.getName());
         event.setDescription(eventRequest.getDescription());
-        event.setCategory(categoryRepository.findById(eventRequest.getCategoryId()).get());
+        event.setCategory(categoryRepository.findById(eventRequest.getCategoryId()).orElseThrow());
         event.setSlogan(eventRequest.getSlogan());
         event.setDateTime(LocalDateTime.of(eventRequest.getYear() , eventRequest.getMonth() , eventRequest.getDay() , eventRequest.getHour(),   eventRequest.getMinute() , eventRequest.getSeconds()));
         event.setImage(image);

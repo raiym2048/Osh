@@ -15,7 +15,7 @@ public interface EditorService {
     void updateProject(Long id, ProjectRequest projectRequest );
     void updateService(Long id, ServicesRequest servicesRequest);
     AuthLoginResponse loginEditor(AdminLoginRequest adminLoginRequest);
-    void changePassword(String token ,EditorPasswordRequest editorPasswordRequest);
+    void changePassword(String token ,EditorPasswordRequest editorPasswordRequest, String editorEmail);
     void updateActivity(Long id , ActivityRequest activityRequest , Long imageId );
     void updateSponsorship(Long id , SponsorshipRequest sponsorshipRequest);
     void updateEvent(Long eventId , EventRequest eventRequest , Long imageId );

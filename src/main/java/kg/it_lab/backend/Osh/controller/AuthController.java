@@ -30,9 +30,4 @@ public class AuthController {
             return new ResponseEntity<>("Token expired", HttpStatus.UNAUTHORIZED);
         }
     }
-
-    @GetMapping
-    public String test() {
-        return "It works";
-    }
 }

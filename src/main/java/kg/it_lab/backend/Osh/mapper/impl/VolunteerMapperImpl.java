@@ -19,9 +19,9 @@ public class VolunteerMapperImpl implements VolunteerMapper {
         response.setName(volunteer.getName());
         response.setGender(String.valueOf(volunteer.getGender()));
         response.setAge(volunteer.getAge());
-        volunteer.setTown(volunteer.getTown());
-        volunteer.setComment(volunteer.getComment());
-        volunteer.setContacts(volunteer.getContacts());
+        response.setTown(volunteer.getTown());
+        response.setComment(volunteer.getComment());
+        response.setContacts(volunteer.getContacts());
         return response;
     }
 

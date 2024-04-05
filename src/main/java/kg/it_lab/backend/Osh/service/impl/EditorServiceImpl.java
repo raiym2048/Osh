@@ -135,19 +135,26 @@ public class EditorServiceImpl implements EditorService {
 
     }
     @Override
-    public void changePassword(String token  ,EditorPasswordRequest editorPasswordRequest) {
-        User editor  = authLoginService.getUserFromToken(token);
+    public void changePassword(String token  ,EditorPasswordRequest editorPasswordRequest, String editorEmail) {
+        if(token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        String editorEmailFromToken = jwtService.getUserEmail(token);
+        System.out.println("It's email from token: " + editorEmailFromToken);
+        if(!editorEmailFromToken.equals(editorEmail)) {
+            throw new BadRequestException("You can't change password!");
+        }
+
+        User editor = userRepository.findByEmail(editorEmail).orElseThrow();
 
         String pass1 = editorPasswordRequest.getPassword1();
         String pass2 = editorPasswordRequest.getPassword2();
         if(!Objects.equals(pass1, pass2)){
-            throw new BadRequestException("Passwords don't match!");
+            throw new BadCredentialsException("Passwords don't match!");
         }
 
         editor.setPassword(encoder.encode(pass1));
-
         userRepository.save(editor);
-
     }
 
     @Override
