@@ -6,9 +6,11 @@ import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.admin.category.CategoryRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
+import kg.it_lab.backend.Osh.dto.numbers.NumbersRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
+import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 
 public interface AdminService {
     void add(NewsRequest newsRequest , Long  imageId);
@@ -35,6 +37,12 @@ public interface AdminService {
     void addActivity(ActivityRequest activityRequest , Long imageId );
     void updateActivity(Long id , ActivityRequest activityRequest ,   Long imageId );
     void deleteActivity(Long id);
+    void addSponsorship(SponsorshipRequest sponsorshipRequest);
+    void updateSponsorship(Long id , SponsorshipRequest sponsorshipRequest);
+    void deleteSponsorship(Long id );
+    void addNumbers(NumbersRequest numbersRequest);
+    void updateNumbers(Long id , NumbersRequest numbersRequest);
+    void deleteNumbersById(Long id);
 
 
 }

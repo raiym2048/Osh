@@ -5,19 +5,23 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsResponse;
 import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.News;
+import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
 import kg.it_lab.backend.Osh.repository.CategoryRepository;
+import kg.it_lab.backend.Osh.repository.NewsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @AllArgsConstructor
 public class NewsMapperImpl implements NewsMapper {
     private final CategoryRepository categoryRepository;
+    private final NewsRepository newsRepository;
 
     @Override
     public NewsResponse toDto(News news) {

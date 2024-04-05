@@ -8,6 +8,7 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
+import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 
 public interface EditorService {
     void updateById(Long id, NewsRequest newsRequest , Long imageId);
@@ -16,5 +17,6 @@ public interface EditorService {
     AuthLoginResponse loginEditor(AdminLoginRequest adminLoginRequest);
     void changePassword(String token ,EditorPasswordRequest editorPasswordRequest);
     void updateActivity(Long id , ActivityRequest activityRequest , Long imageId );
+    void updateSponsorship(Long id , SponsorshipRequest sponsorshipRequest);
     void updateEvent(Long eventId , EventRequest eventRequest , Long imageId );
 }
