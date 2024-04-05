@@ -15,7 +15,7 @@
 //    @Autowired
 //    private ActivityRepository activityRepository;
 //
-//    private final Activity activity = new Activity();
+//    private final Activity activity =  new Activity();
 //
 //    @BeforeEach
 //    void setUp() {
