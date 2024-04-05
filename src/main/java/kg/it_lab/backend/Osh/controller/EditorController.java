@@ -65,10 +65,10 @@ public class EditorController {
     public AuthLoginResponse loginEditor(@RequestBody AdminLoginRequest adminLoginRequest){
         return editorService.loginEditor(adminLoginRequest);
     }
-    @PostMapping("/changePassword")
-    public MyData changePassword(@RequestHeader("Authorization")String token ,  @RequestBody EditorPasswordRequest editorPasswordRequest){
+    @PutMapping("/changePassword/{editorEmail}")
+    public MyData changePassword(@RequestHeader("Authorization")String token ,@RequestBody EditorPasswordRequest editorPasswordRequest, @PathVariable String editorEmail){
 
-        editorService.changePassword( token , editorPasswordRequest);
+        editorService.changePassword(token , editorPasswordRequest, editorEmail);
 
         MyData data = new MyData();
         data.setMessage("Your password changed successfully");
