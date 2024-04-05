@@ -66,7 +66,7 @@ public class NewsMapperImpl implements NewsMapper {
         news.setName(newsRequest.getName());
         news.setDescription(newsRequest.getDescription());
         news.setCreatedAt(LocalDateTime.now());
-        news.setCategory(categoryRepository.findById(newsRequest.getCategoryId()).get());
+        news.setCategory(categoryRepository.findById(newsRequest.getCategoryId()).orElseThrow());
         news.setSlogan(newsRequest.getSlogan());
         news.setImage(image);
         return news;
