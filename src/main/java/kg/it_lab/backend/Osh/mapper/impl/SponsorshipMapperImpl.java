@@ -15,11 +15,12 @@ public class SponsorshipMapperImpl implements SponsorshipMapper {
     @Override
     public SponsorshipResponse toDto(Sponsorship sponsorship) {
         SponsorshipResponse sponsorshipResponse = new SponsorshipResponse();
+        sponsorshipResponse.setCompany(sponsorship.getCompany());
         sponsorshipResponse.setInn(sponsorship.getInn());
+        sponsorshipResponse.setAddress(sponsorship.getAddress());
+        sponsorshipResponse.setPaymentAccount(sponsorship.getPaymentAccount());
         sponsorshipResponse.setBank(sponsorship.getBank());
         sponsorshipResponse.setBic(sponsorship.getBic());
-        sponsorshipResponse.setCompany(sponsorship.getCompany());
-        sponsorshipResponse.setAddress(sponsorship.getAddress());
         sponsorshipResponse.setDirector(sponsorship.getDirector());
         return sponsorshipResponse;
     }
