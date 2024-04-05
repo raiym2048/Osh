@@ -17,6 +17,7 @@ public class NumbersMapperImpl implements NumbersMapper {
     @Override
     public NumbersResponse toDto(Numbers numbers) {
         NumbersResponse numbersResponse = new NumbersResponse();
+        numbersResponse.setId(numbers.getId());
         numbersResponse.setProjectNumbers(numbers.getProjectNumbers());
         numbersResponse.setHubNumbers(numbers.getHubNumbers());
         numbersResponse.setPeopleNumbers(numbers.getPeopleNumbers());
