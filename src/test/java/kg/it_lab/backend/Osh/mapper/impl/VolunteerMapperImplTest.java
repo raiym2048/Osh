@@ -22,13 +22,6 @@ class VolunteerMapperImplTest {
 
     @InjectMocks
     private VolunteerMapperImpl volunteerMapper;
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
 
     @Test
     void itShouldReturnVolunteerResponse() {
