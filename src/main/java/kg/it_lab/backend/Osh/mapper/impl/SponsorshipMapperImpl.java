@@ -23,6 +23,8 @@ public class SponsorshipMapperImpl implements SponsorshipMapper {
         sponsorshipResponse.setBank(sponsorship.getBank());
         sponsorshipResponse.setBic(sponsorship.getBic());
         sponsorshipResponse.setDirector(sponsorship.getDirector());
+        if(sponsorship.getImage() != null)
+            sponsorshipResponse.setImagePath(sponsorship.getImage().getPath());
         return sponsorshipResponse;
     }
 

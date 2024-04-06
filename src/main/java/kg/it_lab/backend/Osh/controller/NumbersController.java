@@ -1,7 +1,8 @@
 package kg.it_lab.backend.Osh.controller;
 
-import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipResponse;
-import kg.it_lab.backend.Osh.service.SponsorshipService;
+import kg.it_lab.backend.Osh.dto.numbers.NumbersResponse;
+import kg.it_lab.backend.Osh.service.NumbersService;
+import kg.it_lab.backend.Osh.service.admin.AdminNumbersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,15 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sponsorship")
+@RequestMapping("/numbers")
 @RequiredArgsConstructor
-public class SponsorshipController {
+public class NumbersController {
 
-    private final SponsorshipService sponsorshipService;
+    private NumbersService numbersService;
 
     @GetMapping("/all")
-    public List<SponsorshipResponse> all(){
-        return sponsorshipService.all();
+    public List<NumbersResponse> all(){
+        return numbersService.all();
     }
-
 }
