@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface HubMapper {
     HubResponse toDto(Hub hub);
-    List<HubResponse> toDtos(List<Hub> hubs);
+    List<HubResponse> toDtoS(List<Hub> hubs);
     Hub toDtoHub(Hub hub , HubRequest hubRequest);
 }
