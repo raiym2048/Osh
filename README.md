@@ -31,10 +31,7 @@ A step by step series of examples that tell you how to get a development environ
    
 
    ```bash
-   git clone https://github.com/YourGithubUsername/YourRepositoryName.git
-##
-    ```bash
-        mvn clean install
+   git clone https://github.com/YourGithubUsername/YourRepositoryName.git      
    
 ## Running the tests
 
