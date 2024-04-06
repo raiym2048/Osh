@@ -2,6 +2,7 @@ package kg.it_lab.backend.Osh.mapper.impl;
 
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipResponse;
+import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.Services;
 import kg.it_lab.backend.Osh.entities.Sponsorship;
 import kg.it_lab.backend.Osh.mapper.SponsorshipMapper;
@@ -35,7 +36,7 @@ public class SponsorshipMapperImpl implements SponsorshipMapper {
     }
 
     @Override
-    public Sponsorship toDtoSponsorship(Sponsorship sponsorship, SponsorshipRequest sponsorshipRequest) {
+    public Sponsorship toDtoSponsorship(Sponsorship sponsorship, SponsorshipRequest sponsorshipRequest, Image image) {
         sponsorship.setAddress(sponsorshipRequest.getAddress());
         sponsorship.setBank(sponsorshipRequest.getBank());
         sponsorship.setInn(sponsorshipRequest.getInn());
@@ -43,6 +44,7 @@ public class SponsorshipMapperImpl implements SponsorshipMapper {
         sponsorship.setCompany(sponsorshipRequest.getCompany());
         sponsorship.setPaymentAccount(sponsorshipRequest.getPaymentAccount());
         sponsorship.setBic(sponsorshipRequest.getBic());
+        sponsorship.setImage(image);
         return sponsorship;
     }
 }
