@@ -46,6 +46,7 @@ public class AdminPartnersServiceImpl implements AdminPartnersService {
         partnersRepository.save(partners.get());
     }
 
+
     @Override
     public void deletePartners(Long id) {
         Optional<Partners > partners = partnersRepository.findById(id);
