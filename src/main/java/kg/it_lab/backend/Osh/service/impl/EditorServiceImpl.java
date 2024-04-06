@@ -16,7 +16,7 @@ import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.*;
 import kg.it_lab.backend.Osh.repository.*;
-import kg.it_lab.backend.Osh.service.AdminService;
+import kg.it_lab.backend.Osh.service.admin.AdminService;
 import kg.it_lab.backend.Osh.service.AuthLoginService;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;

@@ -38,7 +38,7 @@ Add additional notes about how to deploy this on a live system.
 
 ## Authors
 
-* **raiymbek2048** - *Initial work* - [YourGithubUsername](https://github.com/raiymbek2048)
+* **raiym2048** - *Initial work* - [raiym2048](https://github.com/raiym2048)
 
 ## License
 
@@ -59,5 +59,5 @@ A step by step series of examples that tell you how to get a development environ
    
 
    ```bash
-   git clone https://github.com/YourGithubUsername/YourRepositoryName.git
+   git clone https://github.com/raiym2048/Osh.git
       
