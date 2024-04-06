@@ -38,7 +38,7 @@ Add additional notes about how to deploy this on a live system.
 
 ## Authors
 
-* **raiymbek2048** - *Initial work* - [YourGithubUsername](https://github.com/raiymbek2048)
+* **raiymbek2048** - *Initial work* - [raiym2048](https://github.com/raiymbek2048)
 
 ## License
 
