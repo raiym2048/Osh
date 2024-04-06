@@ -56,7 +56,7 @@ public class EditorController {
     }
     @PutMapping("/sponsorship/updateById/{id}/{imageId}")
     public MyData updateSponsorship(@PathVariable Long id , @RequestBody SponsorshipRequest sponsorshipRequest, @PathVariable Long imageId){
-        editorService.updateSponsorship( id , sponsorshipRequest, imageId);
+        editorService.updateSponsorship(id , sponsorshipRequest, imageId);
         MyData data = new MyData();
         data.setMessage("Sponsorship updated successfully");
         return data;

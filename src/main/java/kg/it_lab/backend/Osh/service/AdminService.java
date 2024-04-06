@@ -44,7 +44,5 @@ public interface AdminService {
     void addNumbers(NumbersRequest numbersRequest);
     void updateNumbers(Long id , NumbersRequest numbersRequest);
     void deleteNumbersById(Long id);
-
-
     int imageChecker(Image image);
 }

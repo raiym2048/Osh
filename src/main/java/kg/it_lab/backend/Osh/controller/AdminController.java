@@ -16,6 +16,7 @@ import kg.it_lab.backend.Osh.service.AdminService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
@@ -33,63 +34,63 @@ public class AdminController {
                       @RequestHeader(name = "Accept-Language", required = false) Locale locale){
         adminService.add(newsRequest , imageId);
         MyData data = new MyData();
-        data.setMessage("News added successfully");
+        data.setMessage(messageSource.getMessage("news.add", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PutMapping("/news/updateById/{newsId}/{imageId}")
     public MyData updateById(@PathVariable Long newsId, @RequestBody NewsRequest newsRequest , @PathVariable Long imageId) {
         adminService.updateById(newsId, newsRequest , imageId);
         MyData data = new MyData();
-        data.setMessage("News updated successfully");
+        data.setMessage(messageSource.getMessage("news.update", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @DeleteMapping("/news/deleteById/{newsId}")
     public MyData deleteByName(@PathVariable Long newsId) {
         adminService.deleteById(newsId);
         MyData data = new MyData();
-        data.setMessage("News deleted successfully");
+        data.setMessage(messageSource.getMessage("news.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PostMapping("/event/add/{imageId}")
     public MyData add( @RequestBody EventRequest eventRequest ,@PathVariable Long imageId){
         adminService.addEvent(eventRequest ,imageId);
         MyData data = new MyData();
-        data.setMessage("Event added successfully");
+        data.setMessage(messageSource.getMessage("event.add", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PutMapping("/event/updateById/{eventId}/{imageId}")
     public MyData update(@PathVariable Long eventId, @RequestBody EventRequest eventRequest ,@PathVariable Long imageId) {
         adminService.updateEvent(eventId, eventRequest , imageId);
         MyData data = new MyData();
-        data.setMessage("Event updated successfully");
+        data.setMessage(messageSource.getMessage("event.update", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @DeleteMapping("/event/deleteById/{eventId}")
     public MyData delete(@PathVariable Long eventId){
         adminService.deleteEvent(eventId);
         MyData data = new MyData();
-        data.setMessage("Event deleted successfully");
+        data.setMessage(messageSource.getMessage("event.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PostMapping("/category/add")
     public MyData addCategory(@RequestBody CategoryRequest categoryRequest){
         adminService.addCategory(categoryRequest);
         MyData data = new MyData();
-        data.setMessage("Category added successfully");
+        data.setMessage(messageSource.getMessage("category.add", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @DeleteMapping("/category/deleteById/{id}")
     public MyData deleteCategory(@PathVariable Long id){
         adminService.deleteCategory(id);
         MyData data = new MyData();
-        data.setMessage("Category was successfully deleted");
+        data.setMessage(messageSource.getMessage("category.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PostMapping("/registerEditor")
     public MyData registerEditor(@RequestBody EditorRegisterRequest editorRegisterRequest){
         adminService.registerEditor(editorRegisterRequest);
         MyData data = new MyData();
-        data.setMessage("Your password was sent to "+ editorRegisterRequest.getEmail()+" !");
+        data.setMessage(messageSource.getMessage("password.sent", null, LocaleContextHolder.getLocale()) + " " + editorRegisterRequest.getEmail()+" !");
         return data;
     }
     @PostMapping("/role/add")
@@ -97,14 +98,14 @@ public class AdminController {
 
         adminService.addRole(roleRequest);
         MyData data = new MyData();
-            data.setMessage("Role added successfully");
+            data.setMessage(messageSource.getMessage("role.add", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @DeleteMapping("/role/delete/{id}")
     public MyData deleteRole(@PathVariable Long id ){
         adminService.deleteRole(id);
         MyData data = new MyData();
-        data.setMessage("Role deleted successfully");
+        data.setMessage(messageSource.getMessage("role.delete", null, LocaleContextHolder.getLocale()));
         return data;
 
     }
@@ -113,21 +114,21 @@ public class AdminController {
     public MyData addProject(@RequestBody ProjectRequest projectRequest ){
         adminService.addProject(projectRequest );
         MyData data = new MyData();
-        data.setMessage("Project added successfully");
+        data.setMessage(messageSource.getMessage("project.add" , null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PutMapping("/project/updateById/{projectId}")
     public MyData updateProject(@PathVariable Long projectId, @RequestBody ProjectRequest projectRequest ){
         adminService.updateProject(projectId, projectRequest );
         MyData data = new MyData();
-        data.setMessage("Project updated successfully");
+        data.setMessage(messageSource.getMessage("project.update", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @DeleteMapping("/project/deleteById/{id}")
     public MyData deleteProject(@PathVariable Long id) {
         adminService.deleteProject(id);
         MyData data = new MyData();
-        data.setMessage("Project deleted successfully");
+        data.setMessage(messageSource.getMessage("project.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PostMapping("/project/attachImageToProject/{projectId}/image/{imageId}")
