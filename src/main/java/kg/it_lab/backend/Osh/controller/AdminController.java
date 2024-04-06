@@ -1,6 +1,5 @@
 package kg.it_lab.backend.Osh.controller;
 
-import com.amazonaws.services.dynamodbv2.xspec.M;
 import kg.it_lab.backend.Osh.dto.activity.ActivityRequest;
 import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
@@ -188,16 +187,16 @@ public class AdminController {
         data.setMessage("Activity deleted successfully");
         return data;
     }
-    @PostMapping("/sponsorship/add")
-        public MyData addSponsorship(@RequestBody SponsorshipRequest sponsorshipRequest){
-        adminService.addSponsorship(sponsorshipRequest);
+    @PostMapping("/sponsorship/add/{imageId}")
+        public MyData addSponsorship(@RequestBody SponsorshipRequest sponsorshipRequest, @PathVariable Long imageId){
+        adminService.addSponsorship(sponsorshipRequest, imageId);
         MyData data = new MyData();
         data.setMessage("Sponsorship added successfully");
         return data;
     }
-    @PutMapping("/sponsorship/updateById/{id}")
-    public MyData updateSponsorship(@PathVariable Long id , @RequestBody SponsorshipRequest sponsorshipRequest){
-        adminService.updateSponsorship( id , sponsorshipRequest);
+    @PutMapping("/sponsorship/updateById/{id}/{imageId}/")
+    public MyData updateSponsorship(@PathVariable Long id , @RequestBody SponsorshipRequest sponsorshipRequest, @PathVariable Long imageId){
+        adminService.updateSponsorship( id , sponsorshipRequest, imageId);
         MyData data = new MyData();
         data.setMessage("Sponsorship updated successfully");
         return data;

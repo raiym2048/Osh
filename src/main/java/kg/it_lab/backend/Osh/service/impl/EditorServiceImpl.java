@@ -16,6 +16,7 @@ import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.*;
 import kg.it_lab.backend.Osh.repository.*;
+import kg.it_lab.backend.Osh.service.AdminService;
 import kg.it_lab.backend.Osh.service.AuthLoginService;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
@@ -51,6 +52,7 @@ public class EditorServiceImpl implements EditorService {
     private final AuthLoginService authLoginService;
     private final SponsorshipRepository sponsorshipRepository;
     private final SponsorshipMapper sponsorshipMapper;
+    private final AdminService adminService;
 
     @Override
     public void updateById(Long id, NewsRequest newsRequest, Long imageId) {
@@ -58,6 +60,8 @@ public class EditorServiceImpl implements EditorService {
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
+        if((adminService.imageChecker(image.get()) == 1 && !newsRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<News> news = newsRepository.findById(id);
         if (newsRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the news can't be empty");
@@ -180,7 +184,13 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest) {
+    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest, Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
+        if (image.isEmpty()) {
+            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
+        }
+        if((adminService.imageChecker(image.get()) == 1 && !sponsorshipRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
         if(sponsorship.isEmpty()){
             throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
@@ -203,7 +213,7 @@ public class EditorServiceImpl implements EditorService {
         if(sponsorshipRequest.getDirector().isEmpty()){
             throw new BadRequestException("Director can't be empty");
         }
-        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest));
+        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest, image.get()));
     }
 
     @Override
@@ -212,6 +222,8 @@ public class EditorServiceImpl implements EditorService {
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
+        if((adminService.imageChecker(image.get()) == 1 && !newsRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<Event> event = eventRepository.findById(eventId);
         if (eventRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the event can't be empty");

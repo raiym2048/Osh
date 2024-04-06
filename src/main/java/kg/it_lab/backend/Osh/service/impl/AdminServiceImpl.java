@@ -83,6 +83,8 @@ public class AdminServiceImpl implements AdminService {
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
+        if((imageChecker(image.get()) == 1 && !newsRepository.existsByImage(image.get())) || imageChecker(image.get()) > 1)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<News> news = newsRepository.findById(id);
         if (newsRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the news can't be empty");
@@ -193,6 +195,8 @@ public class AdminServiceImpl implements AdminService {
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
+        if((imageChecker(image.get()) == 1 && !eventRepository.existsByImage(image.get())) || imageChecker(image.get()) > 1)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<Event> event = eventRepository.findById(id);
         if (eventRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the event can't be empty");
@@ -452,6 +456,8 @@ public class AdminServiceImpl implements AdminService {
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
+        if(imageChecker(image.get()) > 0)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         if (activityRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the activity can't be empty");
         }
@@ -471,6 +477,8 @@ public class AdminServiceImpl implements AdminService {
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
         }
+        if((imageChecker(image.get()) == 1 && !activityRepository.existsByImage(image.get())) || imageChecker(image.get()) > 1)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<Activity> activity = activityRepository.findById(id);
         if (activityRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the activity can't be empty");
@@ -493,42 +501,59 @@ public class AdminServiceImpl implements AdminService {
         if (activity.isEmpty()) {
             throw new NotFoundException("Activity with id " + id + " not found", HttpStatus.NOT_FOUND);
         }
+        int cnt = 0;
+        if(activity.get().getImage() != null){
+            cnt = imageChecker(activity.get().getImage());
+        }
 
         activityRepository.deleteById(id);
-        imageRepository.deleteByName(activity.get().getImage().getName());
+        if(cnt == 1)imageService.deleteFile(activity.get().getImage().getId());
+//        imageRepository.deleteByName(activity.get().getImage().getName());
 
 
     }
 
     @Override
-    public void addSponsorship(SponsorshipRequest sponsorshipRequest) {
-            if(sponsorshipRequest.getInn().isEmpty()){
-                throw new BadRequestException("INN can't be empty ");
-            }
-            if(sponsorshipRequest.getBank().isEmpty()){
-                throw new BadRequestException("Bank can't be empty");
-            }
-            if(sponsorshipRequest.getAddress().isEmpty()){
-                throw new BadRequestException("Address can't be empty ");
-            }
-            if(sponsorshipRequest.getPaymentAccount().isEmpty()){
-                throw new BadRequestException("Payment account can't be empty");
-            }
-            if(sponsorshipRequest.getCompany().isEmpty()) {
-                throw new BadRequestException("Company name can't be empty");
-            }
-            if(sponsorshipRequest.getDirector().isEmpty()){
-                throw new BadRequestException("Director can't be empty");
-            }
-            Sponsorship sponsorship = new Sponsorship();
-            sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship ,sponsorshipRequest ));
+    public void addSponsorship(SponsorshipRequest sponsorshipRequest, Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
+        if (image.isEmpty()) {
+            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
+        }
+        if(imageChecker(image.get()) > 0)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+        if(sponsorshipRequest.getInn().isEmpty()){
+            throw new BadRequestException("INN can't be empty ");
+        }
+        if(sponsorshipRequest.getBank().isEmpty()){
+            throw new BadRequestException("Bank can't be empty");
+        }
+        if(sponsorshipRequest.getAddress().isEmpty()){
+            throw new BadRequestException("Address can't be empty ");
+        }
+        if(sponsorshipRequest.getPaymentAccount().isEmpty()){
+            throw new BadRequestException("Payment account can't be empty");
+        }
+        if(sponsorshipRequest.getCompany().isEmpty()) {
+            throw new BadRequestException("Company name can't be empty");
+        }
+        if(sponsorshipRequest.getDirector().isEmpty()){
+            throw new BadRequestException("Director can't be empty");
+        }
+        Sponsorship sponsorship = new Sponsorship();
+        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship ,sponsorshipRequest, image.get()));
     }
 
     @Override
-    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest) {
+    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest, Long imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
+        if (image.isEmpty()) {
+            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
+        }
+        if((imageChecker(image.get()) == 1 && !sponsorshipRepository.existsByImage(image.get())) || imageChecker(image.get()) > 1)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
         if(sponsorship.isEmpty()){
-            throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Sponsorship with id " + id + " not found",HttpStatus.NOT_FOUND);
         }
         if(sponsorshipRequest.getInn().isEmpty()){
             throw new BadRequestException("INN can't be empty ");
@@ -548,7 +573,7 @@ public class AdminServiceImpl implements AdminService {
         if(sponsorshipRequest.getDirector().isEmpty()){
             throw new BadRequestException("Director can't be empty");
         }
-        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest));
+        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest, image.get()));
     }
 
 
@@ -556,7 +581,7 @@ public class AdminServiceImpl implements AdminService {
     public void deleteSponsorship(Long id) {
         Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
         if(sponsorship.isEmpty()){
-            throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Sponsorship with id " + id + " not found",HttpStatus.NOT_FOUND);
         }
         sponsorshipRepository.deleteById(id);
     }
@@ -617,7 +642,8 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    private int imageChecker(Image image){
+    @Override
+    public int imageChecker(Image image){
         int cnt = 0;
         if (eventRepository.existsByImage(image)) {
             cnt++;
@@ -638,6 +664,10 @@ public class AdminServiceImpl implements AdminService {
         if (servicesRepository.existsByImagesContaining(image)) {
             cnt++;
             System.out.println("SERVICES");
+        }
+        if(sponsorshipRepository.existsByImage(image)){
+            cnt++;
+            System.out.println("SPONSORSHIP");
         }
         return cnt;
 
