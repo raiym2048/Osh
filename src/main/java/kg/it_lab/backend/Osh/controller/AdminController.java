@@ -12,7 +12,7 @@ import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
-import kg.it_lab.backend.Osh.service.AdminService;
+import kg.it_lab.backend.Osh.service.admin.*;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -27,47 +27,55 @@ import java.util.Locale;
 @RequestMapping("/admin")
 public class AdminController {
     private final AdminService adminService;
+    private final AdminNewsService adminNewsService;
+    private final AdminEventService adminEventService;
+    private final AdminProjectService adminProjectService;
+    private final AdminServicesService adminServicesService;
+    private final AdminSponsorshipService adminSponsorshipService;
+    private final AdminActivityService adminActivityService;
+    private final AdminNumbersService adminNumbersService;
     private final MessageSource messageSource;
+
     @PostMapping("/news/add/{imageId}")
     public MyData add(@RequestBody NewsRequest newsRequest,
                       @PathVariable Long imageId,
                       @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminService.add(newsRequest , imageId);
+        adminNewsService.add(newsRequest , imageId);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("news.add", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PutMapping("/news/updateById/{newsId}/{imageId}")
     public MyData updateById(@PathVariable Long newsId, @RequestBody NewsRequest newsRequest , @PathVariable Long imageId) {
-        adminService.updateById(newsId, newsRequest , imageId);
+        adminNewsService.updateById(newsId, newsRequest , imageId);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("news.update", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @DeleteMapping("/news/deleteById/{newsId}")
     public MyData deleteByName(@PathVariable Long newsId) {
-        adminService.deleteById(newsId);
+        adminNewsService.deleteById(newsId);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("news.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PostMapping("/event/add/{imageId}")
     public MyData add( @RequestBody EventRequest eventRequest ,@PathVariable Long imageId){
-        adminService.addEvent(eventRequest ,imageId);
+        adminEventService.addEvent(eventRequest ,imageId);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("event.add", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PutMapping("/event/updateById/{eventId}/{imageId}")
     public MyData update(@PathVariable Long eventId, @RequestBody EventRequest eventRequest ,@PathVariable Long imageId) {
-        adminService.updateEvent(eventId, eventRequest , imageId);
+        adminEventService.updateEvent(eventId, eventRequest , imageId);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("event.update", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @DeleteMapping("/event/deleteById/{eventId}")
     public MyData delete(@PathVariable Long eventId){
-        adminService.deleteEvent(eventId);
+        adminEventService.deleteEvent(eventId);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("event.delete", null, LocaleContextHolder.getLocale()));
         return data;
@@ -112,28 +120,28 @@ public class AdminController {
 
     @PostMapping("/project/add")
     public MyData addProject(@RequestBody ProjectRequest projectRequest ){
-        adminService.addProject(projectRequest );
+        adminProjectService.addProject(projectRequest );
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("project.add" , null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PutMapping("/project/updateById/{projectId}")
     public MyData updateProject(@PathVariable Long projectId, @RequestBody ProjectRequest projectRequest ){
-        adminService.updateProject(projectId, projectRequest );
+        adminProjectService.updateProject(projectId, projectRequest );
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("project.update", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @DeleteMapping("/project/deleteById/{id}")
     public MyData deleteProject(@PathVariable Long id) {
-        adminService.deleteProject(id);
+        adminProjectService.deleteProject(id);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("project.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PostMapping("/project/attachImageToProject/{projectId}/image/{imageId}")
     public MyData attachImageToProject(@PathVariable Long projectId, @PathVariable Long imageId) {
-        adminService.attachImageToProject(projectId, imageId);
+        adminProjectService.attachImageToProject(projectId, imageId);
         MyData data = new MyData();
         data.setMessage("Image attached to project successfully");
         return data;
@@ -141,70 +149,70 @@ public class AdminController {
 
     @PostMapping("/services/add")
     public MyData addService(@RequestBody ServicesRequest servicesRequest){
-        adminService.addService(servicesRequest);
+        adminServicesService.addService(servicesRequest);
         MyData data = new MyData();
         data.setMessage("Services added successfully");
         return data;
     }
     @PutMapping("/services/updateById/{id}")
     public MyData updateService(@PathVariable Long id, @RequestBody ServicesRequest servicesRequest){
-        adminService.updateService(id, servicesRequest);
+        adminServicesService.updateService(id, servicesRequest);
         MyData data = new MyData();
         data.setMessage("Services updated successfully");
         return data;
     }
     @DeleteMapping("/services/deleteById/{id}")
     public MyData deleteService(@PathVariable Long id) {
-        adminService.deleteService(id);
+        adminServicesService.deleteService(id);
         MyData data = new MyData();
         data.setMessage("Services deleted successfully");
         return data;
     }
     @PostMapping("/services/attachImageToService/{serviceId}/image/{imageId}")
     public MyData attachImageToService(@PathVariable Long serviceId, @PathVariable Long imageId) {
-        adminService.attachImageToService(serviceId, imageId);
+        adminServicesService.attachImageToService(serviceId, imageId);
         MyData data = new MyData();
         data.setMessage("Image attached to services successfully");
         return data;
     }
     @PostMapping("/activity/add/{imageId}")
     public MyData addActivity(@RequestBody ActivityRequest activityRequest , @PathVariable Long imageId ){
-        adminService.addActivity(activityRequest , imageId);
+        adminActivityService.addActivity(activityRequest , imageId);
         MyData data = new MyData();
         data.setMessage("Activity added successfully");
         return data;
     }
     @PutMapping("/activity/updateById/{activityId}/{imageId}")
     public MyData updateActivity(@PathVariable Long activityId, @RequestBody ActivityRequest activityRequest , @PathVariable Long imageId) {
-        adminService.updateActivity(activityId, activityRequest , imageId);
+        adminActivityService.updateActivity(activityId, activityRequest , imageId);
         MyData data = new MyData();
         data.setMessage("Activity updated successfully");
         return data;
     }
     @DeleteMapping("/activity/deleteById/{id}")
     public MyData deleteActivity(@PathVariable Long id) {
-        adminService.deleteActivity(id);
+        adminActivityService.deleteActivity(id);
         MyData data = new MyData();
         data.setMessage("Activity deleted successfully");
         return data;
     }
     @PostMapping("/sponsorship/add/{imageId}")
         public MyData addSponsorship(@RequestBody SponsorshipRequest sponsorshipRequest, @PathVariable Long imageId){
-        adminService.addSponsorship(sponsorshipRequest, imageId);
+        adminSponsorshipService.addSponsorship(sponsorshipRequest, imageId);
         MyData data = new MyData();
         data.setMessage("Sponsorship added successfully");
         return data;
     }
     @PutMapping("/sponsorship/updateById/{id}/{imageId}/")
     public MyData updateSponsorship(@PathVariable Long id , @RequestBody SponsorshipRequest sponsorshipRequest, @PathVariable Long imageId){
-        adminService.updateSponsorship( id , sponsorshipRequest, imageId);
+        adminSponsorshipService.updateSponsorship( id , sponsorshipRequest, imageId);
         MyData data = new MyData();
         data.setMessage("Sponsorship updated successfully");
         return data;
     }
     @DeleteMapping("/sponsorship/deleteById/{id}")
     public MyData deleteSponsorship(@PathVariable Long id ){
-        adminService.deleteSponsorship(id);
+        adminSponsorshipService.deleteSponsorship(id);
         MyData data = new MyData();
         data.setMessage("Sponsorship deleted successfully");
         return data;
@@ -212,25 +220,23 @@ public class AdminController {
     }
     @PostMapping("/numbers/add")
     public MyData addNumbers(@RequestBody NumbersRequest numbersRequest){
-        adminService.addNumbers(numbersRequest);
+        adminNumbersService.addNumbers(numbersRequest);
         MyData data = new MyData();
         data.setMessage("Numbers added successfully");
         return data;
     }
     @PutMapping("/numbers/updateById/{id}")
     public MyData updateNumbers(@PathVariable Long id ,@RequestBody NumbersRequest numbersRequest){
-        adminService.updateNumbers(id , numbersRequest);
+        adminNumbersService.updateNumbers(id , numbersRequest);
         MyData data = new MyData();
         data.setMessage("Numbers updated successfully");
         return data;
     }
     @DeleteMapping("/numbers/deleteById/{id}")
     public MyData deleteNumbersById(@PathVariable Long id ){
-        adminService.deleteNumbersById(id);
+        adminNumbersService.deleteNumbersById(id);
         MyData data = new MyData();
         data.setMessage("Numbers deleted successfully");
         return data;
     }
-
-
 }
