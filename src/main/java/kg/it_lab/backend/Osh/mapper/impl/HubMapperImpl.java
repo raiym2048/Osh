@@ -29,7 +29,7 @@ public class HubMapperImpl implements HubMapper {
     }
 
     @Override
-    public List<HubResponse> toDtos(List<Hub> hubs) {
+    public List<HubResponse> toDtoS(List<Hub> hubs) {
         List<HubResponse> hubResponses = new ArrayList<>();
         for(Hub hub : hubs){
             hubResponses.add(toDto(hub));
