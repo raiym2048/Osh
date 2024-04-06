@@ -11,4 +11,6 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     Optional<News> findByName(String name);
 
     boolean existsByImage(Image image);
+
+    int countAllByImage(Image image);
 }

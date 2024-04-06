@@ -126,6 +126,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public int imageChecker(Image image){
         int cnt = 0;
+        if (newsRepository.existsByImage(image)) {
+            cnt++;
+            System.out.println("NEWS");
+        }
         if (eventRepository.existsByImage(image)) {
             cnt++;
             System.out.println("EVENT");
@@ -133,10 +137,6 @@ public class AdminServiceImpl implements AdminService {
         if (activityRepository.existsByImage(image)) {
             cnt++;
             System.out.println("ACTIVITY");
-        }
-        if (newsRepository.existsByImage(image)) {
-            cnt++;
-            System.out.println("NEWS");
         }
         if (projectRepository.existsByImagesContaining(image)) {
             cnt++;
