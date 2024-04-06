@@ -1,9 +1,6 @@
 package kg.it_lab.backend.Osh.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -19,5 +16,7 @@ public class Sponsorship {
     private String bank;
     private String bic;
     private String director;
-
+    @OneToOne
+    @JoinColumn
+    private Image image;
 }
