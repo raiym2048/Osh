@@ -24,4 +24,5 @@ public interface AdminService {
     void deleteRole(Long id );
     void checker(Optional<News> news, Long id);
     int imageChecker(Image image);
+
 }

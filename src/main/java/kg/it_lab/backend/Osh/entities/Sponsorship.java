@@ -16,7 +16,7 @@ public class Sponsorship {
     private String bank;
     private String bic;
     private String director;
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     private Image image;
 }

@@ -6,6 +6,7 @@ import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
 import kg.it_lab.backend.Osh.dto.admin.category.CategoryRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
+import kg.it_lab.backend.Osh.dto.hub.HubRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
 import kg.it_lab.backend.Osh.dto.numbers.NumbersRequest;
@@ -13,6 +14,7 @@ import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
+import kg.it_lab.backend.Osh.service.admin.AdminHubService;
 import kg.it_lab.backend.Osh.service.admin.*;
 
 import lombok.AllArgsConstructor;
@@ -36,6 +38,7 @@ public class AdminController {
     private final AdminActivityService adminActivityService;
     private final AdminNumbersService adminNumbersService;
     private final MessageSource messageSource;
+    private final AdminHubService adminHubService;
 
     @PostMapping("/news/add/{imageId}")
     public MyData add(@RequestBody NewsRequest newsRequest,
@@ -281,6 +284,34 @@ public class AdminController {
         adminNumbersService.deleteNumbersById(id);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("numbers.delete", null, LocaleContextHolder.getLocale()));
+        return data;
+    }
+    @PostMapping("/hub/add")
+    public MyData addHub(@RequestBody HubRequest hubRequest){
+        adminHubService.addHub(hubRequest);
+        MyData data = new MyData();
+        data.setMessage("Hub added successfully");
+        return data;
+    }
+    @PutMapping("/hub/updateById/{id}")
+    public MyData updateHub(@PathVariable Long id ,@RequestBody HubRequest hubRequest){
+        adminHubService.updateHub(id , hubRequest);
+        MyData data = new MyData();
+        data.setMessage("Hub updated successfully");
+        return data;
+    }
+    @DeleteMapping("/hub/deleteById/{id}")
+    public MyData deleteHub(@PathVariable Long id ){
+        adminHubService.deleteHub(id);
+        MyData data = new MyData();
+        data.setMessage("Hub deleted successfully");
+        return data;
+    }
+    @PostMapping("/hub/attachImageToHub/{hubId}/image/{imageId}")
+    public MyData attachImageToHub(@PathVariable Long hubId, @PathVariable Long imageId) {
+        adminHubService.attachImageToHub(hubId, imageId);
+        MyData data = new MyData();
+        data.setMessage("Image attached to hub successfully");
         return data;
     }
 }
