@@ -553,7 +553,7 @@ public class AdminServiceImpl implements AdminService {
             throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
         if(sponsorship.isEmpty()){
-            throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Sponsorship with id " + id + " not found",HttpStatus.NOT_FOUND);
         }
         if(sponsorshipRequest.getInn().isEmpty()){
             throw new BadRequestException("INN can't be empty ");
@@ -581,7 +581,7 @@ public class AdminServiceImpl implements AdminService {
     public void deleteSponsorship(Long id) {
         Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
         if(sponsorship.isEmpty()){
-            throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Sponsorship with id " + id + " not found",HttpStatus.NOT_FOUND);
         }
         sponsorshipRepository.deleteById(id);
     }

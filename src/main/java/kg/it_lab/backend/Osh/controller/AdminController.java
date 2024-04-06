@@ -1,6 +1,5 @@
 package kg.it_lab.backend.Osh.controller;
 
-import com.amazonaws.services.dynamodbv2.xspec.M;
 import kg.it_lab.backend.Osh.dto.activity.ActivityRequest;
 import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
