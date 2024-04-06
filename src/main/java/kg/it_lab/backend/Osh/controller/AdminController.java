@@ -15,8 +15,10 @@ import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.service.admin.*;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Locale;
 
 
 @RestController
@@ -31,9 +33,12 @@ public class AdminController {
     private final AdminSponsorshipService adminSponsorshipService;
     private final AdminActivityService adminActivityService;
     private final AdminNumbersService adminNumbersService;
+    private final MessageSource messageSource;
 
     @PostMapping("/news/add/{imageId}")
-    public MyData add(@RequestBody NewsRequest newsRequest ,@PathVariable Long imageId ){
+    public MyData add(@RequestBody NewsRequest newsRequest,
+                      @PathVariable Long imageId,
+                      @RequestHeader(name = "Accept-Language", required = false) Locale locale){
         adminNewsService.add(newsRequest , imageId);
         MyData data = new MyData();
         data.setMessage("News added successfully");
@@ -100,7 +105,7 @@ public class AdminController {
 
         adminService.addRole(roleRequest);
         MyData data = new MyData();
-        data.setMessage("Role added successfully");
+            data.setMessage("Role added successfully");
         return data;
     }
     @DeleteMapping("/role/delete/{id}")
