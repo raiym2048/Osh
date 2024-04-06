@@ -39,6 +39,8 @@ public class AdminController {
     private final AdminNumbersService adminNumbersService;
     private final MessageSource messageSource;
     private final AdminHubService adminHubService;
+    private final AdminPartnersService adminPartnersService;
+
 
     @PostMapping("/news/add/{imageId}")
     public MyData add(@RequestBody NewsRequest newsRequest,
@@ -287,31 +289,52 @@ public class AdminController {
         return data;
     }
     @PostMapping("/hub/add")
-    public MyData addHub(@RequestBody HubRequest hubRequest){
+    public MyData addHub(@RequestBody HubRequest hubRequest , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
         adminHubService.addHub(hubRequest);
         MyData data = new MyData();
-        data.setMessage("Hub added successfully");
+        data.setMessage(messageSource.getMessage("hub.add", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PutMapping("/hub/updateById/{id}")
-    public MyData updateHub(@PathVariable Long id ,@RequestBody HubRequest hubRequest){
+    public MyData updateHub(@PathVariable Long id ,@RequestBody HubRequest hubRequest , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
         adminHubService.updateHub(id , hubRequest);
         MyData data = new MyData();
-        data.setMessage("Hub updated successfully");
+        data.setMessage(messageSource.getMessage("hub.update", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @DeleteMapping("/hub/deleteById/{id}")
-    public MyData deleteHub(@PathVariable Long id ){
+    public MyData deleteHub(@PathVariable Long id , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
         adminHubService.deleteHub(id);
         MyData data = new MyData();
-        data.setMessage("Hub deleted successfully");
+        data.setMessage(messageSource.getMessage("hub.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PostMapping("/hub/attachImageToHub/{hubId}/image/{imageId}")
-    public MyData attachImageToHub(@PathVariable Long hubId, @PathVariable Long imageId) {
+    public MyData attachImageToHub(@PathVariable Long hubId, @PathVariable Long imageId , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
         adminHubService.attachImageToHub(hubId, imageId);
         MyData data = new MyData();
-        data.setMessage("Image attached to hub successfully");
+        data.setMessage(messageSource.getMessage("image.attach.hub", null, LocaleContextHolder.getLocale()));
+        return data;
+    }
+    @PostMapping("/partners/add/{imageId}")
+    public MyData addPartners(@PathVariable Long imageId){
+        adminPartnersService.addPartners(imageId);
+        MyData data = new MyData();
+        data.setMessage(messageSource.getMessage("partners.add", null, LocaleContextHolder.getLocale()));
+        return data;
+    }
+    @PutMapping("/partners/updateById/{id}/{imageId}")
+    public MyData updatePartners(@PathVariable Long id , @PathVariable Long imageId , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
+        adminPartnersService.updatePartners(id , imageId);
+        MyData data = new MyData();
+        data.setMessage(messageSource.getMessage("partners.update", null, LocaleContextHolder.getLocale()));
+        return data;
+    }
+    @DeleteMapping("/partners/deleteById/{id}")
+    public MyData deletePartners(@PathVariable Long id , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
+        adminPartnersService.deletePartners(id);
+        MyData data = new MyData();
+        data.setMessage(messageSource.getMessage("partners.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
 }

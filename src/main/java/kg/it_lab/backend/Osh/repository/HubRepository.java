@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface HubRepository extends JpaRepository<Hub, Long>{
-    Optional<Project> findByName(String name);
+    Optional<Hub> findByName(String name);
 }

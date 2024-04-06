@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -76,7 +77,13 @@ public class AdminHubServiceImpl implements AdminHubService {
         if(hub.isEmpty() || image.isEmpty()){
             throw new BadRequestException("Hub or image with this id wasn't found");
         }
-        hub.get().getImages().add(image.get());
+        if(adminService.imageChecker(image.get()) > 0)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+        List<Image> images = new ArrayList<>();
+        if(hub.get().getImages() != null) images = hub.get().getImages();
+        images.add(image.get());
+        hub.get().setImages(images);
         hubRepository.save(hub.get());
     }
+
 }
