@@ -59,5 +59,5 @@ A step by step series of examples that tell you how to get a development environ
    
 
    ```bash
-   git clone https://github.com/raiymbek2048/Osh.git
+   git clone https://github.com/raiym2048/Osh.git
       
