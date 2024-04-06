@@ -19,19 +19,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 What things you need to install the software and how to install them.
-
-### Installing
-
-A step by step series of examples that tell you how to get a development environment running.
-
-1. **Clone the repository**
-2. 
-
-   You can clone the repository by running the following command in your terminal:
-   
-
-   ```bash
-   git clone https://github.com/YourGithubUsername/YourRepositoryName.git      
+ 
    
 ## Running the tests
 
@@ -61,3 +49,16 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Hat tip to anyone whose code was used
 * Inspiration
 * etc
+### Installing
+
+A step by step series of examples that tell you how to get a development environment running.
+
+1. **Clone the repository**
+2. 
+
+   You can clone the repository by running the following command in your terminal:
+   
+
+   ```bash
+   git clone https://github.com/YourGithubUsername/YourRepositoryName.git
+      
