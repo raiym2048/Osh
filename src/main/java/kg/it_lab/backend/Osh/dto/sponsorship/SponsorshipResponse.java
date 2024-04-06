@@ -13,4 +13,5 @@ public class SponsorshipResponse {
     private String bank;
     private String bic;
     private String director;
+    private String imagePath;
 }
