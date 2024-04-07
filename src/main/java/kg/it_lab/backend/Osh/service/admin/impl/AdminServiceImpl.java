@@ -1,8 +1,5 @@
 package kg.it_lab.backend.Osh.service.admin.impl;
-
-import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
-
-
+import kg.it_lab.backend.Osh.dto.admin.RegisterRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.entities.*;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
@@ -29,7 +26,7 @@ public class AdminServiceImpl implements AdminService {
     private final ProjectRepository projectRepository;
     private final ServicesRepository servicesRepository;
     private final ActivityRepository activityRepository;
-    private final SponsorshipRepository sponsorshipRepository;
+    private final VolunteerRepository volunteerRepository;
 
 
 
@@ -57,7 +54,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void registerEditor(EditorRegisterRequest editorRegisterRequest) {
+    public void registerEditor(RegisterRequest editorRegisterRequest) {
         if (userRepository.findByEmail(editorRegisterRequest.getEmail()).isPresent()) {
             throw new BadRequestException("Editor with this email already exist");
         }
@@ -111,4 +108,5 @@ public class AdminServiceImpl implements AdminService {
         }
         return cnt;
     }
+
 }

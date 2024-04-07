@@ -6,7 +6,7 @@ import kg.it_lab.backend.Osh.dto.auth.AuthLoginResponse;
 import kg.it_lab.backend.Osh.dto.auth.EditorPasswordRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
-import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
+import kg.it_lab.backend.Osh.dto.admin.LoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
@@ -113,7 +113,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public AuthLoginResponse loginEditor(AdminLoginRequest adminLoginRequest) {
+    public AuthLoginResponse loginEditor(LoginRequest adminLoginRequest) {
         Optional<User>user =userRepository.findByEmail(adminLoginRequest.getEmail());
         if(adminLoginRequest.getPassword().isEmpty() || adminLoginRequest.getEmail().isEmpty()){
             throw new BadRequestException("Your password or email can't be empty");
@@ -256,22 +256,7 @@ public class EditorServiceImpl implements EditorService {
         eventRepository.save(eventMapper.toDtoEvent(event.get(), eventRequest, image.get()));
     }
 
-    @Override
-    public void updatePartners(Long id, Long imageId) {
-        Optional<Image> image = imageRepository.findById(imageId);
-        if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
-        }
-        if((adminService.imageChecker(image.get()) == 1 && !newsRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
-        Optional<Partners> partners = partnersRepository.findById(id);
-        if (partners.isEmpty()) {
-            throw new NotFoundException("Partners with this ID wasn't found", HttpStatus.NOT_FOUND);
-        }
-        partners.get().setImage(image.get());
-        partnersRepository.save(partners.get());
 
-    }
 
 
     private boolean isLeapYear(int year) {
