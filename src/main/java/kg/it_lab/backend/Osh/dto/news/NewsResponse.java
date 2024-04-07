@@ -11,6 +11,4 @@ public class NewsResponse {
     private String imagePath;
     private String name;
     private LocalDateTime createdAt;
-    private String slogan;
-    private String category;
 }

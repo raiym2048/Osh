@@ -5,7 +5,6 @@ import kg.it_lab.backend.Osh.dto.auth.AuthLoginResponse;
 import kg.it_lab.backend.Osh.dto.auth.EditorPasswordRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
-import kg.it_lab.backend.Osh.dto.hub.HubRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
@@ -73,21 +72,13 @@ public class EditorController {
         data.setMessage(messageSource.getMessage("activity.update", null, LocaleContextHolder.getLocale()));
         return data;
     }
-    @PutMapping("/sponsorship/updateById/{id}/{imageId}")
+    @PutMapping("/sponsorship/updateById/{id}")
     public MyData updateSponsorship(@PathVariable Long id ,
                                     @RequestBody SponsorshipRequest sponsorshipRequest,
-                                    @PathVariable Long imageId,
                                     @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        editorService.updateSponsorship(id , sponsorshipRequest, imageId);
+        editorService.updateSponsorship( id , sponsorshipRequest);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("sponsorship.update", null, LocaleContextHolder.getLocale()));
-        return data;
-    }
-    @PutMapping("/hub/updateById/{id}")
-    public MyData updateHub(@PathVariable Long id , @RequestBody HubRequest hubRequest , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        editorService.updateHub(id , hubRequest);
-        MyData data = new MyData();
-        data.setMessage(messageSource.getMessage("hub.update", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PutMapping("/partners/updateById/{id}/{imageId}")

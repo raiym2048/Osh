@@ -6,7 +6,6 @@ import kg.it_lab.backend.Osh.dto.news.NewsResponse;
 import kg.it_lab.backend.Osh.entities.Category;
 import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.News;
-import kg.it_lab.backend.Osh.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

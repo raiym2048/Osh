@@ -24,13 +24,7 @@ public class AdminSponsorshipServiceImpl implements AdminSponsorshipService {
     private final AdminService adminService;
 
     @Override
-    public void addSponsorship(SponsorshipRequest sponsorshipRequest, Long imageId) {
-        Optional<Image> image = imageRepository.findById(imageId);
-        if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
-        }
-        if(adminService.imageChecker(image.get()) > 0)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+    public void addSponsorship(SponsorshipRequest sponsorshipRequest) {
         if(sponsorshipRequest.getInn().isEmpty()){
             throw new BadRequestException("INN can't be empty ");
         }
@@ -50,17 +44,11 @@ public class AdminSponsorshipServiceImpl implements AdminSponsorshipService {
             throw new BadRequestException("Director can't be empty");
         }
         Sponsorship sponsorship = new Sponsorship();
-        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship ,sponsorshipRequest, image.get()));
+        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship ,sponsorshipRequest));
     }
 
     @Override
-    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest, Long imageId) {
-        Optional<Image> image = imageRepository.findById(imageId);
-        if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
-        }
-        if((adminService.imageChecker(image.get()) == 1 && !sponsorshipRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest) {
         Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
         if(sponsorship.isEmpty()){
             throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
@@ -83,7 +71,7 @@ public class AdminSponsorshipServiceImpl implements AdminSponsorshipService {
         if(sponsorshipRequest.getDirector().isEmpty()){
             throw new BadRequestException("Director can't be empty");
         }
-        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest, image.get()));
+        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest));
     }
 
 

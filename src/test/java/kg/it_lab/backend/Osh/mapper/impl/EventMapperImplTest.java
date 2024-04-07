@@ -5,7 +5,6 @@ import kg.it_lab.backend.Osh.dto.event.EventResponse;
 import kg.it_lab.backend.Osh.entities.Category;
 import kg.it_lab.backend.Osh.entities.Event;
 import kg.it_lab.backend.Osh.entities.Image;
-import kg.it_lab.backend.Osh.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -24,7 +24,6 @@ public class AdminEventServiceImpl implements AdminEventService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
-    private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
     private final ImageService imageService;
     private final AdminService adminService;
@@ -43,12 +42,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         if (eventRequest.getDescription().isEmpty()) {
             throw new BadRequestException("Content of the event can't be empty");
         }
-        if (categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()) {
-            throw new BadRequestException("Category of event with this id wasn't found");
-        }
-        if (eventRequest.getSlogan().isEmpty()) {
-            throw new BadRequestException("Slogan of event can't be empty ");
-        }
+
         if (eventRequest.getYear() < 0) {
             throw new BadRequestException("Date of year can't be negative ");
         }
@@ -114,12 +108,6 @@ public class AdminEventServiceImpl implements AdminEventService {
         }
         if (event.isEmpty()) {
             throw new NotFoundException("Title of event with this id wasn't found", HttpStatus.NOT_FOUND);
-        }
-        if (categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()) {
-            throw new BadRequestException("Category of event can't be empty ");
-        }
-        if (eventRequest.getSlogan().isEmpty()) {
-            throw new BadRequestException("Slogan of event can't be empty ");
         }
         if (eventRequest.getYear() < 0) {
             throw new BadRequestException("Date of year can't be negative ");

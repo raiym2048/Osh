@@ -23,7 +23,6 @@ public class AdminNewsServiceImpl implements AdminNewsService {
 
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
-    private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
     private final ImageService imageService;
     private final AdminService adminService;
@@ -39,9 +38,7 @@ public class AdminNewsServiceImpl implements AdminNewsService {
         if (newsRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the news can't be empty");
         }
-        if(categoryRepository.findById(newsRequest.getCategoryId()).isEmpty()){
-            throw new NotFoundException("Category with this id "+ newsRequest.getCategoryId()+" not found" , HttpStatus.NOT_FOUND);
-        }
+
         if (newsRequest.getDescription().isEmpty()) {
             throw new BadRequestException("Content of the news can't be empty");
         }
@@ -64,12 +61,9 @@ public class AdminNewsServiceImpl implements AdminNewsService {
         if (newsRequest.getDescription().isEmpty()) {
             throw new BadRequestException("Content of the news can't be empty");
         }
-        if (newsRequest.getCategoryId() == null)
-            throw new BadRequestException("Category of the news can't be empty");
-
-        if (categoryRepository.findById(newsRequest.getCategoryId()).isEmpty())
-            throw new NotFoundException("Category with id: " + newsRequest.getCategoryId() + " - wasn't found!!", HttpStatus.NOT_FOUND);
-
+        if (news.isEmpty()) {
+            throw new NotFoundException("News with id: " + id + " - wasn't found!!", HttpStatus.NOT_FOUND);
+        }
         adminService.checker(news, id);
         news.get().setImage(null);
         newsRepository.save(newsMapper.toDtoNews(news.get(), newsRequest, image.get()));

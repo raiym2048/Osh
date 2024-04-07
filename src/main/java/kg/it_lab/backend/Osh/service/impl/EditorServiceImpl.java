@@ -5,7 +5,6 @@ import kg.it_lab.backend.Osh.dto.activity.ActivityRequest;
 import kg.it_lab.backend.Osh.dto.auth.AuthLoginResponse;
 import kg.it_lab.backend.Osh.dto.auth.EditorPasswordRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
-import kg.it_lab.backend.Osh.dto.hub.HubRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
@@ -18,7 +17,6 @@ import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.*;
 import kg.it_lab.backend.Osh.repository.*;
 import kg.it_lab.backend.Osh.service.admin.AdminService;
-import kg.it_lab.backend.Osh.service.AuthLoginService;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,10 +46,8 @@ public class EditorServiceImpl implements EditorService {
     private final ActivityMapper activityMapper;
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
-    private final CategoryRepository categoryRepository;
     private final PasswordEncoder encoder;
-    private final HubMapper hubMapper;
-    private final HubRepository hubRepository;
+
     private final PartnersRepository partnersRepository;
     private final SponsorshipRepository sponsorshipRepository;
     private final SponsorshipMapper sponsorshipMapper;
@@ -187,13 +183,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest, Long imageId) {
-        Optional<Image> image = imageRepository.findById(imageId);
-        if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
-        }
-        if((adminService.imageChecker(image.get()) == 1 && !sponsorshipRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+    public void updateSponsorship(Long id, SponsorshipRequest sponsorshipRequest) {
         Optional<Sponsorship> sponsorship = sponsorshipRepository.findById(id);
         if(sponsorship.isEmpty()){
             throw new NotFoundException("Sponsorship with id" + id + "not found",HttpStatus.NOT_FOUND);
@@ -216,7 +206,7 @@ public class EditorServiceImpl implements EditorService {
         if(sponsorshipRequest.getDirector().isEmpty()){
             throw new BadRequestException("Director can't be empty");
         }
-        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest, image.get()));
+        sponsorshipRepository.save(sponsorshipMapper.toDtoSponsorship(sponsorship.get() , sponsorshipRequest));
     }
 
     @Override
@@ -236,12 +226,6 @@ public class EditorServiceImpl implements EditorService {
         }
         if (event.isEmpty()) {
             throw new NotFoundException("Event with this ID wasn't found", HttpStatus.NOT_FOUND);
-        }
-        if (categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()) {
-            throw new BadRequestException("Category of event can't be empty ");
-        }
-        if (eventRequest.getSlogan().isEmpty()) {
-            throw new BadRequestException("Slogan of event can't be empty ");
         }
         if (eventRequest.getYear() < 0) {
             throw new BadRequestException("Date of year can't be negative ");
@@ -289,20 +273,6 @@ public class EditorServiceImpl implements EditorService {
 
     }
 
-    @Override
-    public void updateHub(Long id, HubRequest hubRequest) {
-        Optional<Hub> hub = hubRepository.findById(id);
-        if(hubRequest.getName().isEmpty() || hubRequest.getDescription().isEmpty()){
-            throw new BadRequestException("Fields can't be empty");
-        }
-        if(hub.isEmpty()){
-            throw new BadRequestException("Hub with this id wasn't found");
-        }
-        if (hubRepository.findByName(hubRequest.getName()).isPresent()) {
-            throw new BadRequestException("Hub with name: " + hubRequest.getName() + " - already exist!");
-        }
-        hubRepository.save(hubMapper.toDtoHub(hub.get(), hubRequest));
-    }
 
     private boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);

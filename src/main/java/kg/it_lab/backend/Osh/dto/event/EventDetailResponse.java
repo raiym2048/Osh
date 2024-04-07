@@ -11,8 +11,6 @@ public class EventDetailResponse {
     private Long id;
     private String imagePath;
     private String name;
-    private String category;
-    private String slogan;
     private String description;
     private LocalDateTime dateTime;
     private TimerResponse timer;
