@@ -23,8 +23,6 @@ public class SponsorshipMapperImpl implements SponsorshipMapper {
         sponsorshipResponse.setBank(sponsorship.getBank());
         sponsorshipResponse.setBic(sponsorship.getBic());
         sponsorshipResponse.setDirector(sponsorship.getDirector());
-        if(sponsorship.getImage() != null)
-            sponsorshipResponse.setImagePath(sponsorship.getImage().getPath());
         return sponsorshipResponse;
     }
 
@@ -38,7 +36,7 @@ public class SponsorshipMapperImpl implements SponsorshipMapper {
     }
 
     @Override
-    public Sponsorship toDtoSponsorship(Sponsorship sponsorship, SponsorshipRequest sponsorshipRequest, Image image) {
+    public Sponsorship toDtoSponsorship(Sponsorship sponsorship, SponsorshipRequest sponsorshipRequest) {
         sponsorship.setAddress(sponsorshipRequest.getAddress());
         sponsorship.setBank(sponsorshipRequest.getBank());
         sponsorship.setInn(sponsorshipRequest.getInn());
@@ -46,7 +44,7 @@ public class SponsorshipMapperImpl implements SponsorshipMapper {
         sponsorship.setCompany(sponsorshipRequest.getCompany());
         sponsorship.setPaymentAccount(sponsorshipRequest.getPaymentAccount());
         sponsorship.setBic(sponsorshipRequest.getBic());
-        sponsorship.setImage(image);
+
         return sponsorship;
     }
 }

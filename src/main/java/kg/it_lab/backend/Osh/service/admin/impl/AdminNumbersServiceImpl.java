@@ -18,27 +18,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AdminNumbersServiceImpl implements AdminNumbersService {
-    private final NewsRepository newsRepository;
-    private final NewsMapper newsMapper;
-    private final EventRepository eventRepository;
-    private final EventMapper eventMapper;
-    private final CategoryRepository categoryRepository;
-    private final ImageRepository imageRepository;
-    private final RoleRepository roleRepository;
-    private final EmailSenderService emailSenderService;
-    private final UserRepository userRepository;
-    private final ProjectMapper projectMapper;
-    private final ProjectRepository projectRepository;
-    private final ServicesMapper servicesMapper;
-    private final ServicesRepository servicesRepository;
-    private final ActivityRepository activityRepository;
-    private final ActivityMapper activityMapper;
-    private final SponsorshipRepository sponsorshipRepository;
-    private final SponsorshipMapper sponsorshipMapper;
+
     private final NumbersRepository numbersRepository;
     private final NumbersMapper numbersMapper;
-    private final ImageService imageService;
-    private final AdminService adminService;
+
     @Override
     public void addNumbers(NumbersRequest numbersRequest) {
         Numbers numbers = new Numbers();

@@ -22,7 +22,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html",
-                                "/auth/**", "/user/**" , "/editor/**" , "/admin/**", "/event/**", "/news/**", "/image/**",
+                                "/auth/**", "/user/**" , "/editor/**" , "/admin/**", "/event/**", "/news/**", "/image/**","/volunteer/**",
                                 "/activity/**", "/project/**", "/service/**", "/sponsorship/**").permitAll()
                         .requestMatchers("/test/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SponsorshipRepository extends JpaRepository<Sponsorship, Long> {
-    boolean existsByImage(Image image);
 }

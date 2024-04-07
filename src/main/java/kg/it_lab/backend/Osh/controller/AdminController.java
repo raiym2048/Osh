@@ -1,12 +1,9 @@
 package kg.it_lab.backend.Osh.controller;
 
-import com.amazonaws.services.dynamodbv2.xspec.L;
 import kg.it_lab.backend.Osh.dto.activity.ActivityRequest;
 import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
-import kg.it_lab.backend.Osh.dto.admin.category.CategoryRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
-import kg.it_lab.backend.Osh.dto.hub.HubRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
 import kg.it_lab.backend.Osh.dto.numbers.NumbersRequest;
@@ -14,7 +11,6 @@ import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
-import kg.it_lab.backend.Osh.service.admin.AdminHubService;
 import kg.it_lab.backend.Osh.service.admin.*;
 
 import lombok.AllArgsConstructor;
@@ -38,7 +34,6 @@ public class AdminController {
     private final AdminActivityService adminActivityService;
     private final AdminNumbersService adminNumbersService;
     private final MessageSource messageSource;
-    private final AdminHubService adminHubService;
     private final AdminPartnersService adminPartnersService;
 
 
@@ -94,22 +89,6 @@ public class AdminController {
         adminEventService.deleteEvent(eventId);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("event.delete", null, LocaleContextHolder.getLocale()));
-        return data;
-    }
-    @PostMapping("/category/add")
-    public MyData addCategory(@RequestBody CategoryRequest categoryRequest,
-                              @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminService.addCategory(categoryRequest);
-        MyData data = new MyData();
-        data.setMessage(messageSource.getMessage("category.add", null, LocaleContextHolder.getLocale()));
-        return data;
-    }
-    @DeleteMapping("/category/deleteById/{id}")
-    public MyData deleteCategory(@PathVariable Long id,
-                                 @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminService.deleteCategory(id);
-        MyData data = new MyData();
-        data.setMessage(messageSource.getMessage("category.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PostMapping("/registerEditor")
@@ -235,21 +214,19 @@ public class AdminController {
         data.setMessage(messageSource.getMessage("activity.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
-    @PostMapping("/sponsorship/add/{imageId}")
+    @PostMapping("/sponsorship/add")
         public MyData addSponsorship(@RequestBody SponsorshipRequest sponsorshipRequest,
-                                     @PathVariable Long imageId,
                                      @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminSponsorshipService.addSponsorship(sponsorshipRequest, imageId);
+        adminSponsorshipService.addSponsorship(sponsorshipRequest);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("sponsorship.add", null, LocaleContextHolder.getLocale()));
         return data;
     }
-    @PutMapping("/sponsorship/updateById/{id}/{imageId}/")
+    @PutMapping("/sponsorship/updateById/{id}")
     public MyData updateSponsorship(@PathVariable Long id ,
                                     @RequestBody SponsorshipRequest sponsorshipRequest,
-                                    @PathVariable Long imageId,
                                     @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminSponsorshipService.updateSponsorship( id , sponsorshipRequest, imageId);
+        adminSponsorshipService.updateSponsorship( id , sponsorshipRequest);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("sponsorship.update", null, LocaleContextHolder.getLocale()));
         return data;
@@ -286,34 +263,6 @@ public class AdminController {
         adminNumbersService.deleteNumbersById(id);
         MyData data = new MyData();
         data.setMessage(messageSource.getMessage("numbers.delete", null, LocaleContextHolder.getLocale()));
-        return data;
-    }
-    @PostMapping("/hub/add")
-    public MyData addHub(@RequestBody HubRequest hubRequest , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminHubService.addHub(hubRequest);
-        MyData data = new MyData();
-        data.setMessage(messageSource.getMessage("hub.add", null, LocaleContextHolder.getLocale()));
-        return data;
-    }
-    @PutMapping("/hub/updateById/{id}")
-    public MyData updateHub(@PathVariable Long id ,@RequestBody HubRequest hubRequest , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminHubService.updateHub(id , hubRequest);
-        MyData data = new MyData();
-        data.setMessage(messageSource.getMessage("hub.update", null, LocaleContextHolder.getLocale()));
-        return data;
-    }
-    @DeleteMapping("/hub/deleteById/{id}")
-    public MyData deleteHub(@PathVariable Long id , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminHubService.deleteHub(id);
-        MyData data = new MyData();
-        data.setMessage(messageSource.getMessage("hub.delete", null, LocaleContextHolder.getLocale()));
-        return data;
-    }
-    @PostMapping("/hub/attachImageToHub/{hubId}/image/{imageId}")
-    public MyData attachImageToHub(@PathVariable Long hubId, @PathVariable Long imageId , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminHubService.attachImageToHub(hubId, imageId);
-        MyData data = new MyData();
-        data.setMessage(messageSource.getMessage("image.attach.hub", null, LocaleContextHolder.getLocale()));
         return data;
     }
     @PostMapping("/partners/add/{imageId}")

@@ -7,8 +7,6 @@ import kg.it_lab.backend.Osh.dto.event.EventResponse;
 import java.util.List;
 
 public interface EventService {
-
-
     List<EventResponse> all();
 
     EventDetailResponse detail(Long id);

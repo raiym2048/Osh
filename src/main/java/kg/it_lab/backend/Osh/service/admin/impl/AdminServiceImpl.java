@@ -1,35 +1,21 @@
 package kg.it_lab.backend.Osh.service.admin.impl;
 
-import kg.it_lab.backend.Osh.dto.activity.ActivityRequest;
 import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
-import kg.it_lab.backend.Osh.dto.admin.category.CategoryRequest;
 
-import kg.it_lab.backend.Osh.dto.event.EventRequest;
-import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 
-import kg.it_lab.backend.Osh.dto.numbers.NumbersRequest;
-import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.role.RoleRequest;
-import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
-import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.entities.*;
-import kg.it_lab.backend.Osh.exception.BadCredentialsException;
 import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
-import kg.it_lab.backend.Osh.mapper.*;
 import kg.it_lab.backend.Osh.repository.*;
 import kg.it_lab.backend.Osh.service.admin.AdminService;
 
-import kg.it_lab.backend.Osh.service.ImageService;
 import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,7 +23,6 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
     private final NewsRepository newsRepository;
     private final EventRepository eventRepository;
-    private final CategoryRepository categoryRepository;
     private final RoleRepository roleRepository;
     private final EmailSenderService emailSenderService;
     private final UserRepository userRepository;
@@ -46,29 +31,7 @@ public class AdminServiceImpl implements AdminService {
     private final ActivityRepository activityRepository;
     private final SponsorshipRepository sponsorshipRepository;
 
-    @Override
-    public void addCategory(CategoryRequest categoryRequest) {
-        if (categoryRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the category can't be empty");
-        }
-        if (categoryRepository.findByName(categoryRequest.getName()).isPresent()) {
-            throw new BadRequestException("Category with this title already exist!");
-        }
 
-        Category category = new Category();
-        category.setName(categoryRequest.getName());
-        categoryRepository.save(category);
-
-    }
-
-    @Override
-    public void deleteCategory(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        if (category.isEmpty()) {
-            throw new BadRequestException("Category wasn't found");
-        }
-        categoryRepository.deleteById(id);
-    }
 
     @Override
     public void addRole(RoleRequest roleRequest) {
@@ -145,10 +108,6 @@ public class AdminServiceImpl implements AdminService {
         if (servicesRepository.existsByImagesContaining(image)) {
             cnt++;
             System.out.println("SERVICES");
-        }
-        if(sponsorshipRepository.existsByImage(image)){
-            cnt++;
-            System.out.println("SPONSORSHIP");
         }
         return cnt;
     }

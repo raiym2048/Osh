@@ -8,5 +8,5 @@ import lombok.Setter;
 public class ServicesRequest {
     private String name;
     private String subtopic;
-    private String description; //todo text there
+    private String description;
 }

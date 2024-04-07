@@ -5,9 +5,7 @@ import kg.it_lab.backend.Osh.dto.news.NewsRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsResponse;
 import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.News;
-import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.mapper.NewsMapper;
-import kg.it_lab.backend.Osh.repository.CategoryRepository;
 import kg.it_lab.backend.Osh.repository.NewsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,13 +13,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 @AllArgsConstructor
 public class NewsMapperImpl implements NewsMapper {
-    private final CategoryRepository categoryRepository;
-    private final NewsRepository newsRepository;
 
     @Override
     public NewsResponse toDto(News news) {
@@ -30,9 +25,7 @@ public class NewsMapperImpl implements NewsMapper {
         if(news.getImage() != null)
             newsResponse.setImagePath(news.getImage().getPath());
         newsResponse.setName(news.getName());
-        newsResponse.setSlogan(news.getSlogan());
         newsResponse.setCreatedAt(news.getCreatedAt());
-        newsResponse.setCategory(news.getCategory().getName());
         return  newsResponse;
 
     }
@@ -53,9 +46,7 @@ public class NewsMapperImpl implements NewsMapper {
         if(news.getImage() != null)
             response.setImagePath(news.getImage().getPath());
         response.setName(news.getName());
-        response.setSlogan(news.getSlogan());
         response.setCreatedAt(news.getCreatedAt());
-        response.setCategory(news.getCategory().getName());
         response.setDescription(news.getDescription());
         return  response;
     }
@@ -66,8 +57,6 @@ public class NewsMapperImpl implements NewsMapper {
         news.setName(newsRequest.getName());
         news.setDescription(newsRequest.getDescription());
         news.setCreatedAt(LocalDateTime.now());
-        news.setCategory(categoryRepository.findById(newsRequest.getCategoryId()).orElseThrow());
-        news.setSlogan(newsRequest.getSlogan());
         news.setImage(image);
         return news;
     }

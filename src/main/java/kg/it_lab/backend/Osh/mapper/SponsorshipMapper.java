@@ -10,5 +10,5 @@ import java.util.List;
 public interface SponsorshipMapper {
     SponsorshipResponse toDto(Sponsorship sponsorship);
     List<SponsorshipResponse> toDtoS(List<Sponsorship> sponsorships);
-    Sponsorship toDtoSponsorship(Sponsorship sponsorship, SponsorshipRequest sponsorshipRequest, Image image);
+    Sponsorship toDtoSponsorship(Sponsorship sponsorship, SponsorshipRequest sponsorshipRequest);
 }

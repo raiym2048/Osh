@@ -11,6 +11,4 @@ import java.time.LocalDateTime;
 public class NewsRequest {
     private String name;
     private String description ;
-    private Long categoryId;
-    private String slogan;
 }
