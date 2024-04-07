@@ -12,6 +12,8 @@ import kg.it_lab.backend.Osh.service.admin.AdminNewsService;
 import kg.it_lab.backend.Osh.service.admin.AdminService;
 import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -26,15 +28,16 @@ public class AdminNewsServiceImpl implements AdminNewsService {
     private final ImageRepository imageRepository;
     private final ImageService imageService;
     private final AdminService adminService;
+    private final MessageSource messageSource;
 
     @Override
     public void add(NewsRequest newsRequest, Long imageId) {
         Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("partners.add", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if(adminService.imageChecker(image.get()) > 0)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+            throw new BadRequestException(messageSource.getMessage("partners.add", null, LocaleContextHolder.getLocale()));
         if (newsRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the news can't be empty");
         }
@@ -45,6 +48,8 @@ public class AdminNewsServiceImpl implements AdminNewsService {
         News news = new News();
         newsRepository.save(newsMapper.toDtoNews(news, newsRequest, image.get()));
     }
+
+    //"Image with id: " + imageId + " - is already in use!!"
 
     @Override
     public void updateById(Long id, NewsRequest newsRequest, Long imageId) {
