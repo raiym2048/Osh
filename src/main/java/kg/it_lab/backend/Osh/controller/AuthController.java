@@ -26,6 +26,7 @@ public class AuthController {
         return authService.register(authLoginRequest);
     }
 
+
     @ExceptionHandler(ExpiredJwtException.class)
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthLoginRequest authLoginRequest,

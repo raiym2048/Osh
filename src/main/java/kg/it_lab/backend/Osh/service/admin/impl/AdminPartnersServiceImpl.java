@@ -35,17 +35,6 @@ public class AdminPartnersServiceImpl implements AdminPartnersService {
         partnersRepository.save(partners);
     }
 
-    @Override
-    public void updatePartners(Long id, Long imageId) {
-    Optional<Partners > partners = partnersRepository.findById(id);
-    Optional<Image> image = imageRepository.findById(imageId);
-        if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
-        }
-        partners.get().setImage(image.get());
-        partnersRepository.save(partners.get());
-    }
-
 
     @Override
     public void deletePartners(Long id) {

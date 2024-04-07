@@ -1,7 +1,7 @@
 package kg.it_lab.backend.Osh.controller;
 
 import kg.it_lab.backend.Osh.dto.activity.ActivityRequest;
-import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
+import kg.it_lab.backend.Osh.dto.admin.RegisterRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
@@ -91,8 +91,8 @@ public class AdminController {
         data.setMessage(messageSource.getMessage("event.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
-    @PostMapping("/registerEditor")
-    public MyData registerEditor(@RequestBody EditorRegisterRequest editorRegisterRequest,
+    @PostMapping("/registerUser")
+    public MyData registerEditor(@RequestBody RegisterRequest editorRegisterRequest,
                                  @RequestHeader(name = "Accept-Language", required = false) Locale locale){
         adminService.registerEditor(editorRegisterRequest);
         MyData data = new MyData();
@@ -272,13 +272,6 @@ public class AdminController {
         data.setMessage(messageSource.getMessage("partners.add", null, LocaleContextHolder.getLocale()));
         return data;
     }
-    @PutMapping("/partners/updateById/{id}/{imageId}")
-    public MyData updatePartners(@PathVariable Long id , @PathVariable Long imageId , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
-        adminPartnersService.updatePartners(id , imageId);
-        MyData data = new MyData();
-        data.setMessage(messageSource.getMessage("partners.update", null, LocaleContextHolder.getLocale()));
-        return data;
-    }
     @DeleteMapping("/partners/deleteById/{id}")
     public MyData deletePartners(@PathVariable Long id , @RequestHeader(name = "Accept-Language", required = false) Locale locale){
         adminPartnersService.deletePartners(id);
@@ -286,4 +279,5 @@ public class AdminController {
         data.setMessage(messageSource.getMessage("partners.delete", null, LocaleContextHolder.getLocale()));
         return data;
     }
+
 }
