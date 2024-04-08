@@ -63,10 +63,10 @@ public class EditorServiceImpl implements EditorService {
             throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<News> news = newsRepository.findById(id);
         if (newsRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the news can't be empty");
+            throw new NullPointerException("Title of the news can't be empty");
         }
         if (newsRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the news can't be empty");
+            throw new NullPointerException("Content of the news can't be empty");
         }
         if (news.isEmpty()) {
             throw new NotFoundException("News with ID  wasn't found", HttpStatus.NOT_FOUND);
@@ -79,17 +79,17 @@ public class EditorServiceImpl implements EditorService {
     @Override
     public void updateProject(Long id, ProjectRequest projectRequest) {
         Optional<Project> project = projectRepository.findById(id);
-        if (projectRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the project can't be empty");
-        }
-        if (projectRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the project can't be empty");
-        }
         if (project.isEmpty()) {
             throw new NotFoundException("Project with this ID wasn't found", HttpStatus.NOT_FOUND);
         }
         if (projectRepository.findByName(projectRequest.getName()).isPresent()) {
             throw new BadCredentialsException("Project with name " + projectRequest.getName() + " already exist!");
+        }
+        if (projectRequest.getName().isEmpty()) {
+            throw new BadRequestException("Title of the project can't be empty");
+        }
+        if (projectRequest.getDescription().isEmpty()) {
+            throw new BadRequestException("Content of the project can't be empty");
         }
         projectRepository.save(projectMapper.toDtoProject(project.get(), projectRequest));
     }
@@ -97,17 +97,17 @@ public class EditorServiceImpl implements EditorService {
     @Override
     public void updateService(Long id, ServicesRequest servicesRequest) {
         Optional<Services> service = servicesRepository.findById(id);
-        if (servicesRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the service can't be empty");
-        }
-        if (servicesRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the service can't be empty");
-        }
         if (service.isEmpty()) {
             throw new NotFoundException("Service with this ID wasn't found", HttpStatus.NOT_FOUND);
         }
         if (servicesRepository.findByName(servicesRequest.getName()).isPresent()) {
             throw new BadCredentialsException("Service with name " + servicesRequest.getName() + " already exist!");
+        }
+        if (servicesRequest.getName().isEmpty()) {
+            throw new BadRequestException("Title of the service can't be empty");
+        }
+        if (servicesRequest.getDescription().isEmpty()) {
+            throw new BadRequestException("Content of the service can't be empty");
         }
         servicesRepository.save(servicesMapper.toDtoService(service.get(), servicesRequest));
     }
@@ -167,17 +167,17 @@ public class EditorServiceImpl implements EditorService {
             throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
         }
         Optional<Activity> activity = activityRepository.findById(id);
-        if (activityRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the activity can't be empty");
-        }
-        if (activityRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the activity can't be empty");
-        }
         if (activity.isEmpty()) {
             throw new NotFoundException("Title of activity with this name wasn't found", HttpStatus.NOT_FOUND);
         }
         if (activityRepository.findByName(activityRequest.getName()).isPresent()) {
             throw new BadRequestException("Title of activity with this name already exist");
+        }
+        if (activityRequest.getName().isEmpty()) {
+            throw new BadRequestException("Title of the activity can't be empty");
+        }
+        if (activityRequest.getDescription().isEmpty()) {
+            throw new BadRequestException("Content of the activity can't be empty");
         }
         activityRepository.save(activityMapper.toDtoActivity(activity.get(),activityRequest, image.get()));
     }
