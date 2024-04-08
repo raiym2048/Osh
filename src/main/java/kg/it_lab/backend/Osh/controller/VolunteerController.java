@@ -5,6 +5,8 @@ import kg.it_lab.backend.Osh.dto.volunteer.VolunteerResponse;
 import kg.it_lab.backend.Osh.service.VolunteerService;
 import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/volunteer")
 public class VolunteerController {
     private final VolunteerService service;
+    private final MessageSource messageSource;
 
     @GetMapping("/getAll")
     public List<VolunteerResponse> getAll() {
@@ -32,6 +35,6 @@ public class VolunteerController {
     @PostMapping("/addVolunteer")
     public ResponseEntity<?> addVolunteer(@RequestBody VolunteerRequest volunteerRequest) {
         service.addVolunteer(volunteerRequest);
-        return new ResponseEntity<>("Your request send to admin!", HttpStatus.OK);
+        return new ResponseEntity<>(messageSource.getMessage("volunteer.request", null, LocaleContextHolder.getLocale()), HttpStatus.OK);
     }
 }

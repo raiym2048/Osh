@@ -288,12 +288,12 @@ public class AdminController {
     @PostMapping("/volunteer/accept/{volunteerId}")
     public ResponseEntity<?> acceptVolunteer(@PathVariable Long volunteerId) {
         adminVolunteerService.acceptVolunteer(volunteerId);
-        return new ResponseEntity<>("Volunteer is successfully accept", HttpStatus.OK);
+        return new ResponseEntity<>(messageSource.getMessage("volunteer.accept", null, LocaleContextHolder.getLocale()), HttpStatus.OK);
     }
 
     @DeleteMapping("/volunteer/reject/{volunteerId}")
     public ResponseEntity<?> rejectVolunteer(@PathVariable Long volunteerId) {
         adminVolunteerService.rejectVolunteer(volunteerId);
-        return new ResponseEntity<>("Volunteer is rejected", HttpStatus.OK);
+        return new ResponseEntity<>(messageSource.getMessage("volunteer.rejected", null, LocaleContextHolder.getLocale()), HttpStatus.OK);
     }
 }

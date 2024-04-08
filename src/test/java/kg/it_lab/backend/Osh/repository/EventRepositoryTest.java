@@ -21,10 +21,8 @@ class EventRepositoryTest {
     @BeforeEach
     void setUp() {
         event.setName("example");
-        event.setSlogan("example");
         event.setDescription("It's description for event");
         event.setDateTime(LocalDateTime.now());
-        event.setCategory(null);
         event.setImage(null);
         eventRepository.save(event);
     }
