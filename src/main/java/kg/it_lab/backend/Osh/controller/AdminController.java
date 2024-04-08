@@ -38,6 +38,7 @@ public class AdminController {
     private final AdminNumbersService adminNumbersService;
     private final MessageSource messageSource;
     private final AdminPartnersService adminPartnersService;
+    private final AdminVolunteerService adminVolunteerService;
 
 
     private final VolunteerService volunteerService;
@@ -286,13 +287,13 @@ public class AdminController {
 
     @PostMapping("/volunteer/accept/{volunteerId}")
     public ResponseEntity<?> acceptVolunteer(@PathVariable Long volunteerId) {
-        adminService.acceptVolunteer(volunteerId);
+        adminVolunteerService.acceptVolunteer(volunteerId);
         return new ResponseEntity<>("Volunteer is successfully accept", HttpStatus.OK);
     }
 
     @DeleteMapping("/volunteer/reject/{volunteerId}")
     public ResponseEntity<?> rejectVolunteer(@PathVariable Long volunteerId) {
-        adminService.rejectVolunteer(volunteerId);
+        adminVolunteerService.rejectVolunteer(volunteerId);
         return new ResponseEntity<>("Volunteer is rejected", HttpStatus.OK);
     }
 }
