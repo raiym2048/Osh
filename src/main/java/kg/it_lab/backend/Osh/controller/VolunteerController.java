@@ -3,9 +3,11 @@ package kg.it_lab.backend.Osh.controller;
 import kg.it_lab.backend.Osh.dto.volunteer.VolunteerRequest;
 import kg.it_lab.backend.Osh.dto.volunteer.VolunteerResponse;
 import kg.it_lab.backend.Osh.service.VolunteerService;
+import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +30,8 @@ public class VolunteerController {
     }
 
     @PostMapping("/addVolunteer")
-    public void addVolunteer(@RequestBody VolunteerRequest volunteerRequest) {
+    public ResponseEntity<?> addVolunteer(@RequestBody VolunteerRequest volunteerRequest) {
         service.addVolunteer(volunteerRequest);
+        return new ResponseEntity<>("Your request send to admin!", HttpStatus.OK);
     }
 }

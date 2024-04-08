@@ -43,6 +43,6 @@ public interface AdminService {
     void addNumbers(NumbersRequest numbersRequest);
     void updateNumbers(Long id , NumbersRequest numbersRequest);
     void deleteNumbersById(Long id);
-
-
+    void acceptVolunteer(Long id);
+    void rejectVolunteer(Long id);
 }

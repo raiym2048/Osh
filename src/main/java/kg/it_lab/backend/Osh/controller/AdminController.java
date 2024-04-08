@@ -1,6 +1,5 @@
 package kg.it_lab.backend.Osh.controller;
 
-import com.amazonaws.services.dynamodbv2.xspec.M;
 import kg.it_lab.backend.Osh.dto.activity.ActivityRequest;
 import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.auth.MyData;
@@ -15,7 +14,10 @@ import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.service.AdminService;
 
+import kg.it_lab.backend.Osh.service.VolunteerService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin")
 public class AdminController {
     private final AdminService adminService;
+    private final VolunteerService volunteerService;
     @PostMapping("/news/add/{imageId}")
     public MyData add(@RequestBody NewsRequest newsRequest ,@PathVariable Long imageId ){
         adminService.add(newsRequest , imageId);
@@ -227,5 +230,15 @@ public class AdminController {
         return data;
     }
 
+    @PostMapping("/volunteer/accept/{volunteerId}")
+    public ResponseEntity<?> acceptVolunteer(@PathVariable Long volunteerId) {
+        adminService.acceptVolunteer(volunteerId);
+        return new ResponseEntity<>("Volunteer is successfully accept", HttpStatus.OK);
+    }
 
+    @DeleteMapping("/volunteer/reject/{volunteerId}")
+    public ResponseEntity<?> rejectVolunteer(@PathVariable Long volunteerId) {
+        adminService.rejectVolunteer(volunteerId);
+        return new ResponseEntity<>("Volunteer is rejected", HttpStatus.OK);
+    }
 }

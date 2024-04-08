@@ -1,5 +1,8 @@
 package kg.it_lab.backend.Osh.service.impl;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletResponse;
+import kg.it_lab.backend.Osh.config.JwtService;
 import kg.it_lab.backend.Osh.dto.activity.ActivityRequest;
 import kg.it_lab.backend.Osh.dto.admin.EditorRegisterRequest;
 import kg.it_lab.backend.Osh.dto.admin.category.CategoryRequest;
@@ -55,6 +58,8 @@ public class AdminServiceImpl implements AdminService {
     private final NumbersRepository numbersRepository;
     private final NumbersMapper numbersMapper;
     private final ImageService imageService;
+    private final VolunteerRepository volunteerRepository;
+    private final JwtService jwtService;
 
     @Override
     public void add(NewsRequest newsRequest, Long imageId) {
@@ -585,6 +590,20 @@ public class AdminServiceImpl implements AdminService {
         numbersRepository.deleteById(id);
 
 
+    }
+
+    @Override
+    public void acceptVolunteer(Long id) {
+        Volunteer volunteer = volunteerRepository.findById(id).orElseThrow(() -> new NotFoundException("Volunteer with id " + id + " not found", HttpStatus.NOT_FOUND));
+        volunteer.setConfirmed(true);
+        // todo here volunteer should enrolled to team or to sth
+        volunteerRepository.save(volunteer);
+    }
+
+    @Override
+    public void rejectVolunteer(Long id) {
+        Volunteer volunteer = volunteerRepository.findById(id).orElseThrow(() -> new NotFoundException("Volunteer with id " + id + " not found", HttpStatus.NOT_FOUND));
+        volunteerRepository.delete(volunteer);
     }
 
     @Override
