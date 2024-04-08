@@ -6,7 +6,7 @@ import kg.it_lab.backend.Osh.dto.auth.AuthLoginResponse;
 import kg.it_lab.backend.Osh.dto.auth.EditorPasswordRequest;
 import kg.it_lab.backend.Osh.dto.event.EventRequest;
 import kg.it_lab.backend.Osh.dto.news.NewsRequest;
-import kg.it_lab.backend.Osh.dto.admin.AdminLoginRequest;
+import kg.it_lab.backend.Osh.dto.admin.LoginRequest;
 import kg.it_lab.backend.Osh.dto.project.ProjectRequest;
 import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
@@ -16,7 +16,7 @@ import kg.it_lab.backend.Osh.exception.BadRequestException;
 import kg.it_lab.backend.Osh.exception.NotFoundException;
 import kg.it_lab.backend.Osh.mapper.*;
 import kg.it_lab.backend.Osh.repository.*;
-import kg.it_lab.backend.Osh.service.AuthLoginService;
+import kg.it_lab.backend.Osh.service.admin.AdminService;
 import kg.it_lab.backend.Osh.service.EditorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,11 +46,12 @@ public class EditorServiceImpl implements EditorService {
     private final ActivityMapper activityMapper;
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
-    private final CategoryRepository categoryRepository;
     private final PasswordEncoder encoder;
-    private final AuthLoginService authLoginService;
+
+    private final PartnersRepository partnersRepository;
     private final SponsorshipRepository sponsorshipRepository;
     private final SponsorshipMapper sponsorshipMapper;
+    private final AdminService adminService;
 
     @Override
     public void updateById(Long id, NewsRequest newsRequest, Long imageId) {
@@ -58,6 +59,8 @@ public class EditorServiceImpl implements EditorService {
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
+        if((adminService.imageChecker(image.get()) == 1 && !newsRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<News> news = newsRepository.findById(id);
         if (newsRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the news can't be empty");
@@ -110,7 +113,7 @@ public class EditorServiceImpl implements EditorService {
     }
 
     @Override
-    public AuthLoginResponse loginEditor(AdminLoginRequest adminLoginRequest) {
+    public AuthLoginResponse loginEditor(LoginRequest adminLoginRequest) {
         Optional<User>user =userRepository.findByEmail(adminLoginRequest.getEmail());
         if(adminLoginRequest.getPassword().isEmpty() || adminLoginRequest.getEmail().isEmpty()){
             throw new BadRequestException("Your password or email can't be empty");
@@ -212,6 +215,8 @@ public class EditorServiceImpl implements EditorService {
         if (image.isEmpty()) {
             throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
         }
+        if((adminService.imageChecker(image.get()) == 1 && !newsRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
+            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
         Optional<Event> event = eventRepository.findById(eventId);
         if (eventRequest.getName().isEmpty()) {
             throw new BadRequestException("Title of the event can't be empty");
@@ -221,12 +226,6 @@ public class EditorServiceImpl implements EditorService {
         }
         if (event.isEmpty()) {
             throw new NotFoundException("Event with this ID wasn't found", HttpStatus.NOT_FOUND);
-        }
-        if (categoryRepository.findById(eventRequest.getCategoryId()).isEmpty()) {
-            throw new BadRequestException("Category of event can't be empty ");
-        }
-        if (eventRequest.getSlogan().isEmpty()) {
-            throw new BadRequestException("Slogan of event can't be empty ");
         }
         if (eventRequest.getYear() < 0) {
             throw new BadRequestException("Date of year can't be negative ");
@@ -256,6 +255,10 @@ public class EditorServiceImpl implements EditorService {
         }
         eventRepository.save(eventMapper.toDtoEvent(event.get(), eventRequest, image.get()));
     }
+
+
+
+
     private boolean isLeapYear(int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }

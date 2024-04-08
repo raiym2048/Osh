@@ -2,6 +2,7 @@ package kg.it_lab.backend.Osh.mapper.impl;
 
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipResponse;
+import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.Services;
 import kg.it_lab.backend.Osh.entities.Sponsorship;
 import kg.it_lab.backend.Osh.mapper.SponsorshipMapper;
@@ -43,6 +44,7 @@ public class SponsorshipMapperImpl implements SponsorshipMapper {
         sponsorship.setCompany(sponsorshipRequest.getCompany());
         sponsorship.setPaymentAccount(sponsorshipRequest.getPaymentAccount());
         sponsorship.setBic(sponsorshipRequest.getBic());
+
         return sponsorship;
     }
 }

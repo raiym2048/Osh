@@ -20,5 +20,4 @@ public class ActivityController {
     public List<ActivityResponse> all(){
         return activityService.all();
     }
-
 }

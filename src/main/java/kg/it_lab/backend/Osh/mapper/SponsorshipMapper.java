@@ -1,6 +1,7 @@
 package kg.it_lab.backend.Osh.mapper;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipResponse;
+import kg.it_lab.backend.Osh.entities.Image;
 import kg.it_lab.backend.Osh.entities.Services;
 import kg.it_lab.backend.Osh.entities.Sponsorship;
 

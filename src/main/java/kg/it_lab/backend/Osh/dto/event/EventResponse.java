@@ -13,8 +13,6 @@ public class EventResponse {
     private Long id;
     private String imagePath;
     private String name;
-    private String category;
-    private String slogan;
     private LocalDateTime dateTime;
     private TimerResponse timer;
 }

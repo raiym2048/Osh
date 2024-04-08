@@ -13,10 +13,6 @@ public class News {
     @Column(columnDefinition = "text")
     private String description;
     private LocalDateTime createdAt;
-    private String slogan;
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "name")
-    private Category category;
     @OneToOne
     @JoinColumn
     private Image image;
