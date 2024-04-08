@@ -12,6 +12,8 @@ import kg.it_lab.backend.Osh.service.ImageService;
 import kg.it_lab.backend.Osh.service.admin.AdminActivityService;
 import kg.it_lab.backend.Osh.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -25,23 +27,24 @@ public class AdminActivityServiceImpl implements AdminActivityService {
     private final ActivityMapper activityMapper;
     private final ImageService imageService;
     private final AdminService adminService;
+    private final MessageSource messageSource;
 
     @Override
     public void addActivity(ActivityRequest activityRequest, Long imageId) {
         Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("image.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if(adminService.imageChecker(image.get()) > 0)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+            throw new BadRequestException(messageSource.getMessage("image.already.in.use", null, LocaleContextHolder.getLocale()));
         if (activityRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the activity can't be empty");
+            throw new BadRequestException(messageSource.getMessage("title.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (activityRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the activity can't be empty");
+            throw new BadRequestException(messageSource.getMessage("content.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (activityRepository.findByName(activityRequest.getName()).isPresent()) {
-            throw new BadCredentialsException("Activity with name " + activityRequest.getName() + " already exist!");
+            throw new BadCredentialsException(messageSource.getMessage("activity.already.in.use", null, LocaleContextHolder.getLocale()));
         }
         Activity activity = new Activity();
         activityRepository.save(activityMapper.toDtoActivity(activity, activityRequest,  image.get()));
@@ -51,22 +54,22 @@ public class AdminActivityServiceImpl implements AdminActivityService {
     public void updateActivity(Long id, ActivityRequest activityRequest, Long imageId) {
         Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this name not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("image.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if((adminService.imageChecker(image.get()) == 1 && !activityRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+            throw new BadRequestException(messageSource.getMessage("image.already.in.use", null, LocaleContextHolder.getLocale()));
         Optional<Activity> activity = activityRepository.findById(id);
         if (activityRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the activity can't be empty");
+            throw new BadRequestException(messageSource.getMessage("title.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (activityRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the activity can't be empty");
+            throw new BadRequestException(messageSource.getMessage("content.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (activity.isEmpty()) {
-            throw new NotFoundException("Activity with this ID wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("activity.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if (activityRepository.findByName(activityRequest.getName()).isPresent()) {
-            throw new BadRequestException("Title of activity with this name already exist");
+            throw new BadRequestException(messageSource.getMessage("activity.already.in.use", null, LocaleContextHolder.getLocale()));
         }
         activityRepository.save(activityMapper.toDtoActivity(activity.get(),activityRequest, image.get()));
     }
@@ -75,7 +78,7 @@ public class AdminActivityServiceImpl implements AdminActivityService {
     public void deleteActivity(Long id) {
         Optional<Activity> activity = activityRepository.findById(id);
         if (activity.isEmpty()) {
-            throw new NotFoundException("Activity with id " + id + " not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("activity.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         int cnt = 0;
         if(activity.get().getImage() != null){
