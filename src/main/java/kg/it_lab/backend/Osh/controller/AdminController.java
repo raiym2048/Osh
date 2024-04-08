@@ -13,7 +13,10 @@ import kg.it_lab.backend.Osh.dto.service.ServicesRequest;
 import kg.it_lab.backend.Osh.dto.sponsorship.SponsorshipRequest;
 import kg.it_lab.backend.Osh.service.admin.*;
 
+import kg.it_lab.backend.Osh.service.VolunteerService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +40,7 @@ public class AdminController {
     private final AdminPartnersService adminPartnersService;
 
 
+    private final VolunteerService volunteerService;
     @PostMapping("/news/add/{imageId}")
     public MyData add(@RequestBody NewsRequest newsRequest,
                       @PathVariable Long imageId,
@@ -280,4 +284,15 @@ public class AdminController {
         return data;
     }
 
+    @PostMapping("/volunteer/accept/{volunteerId}")
+    public ResponseEntity<?> acceptVolunteer(@PathVariable Long volunteerId) {
+        adminService.acceptVolunteer(volunteerId);
+        return new ResponseEntity<>("Volunteer is successfully accept", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/volunteer/reject/{volunteerId}")
+    public ResponseEntity<?> rejectVolunteer(@PathVariable Long volunteerId) {
+        adminService.rejectVolunteer(volunteerId);
+        return new ResponseEntity<>("Volunteer is rejected", HttpStatus.OK);
+    }
 }

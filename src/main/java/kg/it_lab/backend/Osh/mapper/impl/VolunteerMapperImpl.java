@@ -42,6 +42,7 @@ public class VolunteerMapperImpl implements VolunteerMapper {
         volunteer.setTown(volunteerRequest.getTown());
         volunteer.setComment(volunteerRequest.getComment());
         volunteer.setContacts(volunteerRequest.getContacts());
+        volunteer.setConfirmed(false);
         return volunteer;
     }
 }
