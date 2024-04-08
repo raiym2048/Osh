@@ -10,6 +10,8 @@ import kg.it_lab.backend.Osh.service.admin.AdminNumbersService;
 import kg.it_lab.backend.Osh.service.admin.AdminService;
 import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ public class AdminNumbersServiceImpl implements AdminNumbersService {
 
     private final NumbersRepository numbersRepository;
     private final NumbersMapper numbersMapper;
+    private final MessageSource messageSource;
 
     @Override
     public void addNumbers(NumbersRequest numbersRequest) {
@@ -32,7 +35,7 @@ public class AdminNumbersServiceImpl implements AdminNumbersService {
     public void updateNumbers(Long id , NumbersRequest numbersRequest) {
         Optional<Numbers> numbers = numbersRepository.findById(id);
         if(numbersRepository.findById(id).isEmpty()){
-            throw new NotFoundException("Numbers with id "+ id+ " not found!" , HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("numbers.notfound", null, LocaleContextHolder.getLocale()) , HttpStatus.NOT_FOUND);
         }
         numbersRepository.save(numbersMapper.toDtoNumbers(numbers.get() , numbersRequest ));
     }
@@ -41,7 +44,7 @@ public class AdminNumbersServiceImpl implements AdminNumbersService {
     public void deleteNumbersById(Long id) {
         Optional<Numbers> numbers = numbersRepository.findById(id);
         if(numbersRepository.findById(id).isEmpty()){
-            throw new NotFoundException("Numbers with id "+ id+ " not found!" , HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("numbers.notfound", null, LocaleContextHolder.getLocale()) , HttpStatus.NOT_FOUND);
         }
         numbersRepository.deleteById(id);
 
