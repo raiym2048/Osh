@@ -21,6 +21,7 @@ public class Volunteer {
     private String town;
     private String comment;
     private String contacts;
+    private boolean isConfirmed;
     @Transient
     private int age;
 
