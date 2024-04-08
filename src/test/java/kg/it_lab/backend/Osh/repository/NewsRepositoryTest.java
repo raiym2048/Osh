@@ -1,6 +1,5 @@
 package kg.it_lab.backend.Osh.repository;
 
-import kg.it_lab.backend.Osh.entities.Category;
 import kg.it_lab.backend.Osh.entities.News;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,8 +23,6 @@ class NewsRepositoryTest {
         news.setName("example");
         news.setDescription("It's example");
         news.setCreatedAt(LocalDateTime.now());
-        news.setSlogan("It's slogan");
-        news.setCategory(null);
         news.setImage(null);
         newsRepository.save(news);
     }
