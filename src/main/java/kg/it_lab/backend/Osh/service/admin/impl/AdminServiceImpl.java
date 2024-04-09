@@ -9,10 +9,13 @@ import kg.it_lab.backend.Osh.service.admin.AdminService;
 
 import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
 import lombok.AllArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -27,17 +30,18 @@ public class AdminServiceImpl implements AdminService {
     private final ServicesRepository servicesRepository;
     private final ActivityRepository activityRepository;
     private final VolunteerRepository volunteerRepository;
+    private final MessageSource messageSource;
 
 
 
     @Override
     public void addRole(RoleRequest roleRequest) {
         if (roleRequest.getRoleName().isEmpty()) {
-            throw new BadRequestException("Role name can't be empty");
+            throw new BadRequestException(messageSource.getMessage("role.not.empty", null, LocaleContextHolder.getLocale()));
         }
         Optional<Role> role = roleRepository.findByName(roleRequest.getRoleName());
         if (role.isPresent()) {
-            throw new BadRequestException("This role already exist");
+            throw new BadRequestException(messageSource.getMessage("role.exist", null, LocaleContextHolder.getLocale()));
         }
         Role role1 = new Role();
         role1.setName(roleRequest.getRoleName());
@@ -48,7 +52,7 @@ public class AdminServiceImpl implements AdminService {
     public void deleteRole(Long id) {
         Optional<Role>role = roleRepository.findById(id);
         if(role.isEmpty()){
-            throw new NotFoundException("Role with this id: " + id + " - not found", HttpStatus.NOT_FOUND );
+            throw new NotFoundException(messageSource.getMessage("role.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND );
         }
         roleRepository.deleteById(id);
     }
@@ -56,19 +60,19 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void registerEditor(RegisterRequest editorRegisterRequest) {
         if (userRepository.findByEmail(editorRegisterRequest.getEmail()).isPresent()) {
-            throw new BadRequestException("Editor with this email already exist");
+            throw new BadRequestException(messageSource.getMessage("editor.exist", null, LocaleContextHolder.getLocale()));
         }
         if (editorRegisterRequest.getEmail().isEmpty()) {
-            throw new BadRequestException("Your email can't be empty");
+            throw new BadRequestException(messageSource.getMessage("email.empty", null, LocaleContextHolder.getLocale()));
         }
         if (!editorRegisterRequest.getEmail().contains("@")) {
-            throw new BadRequestException("Invalid email!");
+            throw new BadRequestException(messageSource.getMessage("email.invalid", null, LocaleContextHolder.getLocale()));
         }
 
         User editor = new User();
         Optional<Role> role = roleRepository.findByName(editorRegisterRequest.getRole());
         if (role.isEmpty()) {
-            throw new NotFoundException("Role with this name not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("role.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         editor.setEmail(editorRegisterRequest.getEmail());
         editor.setRole(role.get());
@@ -79,7 +83,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void checker(Optional<News> news, Long id) {
         if (news.isEmpty()) {
-            throw new NotFoundException("News with id " + id + " not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("news.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
     }
 
