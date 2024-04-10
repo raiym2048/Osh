@@ -12,6 +12,8 @@ import kg.it_lab.backend.Osh.service.admin.AdminEventService;
 import kg.it_lab.backend.Osh.service.admin.AdminService;
 import kg.it_lab.backend.Osh.service.emailSender.EmailSenderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -27,62 +29,63 @@ public class AdminEventServiceImpl implements AdminEventService {
     private final ImageRepository imageRepository;
     private final ImageService imageService;
     private final AdminService adminService;
+    private final MessageSource messageSource;
 
     @Override
     public void addEvent(EventRequest eventRequest, Long imageId) {
         Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("image.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if(adminService.imageChecker(image.get()) > 0)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+            throw new BadRequestException(messageSource.getMessage("image.already.in.use", null, LocaleContextHolder.getLocale()));
         if (eventRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the event can't be empty");
+            throw new BadRequestException(messageSource.getMessage("content.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the event can't be empty");
+            throw new BadRequestException(messageSource.getMessage("content.not.empty", null, LocaleContextHolder.getLocale()));
         }
 
         if (eventRequest.getYear() < 0) {
-            throw new BadRequestException("Date of year can't be negative ");
+            throw new BadRequestException(messageSource.getMessage("date.negative", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getMonth() < 1 || eventRequest.getMonth() > 12) {
-            throw new BadRequestException("Incorrect input of months");
+            throw new BadRequestException(messageSource.getMessage("incorrect.months", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getDay() > 31 || eventRequest.getDay() < 1) {
-            throw new BadRequestException("Incorrect date of the day");
+            throw new BadRequestException(messageSource.getMessage("incorrect.day", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getMonth() == 2) {
             if (isLeapYear(eventRequest.getYear())) {
                 if (eventRequest.getDay() > 29) {
-                    throw new BadRequestException("February in leap year should have maximum 29 days");
+                    throw new BadRequestException(messageSource.getMessage("february.max29", null, LocaleContextHolder.getLocale()));
                 }
             } else {
                 if (eventRequest.getDay() > 28) {
-                    throw new BadRequestException("February should have maximum 28 days");
+                    throw new BadRequestException(messageSource.getMessage("february.max28", null, LocaleContextHolder.getLocale()));
                 }
             }
 
         } else if (eventRequest.getMonth() == 4 || eventRequest.getMonth() == 6 ||
                 eventRequest.getMonth() == 9 || eventRequest.getMonth() == 11) {
             if (eventRequest.getDay() > 30) {
-                throw new BadRequestException("This month should have maximum 30 days");
+                throw new BadRequestException(messageSource.getMessage("month.max", null, LocaleContextHolder.getLocale()));
             }
         }
 
 
         if (eventRequest.getHour() > 23 || eventRequest.getHour() < 0) {
-            throw new BadRequestException("Incorrect date of hour");
+            throw new BadRequestException(messageSource.getMessage("incorrect.hour", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getMinute() < 0 || eventRequest.getMinute() > 59) {
-            throw new BadRequestException("Incorrect date of minutes");
+            throw new BadRequestException(messageSource.getMessage("incorrect.minutes", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getSeconds() < 0 || eventRequest.getSeconds() > 59) {
-            throw new BadRequestException("Incorrect date of seconds");
+            throw new BadRequestException(messageSource.getMessage("incorrect.seconds", null, LocaleContextHolder.getLocale()));
         }
         LocalDateTime dateTime = LocalDateTime.of(eventRequest.getYear() , eventRequest.getMonth() , eventRequest.getDay() , eventRequest.getHour(),   eventRequest.getMinute() , eventRequest.getSeconds());
         if(dateTime.isBefore(LocalDateTime.now()))
-            throw new BadRequestException("DateTime can not be earlier than now!!!");
+            throw new BadRequestException(messageSource.getMessage("datetime.earlier", null, LocaleContextHolder.getLocale()));
         Event event = new Event();
         eventRepository.save(eventMapper.toDtoEvent(event, eventRequest, image.get()));
     }
@@ -95,44 +98,44 @@ public class AdminEventServiceImpl implements AdminEventService {
     public void updateEvent(Long id, EventRequest eventRequest, Long imageId) {
         Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("image.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if((adminService.imageChecker(image.get()) == 1 && !eventRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+            throw new BadRequestException(messageSource.getMessage("image.already.in.use", null, LocaleContextHolder.getLocale()));
         Optional<Event> event = eventRepository.findById(id);
         if (eventRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the event can't be empty");
+            throw new BadRequestException(messageSource.getMessage("title.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the event can't be empty");
+            throw new BadRequestException(messageSource.getMessage("content.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (event.isEmpty()) {
-            throw new NotFoundException("Title of event with this id wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("event.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if (eventRequest.getYear() < 0) {
-            throw new BadRequestException("Date of year can't be negative ");
+            throw new BadRequestException(messageSource.getMessage("date.negative", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getMonth() < 1 || eventRequest.getMonth() > 12) {
-            throw new BadRequestException("Incorrect input of months");
+            throw new BadRequestException(messageSource.getMessage("incorrect.months", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getDay() > 31 || eventRequest.getDay() < 1) {
-            throw new BadRequestException("Incorrect date of the day");
+            throw new BadRequestException(messageSource.getMessage("incorrect.day", null, LocaleContextHolder.getLocale()));
         }
         if (eventRequest.getMonth() == 2) {
             if (isLeapYear(eventRequest.getYear())) {
                 if (eventRequest.getDay() > 29) {
-                    throw new BadRequestException("February in leap year should have maximum 29 days");
+                    throw new BadRequestException(messageSource.getMessage("february.max29", null, LocaleContextHolder.getLocale()));
                 }
             } else {
                 if (eventRequest.getDay() > 28) {
-                    throw new BadRequestException("February should have maximum 28 days");
+                    throw new BadRequestException(messageSource.getMessage("february.max28", null, LocaleContextHolder.getLocale()));
                 }
             }
 
         } else if (eventRequest.getMonth() == 4 || eventRequest.getMonth() == 6 ||
                 eventRequest.getMonth() == 9 || eventRequest.getMonth() == 11) {
             if (eventRequest.getDay() > 30) {
-                throw new BadRequestException("This month should have maximum 30 days");
+                throw new BadRequestException(messageSource.getMessage("month.max", null, LocaleContextHolder.getLocale()));
             }
         }
         eventRepository.save(eventMapper.toDtoEvent(event.get(), eventRequest, image.get()));
@@ -142,7 +145,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     public void deleteEvent(Long id) {
         Optional<Event> event = eventRepository.findById(id);
         if (event.isEmpty()) {
-            throw new NotFoundException("Event with id: " + id + " - not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("event.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         int cnt = 0;
         if(event.get().getImage() != null){

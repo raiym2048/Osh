@@ -34,16 +34,16 @@ public class AdminNewsServiceImpl implements AdminNewsService {
     public void add(NewsRequest newsRequest, Long imageId) {
         Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException(messageSource.getMessage("partners.add", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("image.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if(adminService.imageChecker(image.get()) > 0)
-            throw new BadRequestException(messageSource.getMessage("partners.add", null, LocaleContextHolder.getLocale()));
+            throw new BadRequestException(messageSource.getMessage("image.already.in.use", null, LocaleContextHolder.getLocale()));
         if (newsRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the news can't be empty");
+            throw new BadRequestException(messageSource.getMessage("title.not.empty", null, LocaleContextHolder.getLocale()));
         }
 
         if (newsRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the news can't be empty");
+            throw new BadRequestException(messageSource.getMessage("content.not.empty", null, LocaleContextHolder.getLocale()));
         }
         News news = new News();
         newsRepository.save(newsMapper.toDtoNews(news, newsRequest, image.get()));
@@ -55,19 +55,19 @@ public class AdminNewsServiceImpl implements AdminNewsService {
     public void updateById(Long id, NewsRequest newsRequest, Long imageId) {
         Optional<Image> image = imageRepository.findById(imageId);
         if (image.isEmpty()) {
-            throw new NotFoundException("Image with this id not found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("image.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if((adminService.imageChecker(image.get()) == 1 && !newsRepository.existsByImage(image.get())) || adminService.imageChecker(image.get()) > 1)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+            throw new BadRequestException(messageSource.getMessage("image.already.in.use", null, LocaleContextHolder.getLocale()));
         Optional<News> news = newsRepository.findById(id);
         if (newsRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the news can't be empty");
+            throw new BadRequestException(messageSource.getMessage("title.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (newsRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the news can't be empty");
+            throw new BadRequestException(messageSource.getMessage("content.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (news.isEmpty()) {
-            throw new NotFoundException("News with id: " + id + " - wasn't found!!", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("news.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         adminService.checker(news, id);
         news.get().setImage(null);

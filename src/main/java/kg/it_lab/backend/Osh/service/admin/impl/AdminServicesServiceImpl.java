@@ -12,6 +12,8 @@ import kg.it_lab.backend.Osh.service.ImageService;
 import kg.it_lab.backend.Osh.service.admin.AdminService;
 import kg.it_lab.backend.Osh.service.admin.AdminServicesService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +29,18 @@ public class AdminServicesServiceImpl implements AdminServicesService {
     private final ServicesRepository servicesRepository;
     private final ImageService imageService;
     private final AdminService adminService;
+    private final MessageSource messageSource;
 
     @Override
     public void addService(ServicesRequest servicesRequest) {
         if (servicesRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the service can't be empty");
+            throw new BadRequestException(messageSource.getMessage("title.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (servicesRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the service can't be empty");
+            throw new BadRequestException(messageSource.getMessage("content.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (servicesRepository.findByName(servicesRequest.getName()).isPresent()) {
-            throw new BadCredentialsException("Service with name " + servicesRequest.getName() + " already exist!");
+            throw new BadCredentialsException(messageSource.getMessage("service.exist", null, LocaleContextHolder.getLocale()));
         }
 
         var service = new Services();
@@ -49,16 +52,16 @@ public class AdminServicesServiceImpl implements AdminServicesService {
     public void updateService(Long id, ServicesRequest servicesRequest) {
         Optional<Services> service = servicesRepository.findById(id);
         if (servicesRequest.getName().isEmpty()) {
-            throw new BadRequestException("Title of the service can't be empty");
+            throw new BadRequestException(messageSource.getMessage("title.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (servicesRequest.getDescription().isEmpty()) {
-            throw new BadRequestException("Content of the service can't be empty");
+            throw new BadRequestException(messageSource.getMessage("content.not.empty", null, LocaleContextHolder.getLocale()));
         }
         if (service.isEmpty()) {
-            throw new NotFoundException( "Service with this id wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException( messageSource.getMessage("service.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if (servicesRepository.findByName(servicesRequest.getName()).isPresent()) {
-            throw new BadCredentialsException("Service with name " + servicesRequest.getName() + " already exist!");
+            throw new BadCredentialsException(messageSource.getMessage("service.exist", null, LocaleContextHolder.getLocale()));
         }
         servicesRepository.save(servicesMapper.toDtoService(service.get(), servicesRequest));
     }
@@ -67,7 +70,7 @@ public class AdminServicesServiceImpl implements AdminServicesService {
     public void deleteService(Long id) {
         Optional<Services> service = servicesRepository.findById(id);
         if (service.isEmpty()) {
-            throw new NotFoundException("Service with this id wasn't found", HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("service.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         ArrayList<Long> ans = new ArrayList<>();
         if(service.get().getImages() != null)
@@ -86,14 +89,14 @@ public class AdminServicesServiceImpl implements AdminServicesService {
     public void attachImageToService(Long serviceId, Long imageId) {
         Optional<Services> service = servicesRepository.findById(serviceId);
         if(service.isEmpty()){
-            throw new NotFoundException("Services with this id" + serviceId + "not found" ,HttpStatus.NOT_FOUND );
+            throw new NotFoundException(messageSource.getMessage("service.notfound", null, LocaleContextHolder.getLocale()),HttpStatus.NOT_FOUND );
         }
         Optional<Image>image = imageRepository.findById(imageId);
         if(image.isEmpty()){
-            throw new NotFoundException("Image with id " + imageId + " not found" , HttpStatus.NOT_FOUND);
+            throw new NotFoundException(messageSource.getMessage("image.notfound", null, LocaleContextHolder.getLocale()), HttpStatus.NOT_FOUND);
         }
         if(adminService.imageChecker(image.get()) > 0)
-            throw new BadRequestException("Image with id: " + imageId + " - is already in use!!");
+            throw new BadRequestException(messageSource.getMessage("image.already.in.use", null, LocaleContextHolder.getLocale()));
         List<Image> images = new ArrayList<>();
         if(service.get().getImages() != null)
             images=service.get().getImages();
