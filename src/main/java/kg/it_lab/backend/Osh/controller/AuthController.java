@@ -15,6 +15,7 @@ import java.util.Locale;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/auth")
 public class AuthController {
 
