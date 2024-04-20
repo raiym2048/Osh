@@ -476,6 +476,6 @@ class EditorServiceImplTest {
 
     @Test
     void updateEvent() {
-        
+
     }
 }
